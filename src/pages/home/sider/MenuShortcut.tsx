@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Menu } from 'antd';
 import { SiteProps } from '../../../utils/withLocale';
 import { Link } from 'react-router-dom';
-import { getFlatRoute } from '../../login/Login.service';
-import { LoginState } from '../../login/Login.model';
+import { getFlatRoute, LoginState } from '../../login/Login.model';
 
 interface Props extends SiteProps {
   login?: LoginState;

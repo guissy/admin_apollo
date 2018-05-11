@@ -1,24 +1,9 @@
 import * as React from 'react';
-import { select } from '../../utils/model';
-import { connect, Dispatch } from 'dva';
-import { LoginState } from './Login.model';
-import LoginComponent from '../components/login/LoginComponent';
+import LoginComponent from './LoginComponent';
 
 /** 登录 */
-@select('login')
-export default class Login extends React.PureComponent<LoginProps, {}> {
-  constructor(props: LoginProps) {
-    super(props);
-  }
-
+export default class Login extends React.PureComponent<{}, {}> {
   render() {
-    const { login } = this.props;
-
-    return <LoginComponent login={login} height={'100vh'} actionType={'login/login'} />;
+    return <LoginComponent height={'100vh'} />;
   }
-}
-
-interface LoginProps {
-  dispatch?: Dispatch;
-  login?: LoginState;
 }

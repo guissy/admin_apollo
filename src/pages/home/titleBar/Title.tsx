@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
-import { Tooltip, message } from 'antd';
+import { Tooltip } from 'antd';
 import styled from 'styled-components';
-import { LoginState } from '../../login/Login.model';
+import { getFlatRoute, LoginState } from '../../login/Login.model';
 import withLocale from '../../../utils/withLocale';
 import { MenuItem } from '../sider/Menu.data';
-import { getFlatRoute } from '../../login/Login.service';
 import Immutable from 'immutable';
-import { messageSuccess } from "../../../utils/showMessage";
+import { messageSuccess } from '../../../utils/showMessage';
 
 const Content = styled.div`
   .name {

@@ -3,7 +3,6 @@ import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
 import { ApplyState, ApplyItem } from './Apply.model';
 import { Form, Modal, Button, Icon } from 'antd';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import { EditFormComponent } from '../../components/form/EditFormComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
@@ -22,7 +21,7 @@ interface Props {
   dispatch: Dispatch;
   apply: ApplyState;
   form?: WrappedFormUtils;
-  site?: (p: IntlKeys) => React.ReactNode;
+  site?: (p: string) => React.ReactNode;
 }
 /** 优惠申请 */
 @withLocale

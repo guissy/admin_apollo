@@ -1,16 +1,11 @@
 import { Action, EffectsCommandMap, SubscriptionAPI } from 'dva';
-import { loginAjax, logoutAjax, loginTwoAjax } from './Login.service';
 import environment from '../../utils/environment';
 import { routerRedux } from 'dva/router';
 import { Location, Action as LocationAction } from 'history';
-import { message } from 'antd';
-import { URL } from 'uuid/v5';
 import { MenuItem } from '../home/sider/Menu.data';
 import Immutable from 'immutable';
 import { parse } from 'querystring';
-import { messageError } from '../../utils/showMessage';
-
-const uuidv5 = URL;
+import MenuData from '../home/sider/Menu.data';
 
 export default {
   namespace: 'login',
@@ -60,65 +55,6 @@ export default {
     }
   },
   effects: {
-    *login({ payload }: Action, { call, put }: EffectsCommandMap) {
-      window.localStorage.setItem('username', payload.username);
-      yield put({ type: 'changeLoading', payload: { loading: true } });
-      if (!!payload.rememberPwd) {
-        window.localStorage.setItem('password', payload.password);
-      } else {
-        window.localStorage.removeItem('password');
-      }
-      delete payload.rememberPwd;
-      payload.mac = uuidv5;
-      const oneResult = yield call(loginAjax, { ...payload });
-      if (oneResult.state !== 0) {
-        yield put({ type: 'changeLoading', payload: { loading: false } });
-        console.log('☞☞☞ 9527 Login.model 75', 'hehe');
-      }
-      const field = {
-        ...payload,
-        uid: oneResult.data.uid,
-        fid: oneResult.data.fid,
-        sign: oneResult.data.sign,
-        code: 0
-      };
-      const result = yield call(loginTwoAjax, { ...field });
-      if (result && result.state === 0) {
-        if (result.data.list) {
-          yield put({
-            type: 'token',
-            loading: false,
-            payload: { ...result }
-          });
-        }
-        const lastestUrl = window.sessionStorage.getItem('lastestUrl');
-        if (lastestUrl) {
-          window.location.href = `${location.origin}${lastestUrl}`;
-          window.sessionStorage.removeItem('lastestUrl');
-        } else {
-          window.location.href = `${location.origin}/`;
-        }
-      } else {
-        yield put({ type: 'changeLoading', payload: { loading: false } });
-        messageError(result.message);
-      }
-    },
-    *logout({ payload }: Action, { call, put }: EffectsCommandMap) {
-      const result = yield call(logoutAjax, { ...payload });
-      if (result && result.state === 0) {
-        window.sessionStorage.clear();
-        yield put(routerRedux.push('/login'));
-        yield put({
-          type: 'logoutSuccess',
-          payload: {
-            hasLogin: false
-          }
-        });
-        return result.state;
-      } else {
-        messageError(result.message);
-      }
-    },
     *token({ payload }: Action, { put, select }: EffectsCommandMap) {
       const result = payload as LoginedResult;
       const user = result.data;
@@ -128,7 +64,7 @@ export default {
       window.sessionStorage.setItem(environment.userInfo, String(JSON.stringify(user)));
 
       yield put({
-        type: 'loginSuccess',
+        type: 'update',
         payload: {
           ...user,
           loading: false,
@@ -136,7 +72,7 @@ export default {
           needLogin: false
         }
       });
-      yield put({ type: 'readShortcut', payload: true });
+      yield put({ type: 'readShortcut', payload: {} });
     },
     *readShortcut({ payload }: Action, { put, select }: EffectsCommandMap) {
       const routeShortcut = JSON.parse(
@@ -148,11 +84,11 @@ export default {
       const route = Immutable.fromJS(routeLogin)
         .mergeDeep(Immutable.fromJS(routeShortcut))
         .toJS();
-      yield put({ type: 'shortcutSuccess', payload: { route } });
+      yield put({ type: 'update', payload: { route } });
     },
     *writeShortcut({ payload }: Action, { put, select }: EffectsCommandMap) {
       window.localStorage.setItem(environment.shortcutMenu, String(JSON.stringify(payload.route)));
-      yield put({ type: 'shortcutSuccess', payload });
+      yield put({ type: 'update', payload });
     },
     *access({ payload }: Action, { put, select }: EffectsCommandMap) {
       // tslint:disable-next-line:no-any
@@ -169,7 +105,7 @@ export default {
         }
       });
       yield put({
-        type: 'getAction',
+        type: 'update',
         payload: {
           isDelete,
           isFetch,
@@ -180,22 +116,7 @@ export default {
     }
   },
   reducers: {
-    changeLoading(state: LoginState, action: Action) {
-      return { ...state, ...action.payload };
-    },
-    loginSuccess(state: LoginState, action: Action) {
-      return { ...state, ...action.payload };
-    },
-    logoutSuccess(state: LoginState, action: Action) {
-      return { ...state, ...action.payload };
-    },
-    getAction(state: LoginState, action: Action) {
-      return { ...state, ...action.payload };
-    },
-    needLogin(state: LoginState, action: Action) {
-      return { ...state, ...action.payload };
-    },
-    shortcutSuccess(state: LoginState, action: Action) {
+    update(state: LoginState, action: Action) {
       return { ...state, ...action.payload };
     }
   }
@@ -252,4 +173,57 @@ interface User {
     job: string;
     comment: string;
   };
+}
+
+/**
+ * 当权限 action 为空数组时，不在菜单中显示
+ * login.route[].action => login.route[].visible
+ */
+export function transformLoginRoute(loginRoute: MenuItem[]) {
+  // 旧版路由适配为新版路由
+  const oldNewMap = {};
+  const menuDataOk = (MenuData as MenuItem[]).map(menuOne => {
+    if (!loginRoute) {
+      return menuOne;
+    }
+    // 一级name: 根据name
+    let parentIndex: number;
+    const loginOne = loginRoute.find((loginItem, index) => {
+      const hasFound = loginItem.name === menuOne.name;
+      parentIndex = index;
+      return hasFound;
+    });
+    const menuOneOk = { ...menuOne };
+    if (loginOne) {
+      menuOneOk.action = loginOne.action;
+      menuOneOk.visible = Array.isArray(loginOne.action) && loginOne.action.length > 0;
+
+      // 二级path: 根据path
+      menuOneOk.visible = Array.isArray(loginOne.action) && loginOne.action.length > 0;
+      menuOneOk.children = menuOne.children.map((menuTwo, index) => {
+        const menuTwoOk = { ...menuTwo };
+        const loginTwo = loginOne.children.find(
+          loginItem => oldNewMap[loginItem.path] || loginItem.path === menuTwo.path
+        );
+        if (loginTwo) {
+          menuTwoOk.action = loginTwo.action;
+          menuTwoOk.visible = Array.isArray(loginTwo.action) && loginTwo.action.length > 0;
+          // 适配旧版 path
+          menuTwoOk.parentIndex = parentIndex;
+          menuTwoOk.index = index;
+        }
+        return menuTwoOk;
+      });
+    }
+    return menuOneOk;
+  });
+
+  return menuDataOk;
+}
+
+/** 两级的loginRoute => 一级的loginRoute */
+export function getFlatRoute(login: LoginState = {} as LoginState): MenuItem[] {
+  const loginRoute = login.route as MenuItem[];
+  const loginRouteFlat = loginRoute.reduce((s, v) => s.concat(v.children), [] as MenuItem[]);
+  return loginRouteFlat;
 }

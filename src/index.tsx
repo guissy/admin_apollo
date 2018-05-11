@@ -4,6 +4,12 @@ import { ConnectedRouter } from 'react-router-redux';
 import { Switch, Route } from 'react-router';
 import createBrowserHistory from 'history/createBrowserHistory';
 import registerServiceWorker from './registerServiceWorker';
+import { RestLink } from 'apollo-link-rest';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo';
+import { setContext } from 'apollo-link-context';
+
 import './assets/fonts/iconfont';
 import './assets/styles/app.scss';
 
@@ -38,7 +44,7 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 营销
 //    优惠申请
-import ApplyModel from './pages/marketing/apply/Apply.model';
+import ApplyModel, { ApplyItem } from './pages/marketing/apply/Apply.model';
 //    优惠类型
 import TypeListModel from './pages/marketing/typeList/TypeList.model';
 //    自动优惠模板
@@ -162,6 +168,9 @@ import SettingModel from './pages/home/header/setting/Setting.model';
 import HeaderModel from './pages/home/header/Header.model';
 import throttleEffect from './utils/throttleEffect';
 import { effectLoadingLoadError, loadReducer, effectErrorMessage } from './utils/model';
+import { moneyForResult, yuan } from './utils/money';
+import environment from './utils/environment';
+import { addTypePatcher } from './utils/graphTypename';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -224,14 +233,52 @@ app.model(throttleEffect(FundDetailModel));
 app.model(throttleEffect(TransferRecordModel));
 app.model(throttleEffect(QueryDetailModel));
 
+const authLink = setContext((_, { headers }) => {
+  const token = sessionStorage.getItem(environment.tokenName);
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : ''
+    }
+  };
+});
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: authLink.concat(
+    new RestLink({
+      uri: environment.apiHost,
+      credentials: 'omit',
+      typePatcher: {
+        ...addTypePatcher('LoginResult', 'LoginOneItem'),
+        ...addTypePatcher('ActivityResult', 'ActiveItem'),
+        ...addTypePatcher(
+          'ApplyResult',
+          'ApplyItem',
+          moneyForResult<ApplyItem[]>({
+            data: {
+              $for: {
+                coupon_money: yuan, // 分转元
+                deposit_money: yuan,
+                withdraw_require: yuan
+              }
+            }
+          })
+        )
+      }
+    })
+  )
+});
+
 const router = ({ history }: SubscriptionAPI) => {
   return (
-    <ConnectedRouter history={history}>
-      <Switch>
-        <Route exect={true} path="/login" component={Login} />
-        <Route path="/" component={Home} />
-      </Switch>
-    </ConnectedRouter>
+    <ApolloProvider client={client}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route exect={true} path="/login" component={Login} />
+          <Route path="/" component={Home} />
+        </Switch>
+      </ConnectedRouter>
+    </ApolloProvider>
   );
 };
 

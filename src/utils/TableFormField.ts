@@ -1,4 +1,5 @@
 import { isFunction } from 'lodash/fp';
+import * as React from 'react';
 import { constant, isPlainObject, isString } from 'lodash/fp';
 
 /** 字段基类 */
@@ -14,11 +15,11 @@ export default class TableFormField {
         };
       });
   }
-  table(page: React.PureComponent<{}>) {
+  table(view: React.PureComponent<{}>) {
     return Object.entries(this)
       .filter(([dataIndex, opt]) => opt.table !== notInTable)
       .map(([dataIndex, opt]) => {
-        const fn = (text: string, record: object) => opt.table({ text, record, page });
+        const fn = (text: string, record: object) => opt.table({ text, record, view });
         const hasTable = opt.hasOwnProperty('table');
         let render = {} as { render: Function };
         if (hasTable) {

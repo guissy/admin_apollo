@@ -12,6 +12,9 @@ import EasternTime from './easternTime/EasternTime';
 import AudioComponent from './AudioComponent';
 import { SettingState } from './setting/Setting.model';
 import environment from '../../../utils/environment';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import { push } from 'react-router-redux';
 
 const CollapseBtn = styled(Icon)`
   color: ${props => props.theme.collapseBtn};
@@ -181,17 +184,6 @@ export default class Header extends React.PureComponent<HeaderProps, HeaderState
     e.nativeEvent.stopImmediatePropagation();
   }
 
-  onLogout = () => {
-    this.props.dispatch!({
-      type: 'login/logout',
-      payload: {
-        username: this.props.login.list.username,
-        refresh_token: this.props.login.refresh_token,
-        uid: this.props.login.list.id
-      }
-    });
-  }
-
   // 折叠 sider
   toggleCollapsed = () => {
     const { header = {} as HeaderDefaultState } = this.props;
@@ -211,12 +203,15 @@ export default class Header extends React.PureComponent<HeaderProps, HeaderState
       site = () => '',
       header = {} as HeaderDefaultState,
       setting = {} as SettingState,
-      login = {} as LoginState
+      login = {} as LoginState,
+      dispatch
     } = this.props;
     const { showPanel, offline_deposit, withdraw, common } = this.state;
     const username = login.list.username;
+    const refresh_token = login.list.refresh_token;
+    const uid = login.list.id;
+    const logoutVars = { username, refresh_token, uid };
     const headerStyle = setting.nav === 'top' ? { marginBottom: '40px' } : {};
-
     return (
       <>
         <style>
@@ -285,10 +280,33 @@ export default class Header extends React.PureComponent<HeaderProps, HeaderState
                 </a>
               </MenuItem>
               <MenuItem key="logout">
-                <a onClick={this.onLogout}>
-                  <ItemIcon type="logout" />
-                  {site('退出登录')}
-                </a>
+                <Mutation
+                  mutation={gql`
+                    mutation logoutMutation($body: LogoutInput!) {
+                      logout(body: $body)
+                        @rest(
+                          path: "/admin/logout"
+                          method: "post"
+                          type: "LogoutResult"
+                          bodyKey: "body"
+                        ) {
+                        state
+                      }
+                    }
+                  `}
+                >
+                  {(logout, { data }) => (
+                    <a
+                      onClick={() => {
+                        logout({ variables: { body: logoutVars } });
+                        dispatch!(push('/login'));
+                      }}
+                    >
+                      <ItemIcon type="logout" />
+                      {site('退出登录')}
+                    </a>
+                  )}
+                </Mutation>
               </MenuItem>
             </Menu.SubMenu>
             <Menu.Item key="setting">
@@ -301,11 +319,12 @@ export default class Header extends React.PureComponent<HeaderProps, HeaderState
             </div>
           )}
           {environment.isDev && (
-            <style>{`
-          .ant-notification-topRight {
-            width: 600px;
-          }
-        `}</style>
+            <style>
+              {`
+              .ant-notification-topRight {
+                width: 600px;
+              }`}
+            </style>
           )}
         </Layout.Header>
       </>

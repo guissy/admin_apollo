@@ -1,13 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Link } from 'dva/router';
 import MenuComponent from './MenuComponent';
 import { Layout } from 'antd';
 import { HeaderDefaultState } from '../header/Header.model';
 import { select } from '../../../utils/model';
-import { connect, Dispatch } from 'dva';
 import { SettingState } from '../header/setting/Setting.model';
-import { MenuMode } from 'antd/lib/menu';
 import LogoComponent from './LogoComponent';
 
 const SiderWrap = styled(Layout.Sider)`
@@ -32,11 +29,7 @@ const MenuWrap = styled.div`
 
 /** sider */
 @select(['header', 'setting'])
-export default class Sider extends React.PureComponent<SiderProps, SiderState> {
-  constructor(props: SiderProps) {
-    super(props);
-  }
-
+export default class Sider extends React.PureComponent<Props, {}> {
   render() {
     const { header = {} as HeaderDefaultState, setting = {} as SettingState } = this.props;
     const menu = (() => {
@@ -63,9 +56,7 @@ export default class Sider extends React.PureComponent<SiderProps, SiderState> {
   }
 }
 
-interface SiderState {}
-
-interface SiderProps {
+interface Props {
   header?: HeaderDefaultState;
   setting?: SettingState;
 }
