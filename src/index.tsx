@@ -14,7 +14,6 @@ import './assets/fonts/iconfont';
 import './assets/styles/app.scss';
 
 import Home from './pages/home/Home';
-import HomeModel from './pages/home/Home.model';
 import Login from './pages/login/Login';
 import LoginModel from './pages/login/Login.model';
 import DashboardModel from './pages/dashboard/Dashboard.model';
@@ -185,7 +184,6 @@ app.model({
   reducers: { update: (state: boolean, { payload }: Action) => payload }
 });
 app.model(throttleEffect(LoginModel));
-app.model(throttleEffect(HomeModel));
 app.model(throttleEffect(DashboardModel));
 app.model(throttleEffect(BackgroundModel));
 app.model(throttleEffect(MemberLogModel));

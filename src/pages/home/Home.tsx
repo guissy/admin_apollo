@@ -11,7 +11,6 @@ import en_US1 from '../../locale/en_US';
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import zh_TW from 'antd/lib/locale-provider/zh_TW';
 import en_US from 'antd/lib/locale-provider/en_US';
-import { HomeState } from './Home.model';
 import LoginComponent from '../login/LoginComponent';
 import { LoginState } from '../login/Login.model';
 import { SettingState } from './header/setting/Setting.model';
@@ -35,12 +34,8 @@ const Layouter = styled.div`
 `;
 
 /** 首页：布局和路由 */
-@select(['home', 'login', 'setting'])
+@select(['login', 'setting'])
 export default class Home extends React.PureComponent<HomeProps, {}> {
-  constructor(props: HomeProps) {
-    super(props);
-  }
-
   render() {
     addLocaleData([...zh, ...en]);
     const localeMap = new Map();
@@ -61,7 +56,7 @@ export default class Home extends React.PureComponent<HomeProps, {}> {
     addLocaleData({ locale: 'zh_HK', ...localeMap.get('zh_HK'), parentLocale: 'zh' });
     addLocaleData({ locale: 'en_US', ...localeMap.get('en_US'), parentLocale: 'en' });
 
-    const { login = {} as LoginState, home, setting = {} as SettingState } = this.props;
+    const { login = {} as LoginState, setting = {} as SettingState } = this.props;
     let antdLang = zh_CN;
     if (setting.lang === 'zh_HK') {
       antdLang = zh_TW;
@@ -99,7 +94,6 @@ export default class Home extends React.PureComponent<HomeProps, {}> {
 }
 
 interface HomeProps {
-  home?: HomeState;
   login?: LoginState;
   setting?: SettingState;
 }
