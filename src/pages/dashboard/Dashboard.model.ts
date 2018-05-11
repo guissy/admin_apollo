@@ -38,8 +38,8 @@ export interface TodayState {
   new_members: string; // 今日新增用户
   online_members: string; // 今日上线用户数
   deposit_money: string; // 今日存款总金额
-  bet_times: string; // 今日总订单数
-  bet_money: string; // 今日总订单金额
+  best_times: string; // 今日总订单数
+  best_money: string; // 今日总订单金额
 }
 
 interface ChannelState extends TodayState {}

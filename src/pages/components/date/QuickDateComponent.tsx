@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Button, Radio } from 'antd';
+import { Radio } from 'antd';
 import styled from 'styled-components';
-import moment, { Moment } from 'moment-timezone';
-import { IntlKeys } from '../../../locale/zh_CN';
+import moment from 'moment-timezone';
 import withLocale from '../../../utils/withLocale';
 import { DatePicker } from 'antd';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
@@ -14,11 +13,8 @@ const QuickDateWrap = styled.div`
   }
 `;
 
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-
 interface Props {
-  site?: (p: IntlKeys) => React.ReactNode;
+  site?: (p: string) => React.ReactNode;
   onChange?: (value: [string, string]) => void; // 参考antd，返回数组
 }
 interface State {
@@ -31,9 +27,7 @@ export default class QuickDateComponent extends React.PureComponent<Props, State
   state = {
     rangePickerValue: [undefined, undefined]
   };
-  componentWillMount() {
-    return;
-  }
+
   // tslint:disable-next-line:no-any
   onChangeDate = (e: any) => {
     let objTime: { from: string; to: string } = { from: '', to: '' };
@@ -96,7 +90,9 @@ export default class QuickDateComponent extends React.PureComponent<Props, State
     this.setState({
       rangePickerValue: [moment(objTime.from, 'YYYY-MM-DD'), moment(objTime.to, 'YYYY-MM-DD')]
     });
-    this.props.onChange([objTime.from, objTime.to]);
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange([objTime.from, objTime.to]);
+    }
   }
   onRangeData = (date: RangePickerValue, dateString: string[]) => {
     let objTime: { from: string; to: string } = { from: '', to: '' };
@@ -111,20 +107,15 @@ export default class QuickDateComponent extends React.PureComponent<Props, State
         rangePickerValue: [undefined, undefined]
       });
     }
-    this.props.onChange([objTime.from, objTime.to]);
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange([objTime.from, objTime.to]);
+    }
   }
   render() {
     const { site = () => null } = this.props;
     return (
       <QuickDateWrap>
-        <RadioGroup defaultValue="" onChange={this.onChangeDate}>
-          <RadioButton value="昨日">{site('昨日')}</RadioButton>
-          <RadioButton value="今日">{site('今日')}</RadioButton>
-          <RadioButton value="本周">{site('本周')}</RadioButton>
-          <RadioButton value="上周">{site('上周')}</RadioButton>
-          <RadioButton value="本月">{site('本月')}</RadioButton>
-          <RadioButton value="上月">{site('上月')}</RadioButton>
-        </RadioGroup>
+        轮播广告
         <RangePicker
           value={this.state.rangePickerValue}
           format="YYYY-MM-DD"

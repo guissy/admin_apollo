@@ -1,198 +1,165 @@
 import * as React from 'react';
+import styled from 'styled-components';
+import { Button, Icon, Upload, Modal } from 'antd';
 import environment from '../../../utils/environment';
+import { UploadFile } from 'antd/lib/upload/interface';
+import { UploadChangeParam } from 'antd/lib/upload';
+import withLocale from '../../../utils/withLocale';
+import { messageError } from '../../../utils/showMessage';
 
-// ueditor需要的相关文件
-import '../../../assets/ueditor/ueditor.config';
-import '../../../assets/ueditor/ueditor.all';
-import '../../../assets/ueditor/lang/zh-cn/zh-cn';
+const UploadContainer = styled.div`
+  .tip {
+    font-size: 12px;
+  }
+`;
 
-const toolbar = [
-  [
-    // 'anchor', //锚点
-    // 'undo', //撤销
-    // 'redo', //重做
-    'bold', // 加粗
-    'indent', // 首行缩进
-    // 'snapscreen', //截图
-    'italic', // 斜体
-    'underline', // 下划线
-    'strikethrough', // 删除线
-    'subscript', // 下标
-    'fontborder', // 字符边框
-    'superscript', // 上标
-    'formatmatch', // 格式刷
-    // 'source', //源代码
-    'blockquote', // 引用
-    'pasteplain', // 纯文本粘贴模式
-    'selectall', // 全选
-    // 'print', //打印
-    // 'preview', //预览
-    'horizontal', // 分隔线
-    'removeformat', // 清除格式
-    'time', // 时间
-    'date', // 日期
-    'unlink', // 取消链接
-    'insertrow', // 前插入行
-    'insertcol', // 前插入列
-    'mergeright', // 右合并单元格
-    'mergedown', // 下合并单元格
-    'deleterow', // 删除行
-    'deletecol', // 删除列
-    'splittorows', // 拆分成行
-    'splittocols', // 拆分成列
-    'splittocells', // 完全拆分单元格
-    'deletecaption', // 删除表格标题
-    'inserttitle', // 插入标题
-    'mergecells', // 合并多个单元格
-    'deletetable', // 删除表格
-    'cleardoc', // 清空文档
-    'insertparagraphbeforetable', // "表格前插入行"
-    'insertcode', // 代码语言
-    'fontfamily', // 字体
-    'fontsize', // 字号
-    'paragraph', // 段落格式
-    // 'simpleupload', //单图上传
-    'insertimage', // 多图上传
-    // 'edittable', //表格属性
-    'edittd', // 单元格属性
-    'link', // 超链接
-    // 'emotion', //表情
-    'spechars', // 特殊字符
-    'searchreplace', // 查询替换
-    // 'map', //Baidu地图
-    // 'gmap', //Google地图
-    // 'insertvideo', //视频
-    'help', // 帮助
-    'justifyleft', // 居左对齐
-    'justifyright', // 居右对齐
-    'justifycenter', // 居中对齐
-    'justifyjustify', // 两端对齐
-    'forecolor', // 字体颜色
-    'backcolor', // 背景色
-    'insertorderedlist', // 有序列表
-    'insertunorderedlist', // 无序列表
-    // 'fullscreen', //全屏
-    'directionalityltr', // 从左向右输入
-    'directionalityrtl', //  从右向左输入
-    'rowspacingtop', // 段前距
-    'rowspacingbottom', // 段后距
-    'pagebreak', // 分页
-    // 'insertframe', //插入Iframe
-    'imagenone', // 默认
-    'imageleft', // 左浮动
-    'imageright', // 右浮动
-    // 'attachment', //附件
-    'imagecenter', // 居中
-    // 'wordimage', //图片转存
-    'lineheight', // 行间距
-    'edittip ', // 编辑提示
-    'customstyle', // 自定义标题
-    'autotypeset', // 自动排版
-    // 'webapp', //百度应用
-    'touppercase', // 字母大写
-    'tolowercase', // 字母小写
-    // 'background', //背景
-    // 'template', //模板
-    // 'scrawl', //涂鸦
-    // 'music', //音乐
-    'inserttable' // 插入表格
-    // 'drafts', // 从草稿箱加载
-    // 'charts', // 图表
-  ]
-];
-
-/** 富文本编辑器Props */
-export interface Props {
-  id: string;
-  value?: string;
-  config?: object;
-  onChange?: (value: string) => void;
+function initValue(props: Props): UploadFile[] {
+  const { value = '' } = props;
+  const file: UploadFile = {
+    url: `${environment.imgHost}/${value}`,
+    uid: Date.now(),
+    size: 0,
+    name: value,
+    type: 'img'
+  };
+  return value ? [file] : [];
 }
 
+interface Props {
+  limit?: number; // image大小, 单位mb  选填
+  value?: string; // 默认展示图片的地址  选填
+  onChange?: Function; // 子组件返给父组件的值  选填
+  onDone?: Function;
+  folder?: string; // 上传图片的文件夹地址  选填
+  site?: (p: string) => string;
+}
 interface State {
-  value: string;
-  ready: boolean;
-  config?: object;
+  fileList: Array<UploadFile>;
+  previewVisible: boolean;
+  previewImage: string | undefined;
 }
+const token = window.sessionStorage.getItem(environment.tokenName);
+const headers = { Authorization: 'Bearer ' + token };
 
-declare global {
-  namespace UE {
-    /** 全局的方法得到编辑器实例 */
-    export function getEditor(e: string, t?: object): typeof UE;
-    /** 销毁 */
-    export function destroy(): void;
-    /** 初始化值 */
-    export function setContent(value: string | undefined): void;
-    /** 初始化回调 */
-    export function ready(cb: () => void): void;
-    /** 编辑时回调 */
-    export function addListener(eventName: string, cb: () => void): void;
-    /** 编程后的内容 */
-    export function getContent(): string;
-  }
-  interface Window {
-    UEDITOR_HOME_URL: string;
-    UE: typeof UE;
-  }
-}
+/**
+ * 上传图片
+ * @example
+ * <UploadComponent
+ *   limit={3}
+ *   onChange={this.onChange}
+ *   value={2.jpg'}
+ *   folder = {'web'}
+ * />
+ */
+@withLocale
+export default class UploadComponent extends React.PureComponent<Props, State> {
+  static defaultProps: Props = {
+    limit: 10,
+    folder: ''
+  };
 
-/** 富文本编辑器 */
-export default class Editor extends React.PureComponent<Props, State> {
-  UE: typeof UE;
-  cacheContent: string = '';
-  UEditorValueCount: number;
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const value = prevState.fileList && prevState.fileList[0] && prevState.fileList[0].name;
+    if (nextProps.value !== value) {
+      return { ...prevState, fileList: initValue(nextProps) };
+    } else {
+      return prevState;
+    }
+  }
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      value: this.props.value || '',
-      ready: false,
-      config: {
-        toolbars: toolbar,
-        autoFloatEnabled: false,
-        enableAutoSave: false,
-        autoSyncData: false,
-        serverUrl: environment.apiHost + '/ueditor',
-        autoHeightEnabled: false,
-        initialFrameHeight: 300
-      }
+      fileList: initValue(props),
+      previewVisible: false,
+      previewImage: ''
     };
   }
 
-  componentDidMount() {
-    this.UEditorValueCount = 0;
-    this.UE = window.UE.getEditor(this.props.id, Object.assign(this.state.config, this.props.config));
-    this.UE.ready(() => {
-      this.UE.setContent(this.state.value);
-      this.setState({ ready: true });
-    });
-
-    this.UE.addListener('contentChange', () => {
-      let content = window.UE.getEditor(this.props.id).getContent();
-      if (typeof this.props.onChange === 'function' && this.cacheContent !== content) {
-        this.props.onChange(content);
-      }
-      this.cacheContent = content;
-    });
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    if (this.state.ready) {
-      this.UE.setContent(nextProps.value);
+  beforeUpload = (file: UploadFile) => {
+    const { site = () => '' } = this.props;
+    const isJPG = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'].includes(file.type);
+    if (!isJPG) {
+      messageError(site('只能上传 jpg、 jpeg、 png、 gif文件'));
     }
+    const names = file.name.split('.');
+    names.pop();
+    const isName = /^[a-zA-Z0-9_]+$/.test(names.join('.')); // 英文、数字、下划线
+    if (!isName) {
+      // 检查图片名是否合法
+      messageError(site('文件名只能是英文、数字、下划线'));
+    }
+    const { limit = 10 } = this.props;
+    const isSizeOk = file.size / 1024 / 1024 < limit;
+    if (!isSizeOk) {
+      messageError(site(`图片体积必须小于${this.props.limit}M`));
+    }
+    return isSizeOk && isName && isJPG;
+  }
+  onChange = (file: UploadChangeParam) => {
+    const { site = () => '' } = this.props;
+    // 去最后一张用于展示
+    const lastFile = file.fileList.slice().pop();
+    if (lastFile) {
+      this.setState({
+        fileList: [lastFile]
+      });
+    }
+    if (file.file.status === 'done') {
+      // 把服务器返回的值 抛给父组件
+      const first = file.fileList[0];
+      console.log(first.response.data.file[0].url);
+      if (this.props.onChange && first) {
+        this.props.onChange(first.response.data.file[0].url);
+      }
+      if (this.props.onDone && first) {
+        this.props.onDone(first.response);
+      }
+    }
+  }
+  onRemove = () => {
     this.setState({
-      value: nextProps.value || ''
+      fileList: []
     });
   }
-
-  componentWillUnmount() {
-    this.UE.destroy();
+  handleCancel = () => this.setState({ previewVisible: false });
+  handlePreview = (file: UploadFile) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true
+    });
   }
-
   render() {
+    const { site = () => '' } = this.props;
     return (
-      <div>
-        <script style={{ width: '100%' }} id={this.props.id} type="text/plain" />
-      </div>
+      <UploadContainer>
+        <Upload
+          action={`${environment.imgHost}/api/${this.props.folder}`}
+          listType="picture"
+          fileList={this.state.fileList}
+          headers={headers}
+          name={'upfile[]'}
+          data={{
+            post_type: 'upfile'
+          }}
+          beforeUpload={this.beforeUpload}
+          onChange={this.onChange}
+          onRemove={this.onRemove}
+          onPreview={this.handlePreview}
+        >
+          <Button>
+            <Icon type="upload" /> {site('点击上传文件')}
+          </Button>
+        </Upload>
+        <span className="tip">
+          {site(
+            '只能上传 jpg、 jpeg、 png、 gif文件,文件名只能是英文、数字、下划线, 且单个文件大小不能超过10M ,图片建议分辨率大小为460*180'
+          )}
+        </span>
+        <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+        </Modal>
+      </UploadContainer>
     );
   }
 }

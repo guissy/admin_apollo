@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { select } from '../../../utils/model';
-import { connect, Dispatch } from 'dva';
+import { Dispatch } from 'dva';
 import environment from '../../../utils/environment';
 import { Button, Col, Form, Input, Radio, Row, Select, Table, Tag } from 'antd';
 import styled from 'styled-components';
 import { AdListState, AdListData } from './AdList.model';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import { FormComponentProps } from 'antd/lib/form';
 import DetailModal, { ViewFormConfig } from '../../components/modal/DetailModal';
@@ -21,12 +20,10 @@ import { showMessageForResult } from '../../../utils/showMessage';
 interface Props extends FormComponentProps {
   dispatch: Dispatch;
   adList: AdListState;
-  site: (p: IntlKeys) => React.ReactNode;
+  site: (p: string) => React.ReactNode;
   form: WrappedFormUtils;
 }
 interface State {}
-const Option = Select.Option;
-const RadioGroup = Radio.Group;
 const Thumbnail = styled.img`
   height: 20px;
   width: auto;
@@ -42,9 +39,9 @@ const position: Array<{ value: string; text: string }> = [
   { text: '优惠页', value: 'coupon' }
 ];
 const TodoItems = position.map(todo => (
-  <Option value={todo.value} key={todo.value}>
+  <Select.Option value={todo.value} key={todo.value}>
     {todo.text}
-  </Option>
+  </Select.Option>
 ));
 /** 轮播广告 */
 @withLocale
@@ -89,8 +86,8 @@ export default class AdList extends React.PureComponent<Props, State> {
         notInTable: true,
         formItemRender: () => (
           <Select>
-            <Option value={'pc'}>PC</Option>
-            <Option value={'h5'}>H5</Option>
+            <Select.Option value={'pc'}>PC</Select.Option>
+            <Select.Option value={'h5'}>H5</Select.Option>
           </Select>
         ),
         formRules: rules
@@ -406,10 +403,10 @@ export default class AdList extends React.PureComponent<Props, State> {
       <div>
         <WrapRow>
           <Col span={3}>
-            <RadioGroup onChange={this.handleChange} value={this.state.pf}>
-              <Radio value={'pc'}>pc</Radio>
-              <Radio value={'h5'}>h5</Radio>
-            </RadioGroup>
+            <Radio.Group onChange={this.handleChange} value={this.state.pf}>
+              <Radio.Button value={'pc'}>pc</Radio.Button>
+              <Radio.Button value={'h5'}>h5</Radio.Button>
+            </Radio.Group>
           </Col>
           <Col span={3} push={18}>
             <Button type="primary" onClick={this.addAdlist}>

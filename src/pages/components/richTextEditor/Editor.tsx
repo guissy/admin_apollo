@@ -111,6 +111,7 @@ export interface Props {
 
 interface State {
   value: string;
+  ready: boolean;
   config?: object;
 }
 
@@ -143,7 +144,8 @@ export default class Editor extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      value: this.props.value ? this.props.value : '',
+      value: this.props.value || '',
+      ready: false,
       config: {
         toolbars: toolbar,
         autoFloatEnabled: false,
@@ -164,6 +166,7 @@ export default class Editor extends React.PureComponent<Props, State> {
     );
     this.UE.ready(() => {
       this.UE.setContent(this.state.value);
+      this.setState({ ready: true });
     });
 
     this.UE.addListener('contentChange', () => {
@@ -176,12 +179,12 @@ export default class Editor extends React.PureComponent<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.value !== '' && this.UEditorValueCount === 0) {
-      this.UE.ready(() => {
-        this.UE.setContent(nextProps.value);
-      });
-      this.UEditorValueCount++;
+    if (this.state.ready) {
+      this.UE.setContent(nextProps.value);
     }
+    this.setState({
+      value: nextProps.value || ''
+    });
   }
 
   componentWillUnmount() {
