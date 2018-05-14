@@ -112,10 +112,8 @@ export default class QuickDateComponent extends React.PureComponent<Props, State
     }
   }
   render() {
-    const { site = () => null } = this.props;
     return (
       <QuickDateWrap>
-        轮播广告
         <RangePicker
           value={this.state.rangePickerValue}
           format="YYYY-MM-DD"

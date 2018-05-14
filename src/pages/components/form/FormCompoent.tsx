@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
@@ -245,7 +244,7 @@ export interface FormComponentProps {
   form?: any; // tslint:disable-line:no-any
   fieldConfig: FormConfig[]; // 字段配置
   actionType?: string; // namespace/effect
-  site?: (words: IntlKeys) => React.ReactNode;
+  site?: (words: string) => React.ReactNode;
   dispatch?: Dispatch;
   formLayout?: 'inline' | 'horizontal' | 'vertical'; // 表单排版类型
   submitText?: string; // 提交按钮文字
@@ -259,7 +258,7 @@ export interface FormComponentProps {
   onDone?: (result?: Result<object> | void) => void; // onSubmit后的回调
   resetFields?: boolean; // 重置字段
   footer?: React.ReactNode;
-  record?: { isTotalRow: boolean };
+  record?: { isTotalRow?: boolean };
   view?: React.PureComponent;
 }
 

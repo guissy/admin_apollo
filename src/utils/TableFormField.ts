@@ -42,7 +42,7 @@ export interface FieldProps<
   C = React.PureComponent
 > {
   text: T;
-  record: R & { isTotalRow: boolean };
+  record: R & { isTotalRow?: boolean };
   view: C;
 }
 

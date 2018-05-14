@@ -1,4 +1,5 @@
 // type ResultData<T> = T extends (infer U)[] ? U[] : T;
+
 /**
  * php 后端返回的数据格式
  */
@@ -11,6 +12,12 @@ export interface Result<T> {
   /** @see Response#status */
   status: number; // http状态码：用于model.effects里处理错误
 }
+/**
+ * 经过graphQL包装的数据格式
+ */
+export type GqlResult<T extends string = string> = {
+  data: { [key in T]: Result<object> };
+};
 
 interface Attr {
   number: number; // 相当于传给后端的 page
@@ -23,27 +30,3 @@ type TotalRow = { [p: string]: any };
 
 /** 包含翻页和表格的小结、总结属性 */
 export type Attributes = Attr & TotalRow;
-
-/**
- * 用于测试
- */
-export namespace result {
-  /** 成功 */
-  export function demoOk() {
-    return {
-      state: 0,
-      data: {},
-      message: 'OK',
-      attributes: {}
-    };
-  }
-  /** 失败 */
-  export function demoError() {
-    return {
-      state: 3,
-      data: {},
-      message: 'body缺少啥啥啥',
-      attributes: {}
-    };
-  }
-}

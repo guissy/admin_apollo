@@ -14,8 +14,9 @@ import { moneyForResult, yuan } from '../../../utils/money';
 import { defaults } from 'lodash/fp';
 import ApplyField from './Apply.field';
 import { SearchComponent } from '../../components/form/SearchComponent';
-import { Query } from 'react-apollo';
+import { FetchResult, Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import { GqlResult, Result } from '../../../utils/result';
 
 interface Props {
   dispatch: Dispatch;
@@ -283,7 +284,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
             page_size: 20
           }}
         >
-          {({ data: { apply = { data: [], attributes: {} } }, updateQuery }) => (
+          {({ data: { apply = { data: [], attributes: {} } } }) => (
             <TableComponent
               dataSource={apply.data}
               columns={tableFields}
@@ -317,15 +318,39 @@ export default class Apply extends React.PureComponent<Props, {}> {
           )}
         </Modal>
         {/* 编辑 */}
-        <EditFormComponent
-          form={this.props.form}
-          fieldConfig={editFields}
-          modalTitle={site('编辑')}
-          modalVisible={editVisible}
-          onCancel={() => this.cancel()}
-          onSubmit={this.onEditSubmit}
-          values={this.state.editing}
-        />
+        <Mutation
+          mutation={gql`
+            mutation memoMutation($body: MemoInput!, $id: Int!) {
+              memo(body: $body, id: $id)
+                @rest(
+                  bodyKey: "body"
+                  path: "/active/apply.comment/:id"
+                  method: "put"
+                  type: "MemoResult"
+                ) {
+                state
+                message
+              }
+            }
+          `}
+        >
+          {(memo, { data }) => (
+            <EditFormComponent
+              form={this.props.form}
+              fieldConfig={editFields}
+              modalTitle={site('编辑')}
+              modalOk={site('修改成功')}
+              modalVisible={editVisible}
+              onCancel={() => this.cancel()}
+              onSubmit={(values: ApplyItem) => {
+                return memo({ variables: { body: values, id: values.id } }).then(
+                  (v: GqlResult<'memo'>) => v.data.memo
+                );
+              }}
+              values={this.state.editing}
+            />
+          )}
+        </Mutation>
         {/* 修改优惠金额 */}
         <EditFormComponent
           form={form}
@@ -335,7 +360,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
           onCancel={() => this.discountCancel()}
           onSubmit={this.onDiscountSubmit}
           record={this.state.rowData}
-          component={this}
+          view={this}
         />
         {/* 修改取款条件 */}
         <EditFormComponent
@@ -346,7 +371,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
           onCancel={() => this.withdrawCancel()}
           onSubmit={this.onWithdrawSubmit}
           record={this.state.rowData}
-          component={this}
+          view={this}
         />
       </>
     );

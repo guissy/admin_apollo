@@ -16,16 +16,21 @@ export function addTypename(typename: string) {
 export function addTypePatcher(
   mainType: string,
   itemType: string,
-  fn?: (result: object) => object
+  fn?: (result: object) => object,
+  isObject: boolean = false
 ) {
   return {
     [mainType](result: object) {
       const resultOk = update(result, {
-        data: {
-          $for: {
-            __typename: constant(itemType)
-          }
-        }
+        data: isObject
+          ? {
+              __typename: constant(itemType)
+            }
+          : {
+              $for: {
+                __typename: constant(itemType)
+              }
+            }
       });
       return typeof fn === 'function' ? fn(resultOk) : resultOk;
     }

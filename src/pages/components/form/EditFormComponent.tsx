@@ -1,12 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { select } from '../../../utils/model';
-import { connect } from 'dva';
 import { Modal } from 'antd';
 import { FormComponent, FormConfig } from './FormCompoent';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
-import { message } from 'antd';
 import { Result } from '../../../utils/result';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import moment, { Moment } from 'moment-timezone';
@@ -138,7 +135,7 @@ export class EditFormComponent extends React.PureComponent<
     if (typeof result === 'object' && 'state' in result) {
       const { state } = result;
       if (state === 0) {
-        messageSuccess(site('操作成功！'));
+        messageSuccess(this.props.modalOk || site('操作成功！'));
       } else {
         messageError(site('操作失败，请重试！'));
         console.info(`🐞: `, result.message);
@@ -160,8 +157,7 @@ export class EditFormComponent extends React.PureComponent<
       submitText = site('确定'),
       onCancel,
       onDone,
-      record,
-      component
+      record
     } = this.props;
     const editContextOk = Object.assign(this.state.editContext || {}, {
       form: this.props.form,
@@ -196,7 +192,6 @@ export class EditFormComponent extends React.PureComponent<
             onDone={onDone}
             resetFields={true}
             record={record}
-            component={component}
           />
         </EditProvider>
       </ModalWrap>
@@ -212,14 +207,15 @@ interface EditFormComponentProps {
   modalTitle?: string | React.ReactNode; // 模态框标题
   submitText?: string; // 确认按钮文字
   modalVisible?: boolean; // 是否显示模态框
-  site?: (words: IntlKeys) => string;
+  site?: (words: string) => string;
   values?: object; // 当前行要编辑的记录
   editContext?: Partial<EditContext>; // 上下文
   onSubmit?: (values: object) => Promise<Result<object> | void>; // 提交事件，返回Promise，用于关闭模态框，清理表单
   onCancel?: Function; // 关闭事件
   onDone?: (result: Result<object> | void) => void; // onSubmit后的回调
-  record?: object;
-  component?: React.PureComponent;
+  record?: { isTotalRow?: boolean } & { [key: string]: any }; // tslint:disable-line
+  view?: React.PureComponent;
+  modalOk?: React.ReactNode;
 }
 
 interface EditFormComponentState {
@@ -231,7 +227,7 @@ interface EditFormComponentState {
 /** 上下文数据类型 */
 export interface EditContext {
   setState: (editContextNext: object) => void;
-  form: WrappedFormUtils;
+  form?: WrappedFormUtils;
   [key: string]: any; // tslint:disable-line:no-any
 }
 

@@ -247,7 +247,7 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
-        ...addTypePatcher('LoginResult', 'LoginOneItem'),
+        ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
         ...addTypePatcher(
           'ApplyResult',
