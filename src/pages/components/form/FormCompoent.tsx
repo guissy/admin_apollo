@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
@@ -21,6 +22,9 @@ const Wrap = styled.section`
     min-width: 100px;
   }
 `;
+
+type DefaultProps = { autoFocus?: boolean; placeholder?: string; ref?: Function };
+
 /** 表单 */
 @withLocale
 @Form.create()
@@ -30,6 +34,20 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
     loading: false,
     visibleModal: false
   };
+
+  autoFocus(isFirst?: boolean) {
+    return isFirst
+      ? {
+          autoFocus: true,
+          ref: (ref: React.ReactInstance) => {
+            const component = ReactDOM.findDOMNode(ref) as HTMLInputElement;
+            if (component) {
+              requestAnimationFrame(() => component.focus());
+            }
+          }
+        }
+      : {};
+  }
   // 提交
   onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -123,6 +141,7 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
 
     // hasResetBt为true认为是搜索表单
     const formStyle = hasResetBtn ? { padding: '20px 20px 10px' } : {};
+    let inputIndex = 0;
     return (
       <Wrap style={formStyle}>
         <Form onSubmit={this.onSubmit} layout={formLayout}>
@@ -161,7 +180,7 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
               // 排除formInitialValue缺省时值为undefined，而提交时缺少字段，(有时后台必须的字段值可以为空)
               const initialValue = v.formInitialValue ? v.formInitialValue : '';
 
-              let defaultProps = {};
+              let defaultProps = {} as DefaultProps;
 
               // 字段提示信息
               if (element) {
@@ -171,12 +190,17 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
                   element.type === Input.TextArea
                 ) {
                   defaultProps = {
-                    placeholder: `${site('请输入')}${currentLang}${v.title}`
+                    placeholder: `${site('请输入')}${currentLang}${v.title}`,
+                    ...this.autoFocus(inputIndex === 0)
                   };
+                  console.log('☞☞☞ 9527 FormCompoent 197', inputIndex, v, element);
+                  inputIndex += 1;
                 } else if (element.type === Select) {
                   defaultProps = {
-                    placeholder: `${site('请选择')}${currentLang}${v.title}`
+                    placeholder: `${site('请选择')}${currentLang}${v.title}`,
+                    ...this.autoFocus(inputIndex === 0)
                   };
+                  inputIndex += 1;
                 }
               }
 

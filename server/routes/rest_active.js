@@ -80,6 +80,9 @@ router.get('/active/apply/:id', async function save(req, res, next) {
 router.patch('/active.withdraw.require/:id', async function save(req, res, next) {
   res.json(resultOk({}))
 });
+router.patch('/active.discount/:id', async function save(req, res, next) {
+  res.json(resultOk({}))
+});
 // 优惠活动标题
 router.get('/actives', async function save(req, res, next) {
   res.json(resultOk(actives))
