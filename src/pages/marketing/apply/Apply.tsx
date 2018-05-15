@@ -38,11 +38,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
     isDetailLoading: false,
     editWithdrawVisible: false,
     detailData: {} as ApplyItem,
-    rowData: {
-      id: '',
-      coupon_money: '',
-      withdraw_require: ''
-    },
+    rowData: {},
     page: 1,
     pageSize: 10
   };
@@ -162,8 +158,9 @@ export default class Apply extends React.PureComponent<Props, {}> {
   editDiscount = (record: ApplyItem) => {
     this.setState({
       editDiscountVisible: true,
-      rowData: record
+      rowData: { ...record }
     });
+    console.log('☞☞☞ 9527 Apply 163', 'editDiscount', record);
   }
   discountCancel = () => {
     this.setState({
@@ -339,7 +336,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
               form={this.props.form}
               fieldConfig={editFields}
               modalTitle={site('编辑')}
-              modalOk={site('修改成功')}
+              modalOk={site('修改备注成功')}
               modalVisible={editVisible}
               onCancel={() => this.cancel()}
               onSubmit={(values: ApplyItem) => {
@@ -352,16 +349,44 @@ export default class Apply extends React.PureComponent<Props, {}> {
           )}
         </Mutation>
         {/* 修改优惠金额 */}
-        <EditFormComponent
-          form={form}
-          fieldConfig={couponFields}
-          modalTitle={site('修改优惠金额')}
-          modalVisible={editDiscountVisible}
-          onCancel={() => this.discountCancel()}
-          onSubmit={this.onDiscountSubmit}
-          record={this.state.rowData}
-          view={this}
-        />
+        <Mutation
+          mutation={gql`
+            mutation couponMutation($body: CouponInput!, $id: Int!) {
+              coupon(body: $body, id: $id)
+                @rest(
+                  bodyKey: "body"
+                  path: "/active.discount/:id"
+                  method: "PATCH"
+                  type: "CouponResult"
+                ) {
+                state
+                message
+              }
+            }
+          `}
+        >
+          {(coupon, { data }) => {
+            // console.log('☞☞☞ 9527 Apply 374', this.state);
+            return (
+              <EditFormComponent
+                form={form}
+                fieldConfig={couponFields}
+                modalTitle={site('修改优惠金额')}
+                modalOk={site('修改优惠金额成功')}
+                modalVisible={editDiscountVisible}
+                onCancel={() => this.discountCancel()}
+                onSubmit={(values: ApplyItem) => {
+                  return coupon({ variables: { body: values, id: values.id } }).then(
+                    (v: GqlResult<'coupon'>) => v.data.coupon
+                  );
+                }}
+                values={this.state.rowData}
+                view={this}
+              />
+            );
+          }}
+        </Mutation>
+
         {/* 修改取款条件 */}
         <EditFormComponent
           form={form}

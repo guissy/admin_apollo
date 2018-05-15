@@ -193,7 +193,6 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
                     placeholder: `${site('请输入')}${currentLang}${v.title}`,
                     ...this.autoFocus(inputIndex === 0)
                   };
-                  console.log('☞☞☞ 9527 FormCompoent 197', inputIndex, v, element);
                   inputIndex += 1;
                 } else if (element.type === Select) {
                   defaultProps = {

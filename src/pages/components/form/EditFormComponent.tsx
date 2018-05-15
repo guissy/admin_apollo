@@ -157,7 +157,7 @@ export class EditFormComponent extends React.PureComponent<
       submitText = site('确定'),
       onCancel,
       onDone,
-      record
+      values
     } = this.props;
     const editContextOk = Object.assign(this.state.editContext || {}, {
       form: this.props.form,
@@ -191,7 +191,7 @@ export class EditFormComponent extends React.PureComponent<
             onCancel={onCancel}
             onDone={onDone}
             resetFields={true}
-            record={record}
+            record={values}
           />
         </EditProvider>
       </ModalWrap>
@@ -208,12 +208,11 @@ interface EditFormComponentProps {
   submitText?: string; // 确认按钮文字
   modalVisible?: boolean; // 是否显示模态框
   site?: (words: string) => string;
-  values?: object; // 当前行要编辑的记录
+  values?: { isTotalRow?: boolean } & { [key: string]: any }; // tslint:disable-line
   editContext?: Partial<EditContext>; // 上下文
   onSubmit?: (values: object) => Promise<Result<object> | void>; // 提交事件，返回Promise，用于关闭模态框，清理表单
   onCancel?: Function; // 关闭事件
   onDone?: (result: Result<object> | void) => void; // onSubmit后的回调
-  record?: { isTotalRow?: boolean } & { [key: string]: any }; // tslint:disable-line
   view?: React.PureComponent;
   modalOk?: React.ReactNode;
 }

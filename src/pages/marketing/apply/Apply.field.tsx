@@ -30,6 +30,7 @@ interface Activity {
 export default class ApplyField extends TableFormField {
   id = {
     edit: <input type="hidden" />,
+    coupon: <input type="hidden" />,
     table: notInTable
   };
 
