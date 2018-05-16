@@ -10,6 +10,7 @@
     "apollo-link-error": "^1.0.9",
     "apollo-link-rest": "^0.2.4",
     "clipboard": "^2.0.0",
+    "core-decorators": "^0.20.0",
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
     "graphql": "^0.13.2",

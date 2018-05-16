@@ -1,4 +1,4 @@
-import { Action, Model } from 'dva';
+import { Model } from 'dva';
 import { Result } from '../../../utils/result';
 import gql from 'graphql-tag';
 
@@ -36,15 +36,7 @@ export interface ApplyState {
 
 const ApplyModel: Model = {
   namespace: 'apply',
-  state: {},
-  reducers: {
-    update(state: ApplyState, { payload }: Action) {
-      return {
-        ...state,
-        ...payload
-      };
-    }
-  }
+  state: {}
 };
 
 export const ApplyItemFragment = gql`

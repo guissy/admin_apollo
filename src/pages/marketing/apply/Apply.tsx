@@ -1,28 +1,24 @@
 import * as React from 'react';
-import { select } from '../../../utils/model';
-import { Dispatch } from 'dva';
-import { ApplyState, ApplyItem, ApplyItemFragment } from './Apply.model';
+import { autobind } from 'core-decorators';
+import ApolloClient from 'apollo-client/ApolloClient';
+import { compose, Mutation, Query, withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
+import { ApplyItem, ApplyItemFragment } from './Apply.model';
 import { Form, Modal, Button, Icon } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import { EditFormComponent } from '../../components/form/EditFormComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
-import { showMessageForResult } from '../../../utils/showMessage';
-import request from '../../../utils/request';
-import { defaults } from 'lodash/fp';
 import ApplyField from './Apply.field';
 import { SearchComponent } from '../../components/form/SearchComponent';
-import { compose, Mutation, Query, withApollo } from 'react-apollo';
-import gql from 'graphql-tag';
 import { GqlResult } from '../../../utils/result';
-import ApolloClient from 'apollo-client/ApolloClient';
+import { stringify } from 'querystring';
+import { pathBuilder } from '../../../utils/apollo';
 
 interface Hoc {
   client: ApolloClient<object>;
   form: WrappedFormUtils;
   site: (p: string) => React.ReactNode;
-  dispatch: Dispatch;
-  apply: ApplyState;
 }
 
 interface Props extends Partial<Hoc> {}
@@ -30,8 +26,8 @@ interface Props extends Partial<Hoc> {}
 /** 优惠申请 */
 @withLocale
 @Form.create()
-@select('')
 @compose(withApollo)
+@autobind
 export default class Apply extends React.PureComponent<Props, {}> {
   refetch: Function;
   state = {
@@ -49,102 +45,61 @@ export default class Apply extends React.PureComponent<Props, {}> {
     searchValues: {}
   };
 
-  onChange = (page: number, pageSize: number) => {
+  onChange(page: number, pageSize: number) {
     // todo: 翻页
   }
-  writeMemo = (record: ApplyItem) => {
-    this.setState({
-      editVisible: true,
-      editing: record
-    });
-  }
-  doPass = (record: ApplyItem) => {
-    request(`/active/apply/status`, {
-      method: 'put',
-      body: JSON.stringify({
-        id: record.id,
-        memo: record.memo,
-        status: 'pass',
-        user_id: record.user_id,
-        user_name: record.user_name
-      })
-    })
-      .then(res => showMessageForResult(res, '已通过'))
-      .then(() => {
-        this.loadTableData();
-      });
-  }
-  doReject = (record: ApplyItem) => {
-    request(`/active/apply/status`, {
-      method: 'put',
-      body: JSON.stringify({
-        id: record.id,
-        memo: record.memo,
-        status: 'rejected',
-        user_id: record.user_id,
-        user_name: record.user_name
-      })
-    })
-      .then(res => showMessageForResult(res, '已拒绝'))
-      .then(() => {
-        this.loadTableData();
-      });
-  }
-  getDetail = (record: ApplyItem) => {
+
+  onShowDetail(record: ApplyItem) {
     this.setState({
       detailModalVisible: true,
       detailData: record
     });
   }
-  handleDetailModalCancel = () => {
+  onShowDetailClose() {
     this.setState({
       detailModalVisible: false
     });
   }
-  onEdit = () => {
+
+  onEditMemo(record: ApplyItem) {
     this.setState({
-      editVisible: false
+      editVisible: true,
+      editing: record
     });
   }
-  editDiscount = (record: ApplyItem) => {
-    this.setState({
-      editDiscountVisible: true,
-      rowData: record
-    });
-    console.log('☞☞☞ 9527 Apply 163', 'editDiscount', record);
-  }
-  discountCancel = () => {
-    this.setState({
-      editDiscountVisible: false
-    });
-  }
-  editWithdraw = (record: ApplyItem) => {
-    this.setState({
-      editWithdrawVisible: true,
-      rowData: record
-    });
-  }
-  withdrawCancel = () => {
-    this.setState({
-      editWithdrawVisible: false
-    });
-  }
-  cancel = () => {
+  onEditMemoClose() {
     this.setState({
       editVisible: false,
       editing: {}
     });
   }
 
+  onEditDiscount(record: ApplyItem) {
+    this.setState({
+      editDiscountVisible: true,
+      rowData: record
+    });
+  }
+  onEditDiscountClose() {
+    this.setState({
+      editDiscountVisible: false
+    });
+  }
+
+  onEditWithdraw(record: ApplyItem) {
+    this.setState({
+      editWithdrawVisible: true,
+      rowData: record
+    });
+  }
+  onEditWithdrawClose() {
+    this.setState({
+      editWithdrawVisible: false
+    });
+  }
+
   render(): React.ReactElement<HTMLElement> {
-    const { site = () => null, form, apply: applyOk, client } = this.props as Hoc;
-    const apply2 = defaults(
-      {
-        data: [] as ApplyItem[],
-        isDetailLoading: true
-      } as ApplyState,
-      applyOk
-    );
+    const { site = () => '', form, client } = this.props as Hoc;
     const { editDiscountVisible, editVisible, editWithdrawVisible } = this.state;
     const fields = new ApplyField();
     const editFields = fields.filterBy('edit');
@@ -158,10 +113,19 @@ export default class Apply extends React.PureComponent<Props, {}> {
           form={form}
           fieldConfig={searchFields}
           pageSize={20}
-          onSubmit={values => {
-            // console.log('☞☞☞ 9527 Apply 164', client.queryManager.);
-            this.setState({ searchValues: { ...values, page: 1, page_size: 20 } });
-            return this.refetch(this.state.searchValues);
+          onSubmit={(values: { apply_time: string[]; pathBuilder: (o: object) => string }) => {
+            let [apply_time_from, apply_time_to] = values.apply_time;
+            delete values.apply_time;
+            values.pathBuilder = pathBuilder('/active/applys');
+            const searchValues = {
+              ...values,
+              apply_time_from,
+              apply_time_to,
+              page: 1,
+              page_size: 20
+            };
+            this.setState({ searchValues });
+            return this.refetch(searchValues);
           }}
         />
         <Query
@@ -172,10 +136,11 @@ export default class Apply extends React.PureComponent<Props, {}> {
                 $page: Int
                 $page_size: Int
                 $user_name: String = ""
-                $level: Int
-                $active_title: String
-                $apply_time_from: String
-                $apply_time_to: String
+                $level: Int = ""
+                $active_title: String = ""
+                $apply_time_from: String = ""
+                $apply_time_to: String = ""
+                $pathBuilder: any
               ) {
                 apply(
                   page: $page
@@ -185,11 +150,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
                   active_title: $active_title
                   apply_time_from: $apply_time_from
                   apply_time_to: $apply_time_to
-                )
-                  @rest(
-                    type: "ApplyResult"
-                    path: "/active/applys?page=:page&page_size=:page_size&user_name=:user_name &$level=:level&active_title=:active_title&apply_time_from=:apply_time_from&apply_time_to=:apply_time_to"
-                  ) {
+                ) @rest(type: "ApplyResult", pathBuilder: $pathBuilder) {
                   state
                   message
                   data {
@@ -207,7 +168,8 @@ export default class Apply extends React.PureComponent<Props, {}> {
             apply_time_from: '',
             apply_time_to: '',
             page: 1,
-            page_size: 20
+            page_size: 20,
+            pathBuilder: pathBuilder('/active/applys')
           }}
         >
           {({ data: { apply = { data: [], attributes: {} } }, loading, refetch }) => {
@@ -226,9 +188,9 @@ export default class Apply extends React.PureComponent<Props, {}> {
         <Modal
           visible={this.state.detailModalVisible}
           title="Title"
-          onCancel={this.handleDetailModalCancel}
+          onCancel={this.onShowDetailClose}
           footer={[
-            <Button key="back" onClick={this.handleDetailModalCancel}>
+            <Button key="back" onClick={this.onShowDetailClose}>
               关闭
             </Button>
           ]}
@@ -265,14 +227,14 @@ export default class Apply extends React.PureComponent<Props, {}> {
             }
           `}
         >
-          {(memo, { data }) => (
+          {memo => (
             <EditFormComponent
               form={this.props.form}
               fieldConfig={editFields}
               modalTitle={site('编辑')}
               modalOk={site('修改备注成功')}
               modalVisible={editVisible}
-              onCancel={() => this.cancel()}
+              onCancel={() => this.onEditMemoClose()}
               onSubmit={(values: ApplyItem) => {
                 return memo({ variables: { body: values, id: values.id } })
                   .then((v: GqlResult<'memo'>) => v.data.memo)
@@ -316,7 +278,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
               modalTitle={site('修改优惠金额')}
               modalOk={site('修改优惠金额成功')}
               modalVisible={editDiscountVisible}
-              onCancel={() => this.discountCancel()}
+              onCancel={() => this.onEditDiscountClose()}
               onSubmit={(values: ApplyItem) => {
                 return coupon({ variables: { body: values, id: values.id } })
                   .then((v: GqlResult<'coupon'>) => v.data.coupon)
@@ -337,7 +299,6 @@ export default class Apply extends React.PureComponent<Props, {}> {
             />
           )}
         </Mutation>
-
         {/* 修改取款条件 */}
         <Mutation
           mutation={gql`
@@ -355,13 +316,13 @@ export default class Apply extends React.PureComponent<Props, {}> {
             }
           `}
         >
-          {(withdraw, { data }) => (
+          {withdraw => (
             <EditFormComponent
               form={form}
               fieldConfig={withdrawFields}
               modalTitle={site('修改取款条件')}
               modalVisible={editWithdrawVisible}
-              onCancel={() => this.withdrawCancel()}
+              onCancel={() => this.onEditWithdrawClose()}
               onSubmit={(values: ApplyItem) => {
                 return withdraw({ variables: { body: values, id: values.id } })
                   .then((v: GqlResult<'withdraw'>) => v.data.withdraw)

@@ -44,6 +44,8 @@ export interface FieldProps<
   text: T;
   record: R & { isTotalRow?: boolean };
   view: C;
+  onChange: (value: string) => void;
+  value: string;
 }
 
 /** 不出现在表格的字段 */

@@ -8,9 +8,10 @@ import { ApplyItem, ApplyItemFragment } from './Apply.model';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import QuickDateComponent from '../../components/date/QuickDateComponent';
-import { graphql, Query, ChildProps, Mutation } from 'react-apollo';
+import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { GqlResult } from '../../../utils/result';
+import { messageResult } from '../../../utils/showMessage';
 
 const site = withLocale.site;
 
@@ -52,7 +53,7 @@ export default class ApplyField extends TableFormField {
 
   active_title = {
     title: site('优惠活动标题'),
-    search: ({ text, record, view }: FieldProps<string, ApplyItem, Apply>) => (
+    search: ({ text, record, view, value, onChange }: FieldProps<string, ApplyItem, Apply>) => (
       <Query
         query={gql`
           query {
@@ -67,7 +68,7 @@ export default class ApplyField extends TableFormField {
         `}
       >
         {({ data: { actives = { data: [] } } = {} }: ChildProps<{}, Activity, {}>) => (
-          <Select>
+          <Select defaultValue={value} onChange={onChange}>
             {actives.data.map((active: { title: string; id: number }, i: number) => (
               <Select.Option key={i} value={String(active.id)}>
                 {active.title}
@@ -104,7 +105,7 @@ export default class ApplyField extends TableFormField {
       return record.isTotalRow ? (
         text
       ) : (
-        <span onClick={() => view.editDiscount(record)}>
+        <span onClick={() => view.onEditDiscount(record)}>
           <Tag color="blue">{text}</Tag>
         </span>
       );
@@ -131,7 +132,7 @@ export default class ApplyField extends TableFormField {
       return record.isTotalRow ? (
         text
       ) : (
-        <span onClick={() => view.editWithdraw(record)}>
+        <span onClick={() => view.onEditWithdraw(record)}>
           <Tag color="blue">{text}</Tag>
         </span>
       );
@@ -141,7 +142,7 @@ export default class ApplyField extends TableFormField {
   apply_detail = {
     title: site('申请详情'),
     table: ({ text, record, view }: FieldProps<string, ApplyItem, Apply>) =>
-      record.isTotalRow ? '' : <a onClick={() => view.getDetail(record)}>详情</a>
+      record.isTotalRow ? '' : <a onClick={() => view.onShowDetail(record)}>详情</a>
   };
 
   apply_time = {
@@ -199,6 +200,7 @@ export default class ApplyField extends TableFormField {
                       confirm={true}
                       onClick={() =>
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
+                          .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => v.data.status)
                           .then(v => {
                             if (view.props.client) {
@@ -221,6 +223,7 @@ export default class ApplyField extends TableFormField {
                       confirm={true}
                       onClick={() =>
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
+                          .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => v.data.status)
                           .then(v => {
                             if (view.props.client) {
@@ -241,7 +244,7 @@ export default class ApplyField extends TableFormField {
                     </LinkComponent>
                   </>
                 )}
-                <LinkComponent onClick={() => view.writeMemo(record)}>写备注</LinkComponent>
+                <LinkComponent onClick={() => view.onEditMemo(record)}>写备注</LinkComponent>
               </TableActionComponent>
             )}
           </Mutation>
