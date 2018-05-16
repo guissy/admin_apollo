@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { FormComponent, FormConfig } from './FormCompoent';
@@ -34,7 +33,7 @@ interface SearchComponentProps {
   onSubmit?: (values: object) => Promise<Result<object>>; // 提交事件，返回Promise，用于关闭模态框，清理表单
   onDone?: (result?: Result<object> | void) => void; // onSubmit后的回调
   actionType?: string; // naresult?: Result<object> | voidmespace/effect
-  site?: (words: IntlKeys) => string;
+  site?: (words: string) => string;
   pageSize?: number; // 查询记录数量
 }
 

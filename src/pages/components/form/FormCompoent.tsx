@@ -34,6 +34,7 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
     loading: false,
     visibleModal: false
   };
+  hasSubmit: boolean;
 
   autoFocus(isFirst?: boolean) {
     return isFirst
@@ -61,6 +62,7 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
         };
       }
       if (!err) {
+        this.hasSubmit = true;
         // 处理日期范围
         Object.entries(values)
           .filter(([key, value]) => key.includes(','))
@@ -125,6 +127,10 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
   onReset = () => {
     this.props.form!.resetFields();
     this.setState({ loading: false });
+  }
+
+  shouldComponentUpdate(nextProps: Readonly<FormComponentProps>, nextState: Readonly<{}>): boolean {
+    return nextProps.resetFields ? !this.hasSubmit : true; // 提交之后不更新，避免表单字段闪回原来的值
   }
 
   public render() {

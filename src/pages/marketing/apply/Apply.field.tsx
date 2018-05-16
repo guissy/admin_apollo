@@ -4,12 +4,13 @@ import { moneyPattern } from '../../../utils/formRule';
 import LinkComponent from '../../components/link/LinkComponent';
 import withLocale from '../../../utils/withLocale';
 import Apply from './Apply';
-import { ApplyItem } from './Apply.model';
+import { ApplyItem, ApplyItemFragment } from './Apply.model';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import QuickDateComponent from '../../components/date/QuickDateComponent';
-import { graphql, Query, ChildProps } from 'react-apollo';
+import { graphql, Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import { GqlResult } from '../../../utils/result';
 
 const site = withLocale.site;
 
@@ -31,6 +32,7 @@ export default class ApplyField extends TableFormField {
   id = {
     edit: <input type="hidden" />,
     coupon: <input type="hidden" />,
+    withdraw: <input type="hidden" />,
     table: notInTable
   };
 
@@ -177,12 +179,68 @@ export default class ApplyField extends TableFormField {
         <TableActionComponent>
           {record.status === 'pending' && (
             <>
-              <LinkComponent confirm={true} onClick={() => view.doPass(record)}>
-                {site('通过')}
-              </LinkComponent>
-              <LinkComponent confirm={true} onClick={() => view.doReject(record)}>
-                {site('拒绝')}
-              </LinkComponent>
+              <Mutation
+                mutation={gql`
+                  mutation statusMutation($id: Int!, $status: String!, $bodyBuilder: bodyBuilder) {
+                    status(id: $id, status: $status)
+                      @rest(
+                        bodyKey: "body"
+                        path: "/active/apply/status"
+                        method: "PUT"
+                        type: "StatusResult"
+                        bodyBuilder: bodyBuilder
+                      ) {
+                      state
+                      message
+                    }
+                  }
+                `}
+              >
+                {(pass, { data }) => (
+                  <>
+                    <LinkComponent
+                      confirm={true}
+                      onClick={() =>
+                        pass({ variables: { id: record.id, status: 'pass' } })
+                          .then((v: GqlResult<'status'>) => v.data.status)
+                          .then(v => {
+                            view.props.client.writeFragment({
+                              id: `ApplyItem:${record.id}`,
+                              fragment: ApplyItemFragment,
+                              data: {
+                                ...record,
+                                status: 'pass'
+                              }
+                            });
+                            return v;
+                          })
+                      }
+                    >
+                      {site('通过')}
+                    </LinkComponent>
+                    <LinkComponent
+                      confirm={true}
+                      onClick={() =>
+                        pass({ variables: { id: record.id, status: 'rejected' } })
+                          .then((v: GqlResult<'status'>) => v.data.status)
+                          .then(v => {
+                            view.props.client.writeFragment({
+                              id: `ApplyItem:${record.id}`,
+                              fragment: ApplyItemFragment,
+                              data: {
+                                ...record,
+                                status: 'rejected'
+                              }
+                            });
+                            return v;
+                          })
+                      }
+                    >
+                      {site('拒绝')}
+                    </LinkComponent>
+                  </>
+                )}
+              </Mutation>
             </>
           )}
           <LinkComponent onClick={() => view.writeMemo(record)}>写备注</LinkComponent>

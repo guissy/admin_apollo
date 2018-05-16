@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
-import { ApplyState, ApplyItem } from './Apply.model';
+import { ApplyState, ApplyItem, ApplyItemFragment } from './Apply.model';
 import { Form, Modal, Button, Icon } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import { EditFormComponent } from '../../components/form/EditFormComponent';
@@ -9,26 +9,31 @@ import { WrappedFormUtils } from 'antd/es/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
 import request from '../../../utils/request';
-import { stringify } from 'querystring';
-import { moneyForResult, yuan } from '../../../utils/money';
 import { defaults } from 'lodash/fp';
 import ApplyField from './Apply.field';
 import { SearchComponent } from '../../components/form/SearchComponent';
-import { FetchResult, Mutation, Query } from 'react-apollo';
+import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import { GqlResult, Result } from '../../../utils/result';
+import { GqlResult } from '../../../utils/result';
+import ApolloClient from 'apollo-client/ApolloClient';
 
-interface Props {
+interface Hoc {
+  client: ApolloClient<object>;
+  form: WrappedFormUtils;
+  site: (p: string) => React.ReactNode;
   dispatch: Dispatch;
   apply: ApplyState;
-  form?: WrappedFormUtils;
-  site?: (p: string) => React.ReactNode;
 }
+
+interface Props extends Partial<Hoc> {}
+
 /** 优惠申请 */
 @withLocale
 @Form.create()
 @select('')
+@compose(withApollo)
 export default class Apply extends React.PureComponent<Props, {}> {
+  refetch: Function;
   state = {
     newVisible: false,
     editVisible: false,
@@ -40,47 +45,17 @@ export default class Apply extends React.PureComponent<Props, {}> {
     detailData: {} as ApplyItem,
     rowData: {},
     page: 1,
-    pageSize: 10
+    pageSize: 10,
+    searchValues: {}
   };
 
-  componentDidMount() {
-    this.loadTableData();
-    // 取下拉
-  }
-  loadTableData = (page: number = this.state.page, pageSize: number = this.state.pageSize) => {
-    return request(
-      `/active/applys?${stringify({
-        page: page,
-        page_size: pageSize
-      })}`
-    )
-      .then(
-        moneyForResult<ApplyItem[]>({
-          data: {
-            $for: {
-              coupon_money: yuan, // 分转元
-              deposit_money: yuan,
-              withdraw_require: yuan
-            }
-          }
-        })
-      )
-      .then(payload => this.props.dispatch({ type: 'apply/update', payload }));
-  }
   onChange = (page: number, pageSize: number) => {
-    this.setState({
-      page,
-      pageSize
-    });
-    this.loadTableData(page, pageSize);
+    // todo: 翻页
   }
   writeMemo = (record: ApplyItem) => {
     this.setState({
       editVisible: true,
-      editing: {
-        id: record.id,
-        content: record.memo
-      }
+      editing: record
     });
   }
   doPass = (record: ApplyItem) => {
@@ -118,15 +93,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
   getDetail = (record: ApplyItem) => {
     this.setState({
       detailModalVisible: true,
-      isDetailLoading: true
-    });
-    request(`/active/apply/${record.id}`).then(result => {
-      if (result.state === 0) {
-        this.setState({
-          detailData: result.data,
-          isDetailLoading: false
-        });
-      }
+      detailData: record
     });
   }
   handleDetailModalCancel = () => {
@@ -139,26 +106,10 @@ export default class Apply extends React.PureComponent<Props, {}> {
       editVisible: false
     });
   }
-  // tslint:disable-next-line:no-any
-  onDiscountSubmit = (values: { pre_coupon_money: string; coupon_money: string; id: string }) => {
-    delete values.pre_coupon_money;
-    values.coupon_money = (Number(values.coupon_money) * 100).toString();
-    this.setState({
-      editDiscountVisible: false
-    });
-    return request(`/active.discount/${this.state.rowData.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(values)
-    })
-      .then(res => showMessageForResult(res, '编辑成功'))
-      .then(() => {
-        this.loadTableData();
-      });
-  }
   editDiscount = (record: ApplyItem) => {
     this.setState({
       editDiscountVisible: true,
-      rowData: { ...record }
+      rowData: record
     });
     console.log('☞☞☞ 9527 Apply 163', 'editDiscount', record);
   }
@@ -166,22 +117,6 @@ export default class Apply extends React.PureComponent<Props, {}> {
     this.setState({
       editDiscountVisible: false
     });
-  }
-  // tslint:disable-next-line:no-any
-  onWithdrawSubmit = (values: any) => {
-    delete values.pre_withdraw_require;
-    values.withdraw_require = values.withdraw_require * 100;
-    this.setState({
-      editWithdrawVisible: false
-    });
-    return request(`/active.withdraw.require/${this.state.rowData.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(values)
-    })
-      .then(res => showMessageForResult(res, '修改成功'))
-      .then(() => {
-        this.loadTableData();
-      });
   }
   editWithdraw = (record: ApplyItem) => {
     this.setState({
@@ -197,26 +132,12 @@ export default class Apply extends React.PureComponent<Props, {}> {
   cancel = () => {
     this.setState({
       editVisible: false,
-      editing: {
-        content: ''
-      }
+      editing: {}
     });
   }
-  onEditSubmit = (values: ApplyItem) => {
-    this.setState({
-      editVisible: false
-    });
-    return request(`/active/apply.comment/${values.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(values)
-    })
-      .then(res => showMessageForResult(res, '编辑成功'))
-      .then(() => {
-        this.loadTableData();
-      });
-  }
+
   render(): React.ReactElement<HTMLElement> {
-    const { site = () => null, form, apply: applyOk } = this.props;
+    const { site = () => null, form, apply: applyOk, client } = this.props as Hoc;
     const apply2 = defaults(
       {
         data: [] as ApplyItem[],
@@ -237,58 +158,70 @@ export default class Apply extends React.PureComponent<Props, {}> {
           form={form}
           fieldConfig={searchFields}
           pageSize={20}
-          onSubmit={values => this.loadTableData(1, 20)}
+          onSubmit={values => {
+            // console.log('☞☞☞ 9527 Apply 164', client.queryManager.);
+            this.setState({ searchValues: { ...values, page: 1, page_size: 20 } });
+            return this.refetch(this.state.searchValues);
+          }}
         />
         <Query
-          query={gql`
-            query applyQuery($page: Int, $page_size: Int) {
-              apply(page: $page, page_size: $page_size)
-                @rest(
-                  type: "ApplyResult"
-                  path: "/active/applys"
-                  params: { page: $page, page_size: $page_size }
-                ) {
-                data {
-                  active_id
-                  active_name
-                  active_title
-                  agent_id
-                  apply_time
-                  content
-                  coupon_money
-                  deposit_money
-                  email
-                  id
-                  ip
-                  issue_mode
-                  level
-                  memo
-                  mobile
-                  process_time
+          query={
+            // tslint:disable
+            gql`
+              query applyQuery(
+                $page: Int
+                $page_size: Int
+                $user_name: String = ""
+                $level: Int
+                $active_title: String
+                $apply_time_from: String
+                $apply_time_to: String
+              ) {
+                apply(
+                  page: $page
+                  page_size: $page_size
+                  user_name: $user_name
+                  level: $level
+                  active_title: $active_title
+                  apply_time_from: $apply_time_from
+                  apply_time_to: $apply_time_to
+                )
+                  @rest(
+                    type: "ApplyResult"
+                    path: "/active/applys?page=:page&page_size=:page_size&user_name=:user_name &$level=:level&active_title=:active_title&apply_time_from=:apply_time_from&apply_time_to=:apply_time_to"
+                  ) {
                   state
-                  status
-                  type_id
-                  type_name
-                  user_id
-                  user_name
-                  withdraw_require
+                  message
+                  data {
+                    ...ApplyItemFragment
+                  }
                 }
               }
-            }
-          `}
+              ${ApplyItemFragment}
+            ` // tslint:enable
+          }
           variables={{
+            user_name: '',
+            level: '',
+            active_title: '',
+            apply_time_from: '',
+            apply_time_to: '',
             page: 1,
             page_size: 20
           }}
         >
-          {({ data: { apply = { data: [], attributes: {} } } }) => (
-            <TableComponent
-              dataSource={apply.data}
-              columns={tableFields}
-              form={form}
-              pagination={getPagination(apply.attributes, this.onChange)}
-            />
-          )}
+          {({ data: { apply = { data: [], attributes: {} } }, loading, refetch }) => {
+            this.refetch = refetch;
+            return (
+              <TableComponent
+                loading={loading}
+                dataSource={apply.data}
+                columns={tableFields}
+                form={form}
+                pagination={getPagination(apply.attributes, this.onChange)}
+              />
+            );
+          }}
         </Query>
         <Modal
           visible={this.state.detailModalVisible}
@@ -311,6 +244,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
               <p>邮箱：{this.state.detailData.email}</p>
               <p>申请活动： {this.state.detailData.active_name}</p>
               <p>活动内容：{this.state.detailData.content}</p>
+              <p>备注：{this.state.detailData.memo}</p>
             </div>
           )}
         </Modal>
@@ -340,9 +274,19 @@ export default class Apply extends React.PureComponent<Props, {}> {
               modalVisible={editVisible}
               onCancel={() => this.cancel()}
               onSubmit={(values: ApplyItem) => {
-                return memo({ variables: { body: values, id: values.id } }).then(
-                  (v: GqlResult<'memo'>) => v.data.memo
-                );
+                return memo({ variables: { body: values, id: values.id } })
+                  .then((v: GqlResult<'memo'>) => v.data.memo)
+                  .then(v => {
+                    client.writeFragment({
+                      id: `ApplyItem:${values.id}`,
+                      fragment: ApplyItemFragment,
+                      data: {
+                        ...this.state.editing,
+                        ...values
+                      }
+                    });
+                    return v;
+                  });
               }}
               values={this.state.editing}
             />
@@ -365,39 +309,79 @@ export default class Apply extends React.PureComponent<Props, {}> {
             }
           `}
         >
-          {(coupon, { data }) => {
-            // console.log('☞☞☞ 9527 Apply 374', this.state);
-            return (
-              <EditFormComponent
-                form={form}
-                fieldConfig={couponFields}
-                modalTitle={site('修改优惠金额')}
-                modalOk={site('修改优惠金额成功')}
-                modalVisible={editDiscountVisible}
-                onCancel={() => this.discountCancel()}
-                onSubmit={(values: ApplyItem) => {
-                  return coupon({ variables: { body: values, id: values.id } }).then(
-                    (v: GqlResult<'coupon'>) => v.data.coupon
-                  );
-                }}
-                values={this.state.rowData}
-                view={this}
-              />
-            );
-          }}
+          {coupon => (
+            <EditFormComponent
+              form={form}
+              fieldConfig={couponFields}
+              modalTitle={site('修改优惠金额')}
+              modalOk={site('修改优惠金额成功')}
+              modalVisible={editDiscountVisible}
+              onCancel={() => this.discountCancel()}
+              onSubmit={(values: ApplyItem) => {
+                return coupon({ variables: { body: values, id: values.id } })
+                  .then((v: GqlResult<'coupon'>) => v.data.coupon)
+                  .then(v => {
+                    client.writeFragment({
+                      id: `ApplyItem:${values.id}`,
+                      fragment: ApplyItemFragment,
+                      data: {
+                        ...this.state.rowData,
+                        ...values
+                      }
+                    });
+                    return v;
+                  });
+              }}
+              values={this.state.rowData}
+              view={this}
+            />
+          )}
         </Mutation>
 
         {/* 修改取款条件 */}
-        <EditFormComponent
-          form={form}
-          fieldConfig={withdrawFields}
-          modalTitle={site('修改取款条件')}
-          modalVisible={editWithdrawVisible}
-          onCancel={() => this.withdrawCancel()}
-          onSubmit={this.onWithdrawSubmit}
-          record={this.state.rowData}
-          view={this}
-        />
+        <Mutation
+          mutation={gql`
+            mutation withdrawMutation($body: WithdrawInput!, $id: Int!) {
+              withdraw(body: $body, id: $id)
+                @rest(
+                  bodyKey: "body"
+                  path: "/active.withdraw/:id"
+                  method: "PATCH"
+                  type: "WithdrawResult"
+                ) {
+                state
+                message
+              }
+            }
+          `}
+        >
+          {(withdraw, { data }) => (
+            <EditFormComponent
+              form={form}
+              fieldConfig={withdrawFields}
+              modalTitle={site('修改取款条件')}
+              modalVisible={editWithdrawVisible}
+              onCancel={() => this.withdrawCancel()}
+              onSubmit={(values: ApplyItem) => {
+                return withdraw({ variables: { body: values, id: values.id } })
+                  .then((v: GqlResult<'withdraw'>) => v.data.withdraw)
+                  .then(v => {
+                    client.writeFragment({
+                      id: `ApplyItem:${values.id}`,
+                      fragment: ApplyItemFragment,
+                      data: {
+                        ...this.state.rowData,
+                        ...values
+                      }
+                    });
+                    return v;
+                  });
+              }}
+              values={this.state.rowData}
+              view={this}
+            />
+          )}
+        </Mutation>
       </>
     );
   }

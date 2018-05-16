@@ -58,7 +58,7 @@ router.get('/copywriter/float', async function login(req, res, next) {
       memo: '@cnname',
       mobile: '13500119988',
       process_time: moment().format('YYYY-MM-DD hh:mm:ss'),
-      state: 'pending',
+      'state|1': ['pending', 'pass', 'rejected'],
       status: '2',
       'type_id': [1],
       type_name: '充值',
@@ -77,7 +77,7 @@ router.put('/active/apply.comment/:id', async function save(req, res, next) {
 router.get('/active/apply/:id', async function save(req, res, next) {
   res.json(resultOk(applys[0]))
 });
-router.patch('/active.withdraw.require/:id', async function save(req, res, next) {
+router.patch('/active.withdraw/:id', async function save(req, res, next) {
   res.json(resultOk({}))
 });
 router.patch('/active.discount/:id', async function save(req, res, next) {

@@ -1,5 +1,6 @@
 import { Action, Model } from 'dva';
 import { Result } from '../../../utils/result';
+import gql from 'graphql-tag';
 
 export interface ApplyItem {
   active_id: string;
@@ -45,6 +46,34 @@ const ApplyModel: Model = {
     }
   }
 };
+
+export const ApplyItemFragment = gql`
+  fragment ApplyItemFragment on ApplyItem {
+    id
+    active_id
+    active_name
+    active_title
+    agent_id
+    apply_time
+    content
+    coupon_money
+    deposit_money
+    email
+    ip
+    issue_mode
+    level
+    memo
+    mobile
+    process_time
+    state
+    status
+    type_id
+    type_name
+    user_id
+    user_name
+    withdraw_require
+  }
+`;
 
 export default ApplyModel;
 export interface ApplyState extends Result<object> {}

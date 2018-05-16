@@ -29,61 +29,57 @@ const DivWrap = styled.div.attrs<{ hasActions: boolean }>({})`
   }
 `;
 
-export default withLocale(
-  connect<Store, {}, Props>(({ loading }: Store) => ({ loading }))(function TableComponent({
-    rowKey = 'id',
-    dataSource = [],
-    columns = [],
-    actionType,
-    pagination,
-    loading,
-    site,
-    ...props
-  }: Props) {
-    let tableColumns: FormConfig[];
-    let hasActions = false;
-    if (!Array.isArray(columns)) {
-      tableColumns = [];
-      messageError('表头column要求是数组，但是得到的是' + prettyString(dataSource));
-    } else {
-      tableColumns = columns.filter(v => v.notInTable !== true);
-      const lastColumn = tableColumns.slice().pop();
-      hasActions = lastColumn ? lastColumn.title === site!('操作') : false;
-    }
-    let totalRowsOk = [] as object[];
-    if (typeof pagination === 'object') {
-      const { totalRows } = pagination;
-      totalRowsOk = totalRows.map((record: { rowName: string }) => {
-        return {
-          ...record,
-          [tableColumns[0].dataIndex]: record.rowName
-        };
-      });
-    }
-    let dataSourceOk = [];
-    if (Array.isArray(dataSource)) {
-      dataSourceOk = dataSource.concat(totalRowsOk);
-    } else {
-      messageError('Table 数据要求是数组，但是得到的是' + prettyString(dataSource));
-    }
-    return (
-      <DivWrap hasActions={hasActions}>
-        <Table
-          size="small"
-          rowKey={rowKey}
-          dataSource={dataSourceOk}
-          columns={tableColumns}
-          bordered={true}
-          pagination={pagination}
-          loading={loading}
-          {...props}
-        />
-      </DivWrap>
-    );
-  })
-);
-
-type Store = { loading?: boolean; site?: (words: string) => string };
+export default withLocale(function TableComponent({
+  rowKey = 'id',
+  dataSource = [],
+  columns = [],
+  actionType,
+  pagination,
+  loading,
+  site,
+  ...props
+}: Props) {
+  let tableColumns: FormConfig[];
+  let hasActions = false;
+  if (!Array.isArray(columns)) {
+    tableColumns = [];
+    messageError('表头column要求是数组，但是得到的是' + prettyString(dataSource));
+  } else {
+    tableColumns = columns.filter(v => v.notInTable !== true);
+    const lastColumn = tableColumns.slice().pop();
+    hasActions = lastColumn ? lastColumn.title === site!('操作') : false;
+  }
+  let totalRowsOk = [] as object[];
+  if (typeof pagination === 'object') {
+    const { totalRows } = pagination;
+    totalRowsOk = totalRows.map((record: { rowName: string }) => {
+      return {
+        ...record,
+        [tableColumns[0].dataIndex]: record.rowName
+      };
+    });
+  }
+  let dataSourceOk = [];
+  if (Array.isArray(dataSource)) {
+    dataSourceOk = dataSource.concat(totalRowsOk);
+  } else {
+    messageError('Table 数据要求是数组，但是得到的是' + prettyString(dataSource));
+  }
+  return (
+    <DivWrap hasActions={hasActions}>
+      <Table
+        size="small"
+        rowKey={rowKey}
+        dataSource={dataSourceOk}
+        columns={tableColumns}
+        bordered={true}
+        pagination={pagination}
+        loading={loading}
+        {...props}
+      />
+    </DivWrap>
+  );
+});
 
 interface TablePaginationConfigWithTotal extends TablePaginationConfig {
   totalRows: object[];
