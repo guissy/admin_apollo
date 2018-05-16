@@ -173,45 +173,44 @@ export default class ApplyField extends TableFormField {
   oparation = {
     title: site('操作'),
     table: ({ record, view }: FieldProps<string, ApplyItem, Apply>) => {
-      return record.isTotalRow ? (
-        ''
-      ) : (
-        <TableActionComponent>
-          {record.status === 'pending' && (
-            <>
-              <Mutation
-                mutation={gql`
-                  mutation statusMutation($id: Int!, $status: String!, $bodyBuilder: bodyBuilder) {
-                    status(id: $id, status: $status)
-                      @rest(
-                        bodyKey: "body"
-                        path: "/active/apply/status"
-                        method: "PUT"
-                        type: "StatusResult"
-                        bodyBuilder: bodyBuilder
-                      ) {
-                      state
-                      message
-                    }
-                  }
-                `}
-              >
-                {(pass, { data }) => (
+      return (
+        !record.isTotalRow && (
+          <Mutation
+            mutation={gql`
+              mutation statusMutation($body: StatusInput!) {
+                status(body: $body)
+                  @rest(
+                    bodyKey: "body"
+                    path: "/active/apply/status"
+                    method: "PUT"
+                    type: "StatusResult"
+                  ) {
+                  state
+                  message
+                }
+              }
+            `}
+          >
+            {(pass, { data }) => (
+              <TableActionComponent>
+                {record.status === 'pending' && (
                   <>
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        pass({ variables: { id: record.id, status: 'pass' } })
+                        pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then((v: GqlResult<'status'>) => v.data.status)
                           .then(v => {
-                            view.props.client.writeFragment({
-                              id: `ApplyItem:${record.id}`,
-                              fragment: ApplyItemFragment,
-                              data: {
-                                ...record,
-                                status: 'pass'
-                              }
-                            });
+                            if (view.props.client) {
+                              view.props.client.writeFragment({
+                                id: `ApplyItem:${record.id}`,
+                                fragment: ApplyItemFragment,
+                                data: {
+                                  ...record,
+                                  status: 'pass'
+                                }
+                              });
+                            }
                             return v;
                           })
                       }
@@ -221,17 +220,19 @@ export default class ApplyField extends TableFormField {
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        pass({ variables: { id: record.id, status: 'rejected' } })
+                        pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then((v: GqlResult<'status'>) => v.data.status)
                           .then(v => {
-                            view.props.client.writeFragment({
-                              id: `ApplyItem:${record.id}`,
-                              fragment: ApplyItemFragment,
-                              data: {
-                                ...record,
-                                status: 'rejected'
-                              }
-                            });
+                            if (view.props.client) {
+                              view.props.client.writeFragment({
+                                id: `ApplyItem:${record.id}`,
+                                fragment: ApplyItemFragment,
+                                data: {
+                                  ...record,
+                                  status: 'rejected'
+                                }
+                              });
+                            }
                             return v;
                           })
                       }
@@ -240,11 +241,11 @@ export default class ApplyField extends TableFormField {
                     </LinkComponent>
                   </>
                 )}
-              </Mutation>
-            </>
-          )}
-          <LinkComponent onClick={() => view.writeMemo(record)}>写备注</LinkComponent>
-        </TableActionComponent>
+                <LinkComponent onClick={() => view.writeMemo(record)}>写备注</LinkComponent>
+              </TableActionComponent>
+            )}
+          </Mutation>
+        )
       );
     }
   };
