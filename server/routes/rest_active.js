@@ -111,7 +111,7 @@ const { activities } = mockjs.mock({'activities|20': [{
         state: '1',
         status: '',
         'title|1': ['充一百送一百', '充话费送老婆', '送上月球，送飞船', '买一送一', '活不见人'],
-        types: ['1'],
+        types: [{name: '充值'}, {name: '满减'}],
         updated: moment().format('YYYY-MM-DD hh:mm:ss'),
         updated_uname: '@cname',
     }]});

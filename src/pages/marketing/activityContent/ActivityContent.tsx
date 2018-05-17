@@ -4,7 +4,7 @@ import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { SearchComponent } from '../../components/form/SearchComponent';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
-import ActivityApplyField from '../activityApply/ActivityApply.field';
+import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { pathBuilder } from '../../../utils/apollo';
 import gql from 'graphql-tag';
@@ -30,10 +30,8 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
-    const fields = new ActivityApplyField(this as React.PureComponent<Hoc>);
+    const fields = new ActivityContentField(this as React.PureComponent<Hoc>);
     const editFields = fields.filterBy('edit');
-    const couponFields = fields.filterBy('coupon');
-    const withdrawFields = fields.filterBy('withdraw');
     const searchFields = fields.filterBy('search');
     const tableFields = fields.table(this);
     const setState = this.setState.bind(this);
