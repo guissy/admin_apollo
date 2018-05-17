@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { select } from '../../../utils/model';
-import { Modal } from 'antd';
+import { Modal, Form } from 'antd';
 import { FormComponent, FormConfig } from './FormCompoent';
 import withLocale from '../../../utils/withLocale';
 import { Result } from '../../../utils/result';
@@ -81,15 +81,9 @@ function getMomentFromString(value: string[] | number[]) {
 
 @withLocale
 @select('')
-// tslint:disable-next-line:no-any
-export class EditFormComponent extends React.PureComponent<
-  EditFormComponentProps,
-  EditFormComponentState
-> {
-  static getDerivedStateFromProps = (
-    nextProps: EditFormComponentProps,
-    prevState: EditFormComponentState
-  ) => {
+@Form.create()
+export class EditFormComponent extends React.PureComponent<Props, State> {
+  static getDerivedStateFromProps = (nextProps: Props, prevState: State) => {
     const fieldConfig = nextProps.fieldConfig;
     const values = nextProps.values;
     let fieldConfigOk = prevState.fieldConfig;
@@ -125,7 +119,7 @@ export class EditFormComponent extends React.PureComponent<
     editContext: {}
   };
 
-  constructor(props: EditFormComponentProps) {
+  constructor(props: Props) {
     super(props);
   }
 
@@ -199,7 +193,7 @@ export class EditFormComponent extends React.PureComponent<
   }
 }
 
-interface EditFormComponentProps {
+interface Props {
   form?: WrappedFormUtils;
 
   fieldConfig: EditFormConfig[]; // 字段配置
@@ -217,7 +211,7 @@ interface EditFormComponentProps {
   modalOk?: React.ReactNode;
 }
 
-interface EditFormComponentState {
+interface State {
   visible: boolean; // 模态框是否可见
   fieldConfig: EditFormConfig[]; // 字段配置
   editContext: Partial<EditContext>; // 上下文

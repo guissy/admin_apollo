@@ -4,10 +4,12 @@ import { select } from '../../../utils/model';
 import { FormComponent, FormConfig } from './FormCompoent';
 import { Result } from '../../../utils/result';
 import { cloneButtonBar } from '../buttonBar/ButtonBarComponent';
+import { Form } from 'antd';
 
 /** 表格上面的查询 */
 @withLocale
 @select('')
+@Form.create()
 export class SearchComponent extends React.PureComponent<SearchComponentProps> {
   public render() {
     const { fieldConfig, site = () => '', actionType, pageSize, onSubmit, onDone } = this.props;

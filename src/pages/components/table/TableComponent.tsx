@@ -1,11 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import withLocale from '../../../utils/withLocale';
-import { connect } from 'dva';
 import { Table } from 'antd';
 import { Attributes } from '../../../utils/result';
 import { TablePaginationConfig, TableRowSelection } from 'antd/lib/table';
-import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { messageError, prettyString } from '../../../utils/showMessage';
 import { FormConfig } from '../form/FormCompoent';
 
@@ -90,7 +88,6 @@ interface Props {
   columns: FormConfig[]; // 表格列的配置
   rowKey?: string | ((record: any, index: number) => string); // tslint:disable-line:no-any
   site?: (words: string) => string;
-  form?: WrappedFormUtils;
   actionType?: string; // namespace/effect
   pagination: TablePaginationConfigWithTotal | false;
   loading?: boolean;
