@@ -2,12 +2,12 @@
 =========
 
 ## 技术栈
-### react
-### dva
-### antd
-### styled
-### rxjs
-### apollo
+- react
+- dva
+- antd
+- styled
+- rxjs
+- apollo
 
 ## 开发新功能模块的文件角色：
 一般有3个文件分别是
