@@ -3,8 +3,8 @@ import { Input, Tag, Select } from 'antd';
 import { moneyPattern } from '../../../utils/formRule';
 import LinkComponent from '../../components/link/LinkComponent';
 import withLocale from '../../../utils/withLocale';
-import Apply from './Apply';
-import { ApplyItem, ApplyItemFragment } from './Apply.model';
+import ActivityApply from './ActivityApply';
+import { ActivityApplyItem } from './ActivityApply.model';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import QuickDateComponent from '../../components/date/QuickDateComponent';
@@ -13,6 +13,7 @@ import gql from 'graphql-tag';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { PureComponent } from 'react';
+import Label from '../../components/label/Label';
 import ApolloClient from 'apollo-client/ApolloClient';
 
 const site = withLocale.site;
@@ -33,8 +34,20 @@ interface Activity {
   actives: ActivityResult;
 }
 
+type ActivityApplyConfig = { [key in keyof ActivityApplyItem]: ActivityApplyConfigValue };
+type ActivityApplyConfigValue = {
+  edit?: React.ReactNode;
+  title?: React.ReactNode;
+  search?: React.ReactNode;
+  coupon?: React.ReactNode;
+  withdraw?: React.ReactNode;
+  detail?: React.ReactNode;
+  table?: React.ReactNode;
+};
+
 /** 优惠字段 */
-export default class ApplyField<T extends { client: ApolloClient<{}> }> extends TableFormField<T> {
+export default class ActivityApplyField<T> extends TableFormField<T>
+  implements ActivityApplyConfig {
   id = {
     edit: <input type="hidden" />,
     coupon: <input type="hidden" />,
@@ -44,7 +57,8 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
 
   user_name = {
     title: site('用户名'),
-    search: <Input />
+    search: <Input />,
+    detail: <Label />
   };
 
   level = {
@@ -57,8 +71,18 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
   };
 
   active_title = {
-    title: site('优惠活动标题'),
-    search: ({ text, record, view, value, onChange }: FieldProps<string, ApplyItem, Apply>) => (
+    title: site('优惠活动标题')
+  };
+
+  active_id = {
+    title: site('优惠活动'),
+    search: ({
+      text,
+      record,
+      view,
+      value,
+      onChange
+    }: FieldProps<string, ActivityApplyItem, ActivityApply>) => (
       <Query
         query={gql`
           query {
@@ -82,7 +106,8 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
           </Select>
         )}
       </Query>
-    )
+    ),
+    table: notInTable
   };
 
   deposit_money = {
@@ -92,7 +117,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
   pre_coupon_money = {
     title: site('原优惠金额'),
     // 修改优惠金额
-    coupon: ({ text, record }: FieldProps<string, ApplyItem, Apply>) => {
+    coupon: ({ text, record }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
       return <span>{record.coupon_money}</span>;
     },
     table: notInTable
@@ -106,7 +131,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
       { required: true, message: '请输入优惠金额' },
       { pattern: moneyPattern(), message: '请输入小数点后小于两位的正数' }
     ],
-    table: ({ text, record, view }: FieldProps<string, ApplyItem, Apply>) => {
+    table: ({ text, record, view }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
       return record.isTotalRow ? (
         text
       ) : (
@@ -126,7 +151,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
   pre_withdraw_require = {
     title: site('原取款条件'),
     // 修改取款条件
-    withdraw: ({ text, record }: FieldProps<string, ApplyItem, Apply>) => (
+    withdraw: ({ text, record }: FieldProps<string, ActivityApplyItem, ActivityApply>) => (
       <span>{record.withdraw_require}</span>
     ),
     table: notInTable
@@ -139,7 +164,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
       { required: true, message: '请输入优惠金额' },
       { pattern: moneyPattern(), message: '请输入小数点后小于两位的正数' }
     ],
-    table: ({ text, record, view }: FieldProps<string, ApplyItem, Apply>) => {
+    table: ({ text, record, view }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
       return record.isTotalRow ? (
         text
       ) : (
@@ -158,7 +183,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
 
   apply_detail = {
     title: site('申请详情'),
-    table: ({ text, record, view }: FieldProps<string, ApplyItem, Apply>) =>
+    table: ({ text, record, view }: FieldProps<string, ActivityApplyItem, ActivityApply>) =>
       record.isTotalRow ? (
         ''
       ) : (
@@ -185,7 +210,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
 
   status = {
     title: site('状态'),
-    table: ({ text }: FieldProps<string, ApplyItem, Apply>) => {
+    table: ({ text }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
       const STATUS = {
         pending: <Tag className="audit-ing">{site('未处理')}</Tag>,
         rejected: <Tag className="audit-refused">{site('已拒绝')}</Tag>,
@@ -197,12 +222,31 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
 
   memo = {
     title: site('备注'),
-    edit: <Input.TextArea />
+    edit: <Input.TextArea />,
+    detail: <Label />
+  };
+
+  mobile = {
+    title: site('联系电话'),
+    table: notInTable,
+    detail: <Label />
+  };
+
+  email = {
+    title: site('邮箱'),
+    table: notInTable,
+    detail: <Label />
+  };
+
+  content = {
+    title: site('申请活动'),
+    table: notInTable,
+    detail: <Label />
   };
 
   oparation = {
     title: site('操作'),
-    table: ({ record, view }: FieldProps<string, ApplyItem, Apply>) => {
+    table: ({ record, view }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
       return (
         !record.isTotalRow && (
           <Mutation
@@ -231,7 +275,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ApplyItem', {
+                            writeFragment(this.props.client, 'ActivityApplyItem', {
                               id: record.id,
                               status: 'pass'
                             });
@@ -247,7 +291,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ApplyItem', {
+                            writeFragment(this.props.client, 'ActivityApplyItem', {
                               id: record.id,
                               status: 'rejected'
                             });
@@ -275,7 +319,7 @@ export default class ApplyField<T extends { client: ApolloClient<{}> }> extends 
       );
     }
   };
-  constructor(view: PureComponent<T>) {
+  constructor(view: React.PureComponent<T & { client: ApolloClient<{}> }>) {
     super(view);
   }
 }

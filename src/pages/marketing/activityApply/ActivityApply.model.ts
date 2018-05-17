@@ -1,41 +1,41 @@
 import { Model } from 'dva';
 import gql from 'graphql-tag';
-import * as React from 'react';
 
-const ApplyModel: Model = {
+const ActivityApplyModel: Model = {
   namespace: 'apply',
   state: {}
 };
-export default ApplyModel;
+export default ActivityApplyModel;
 
-export interface ApplyItem {
+export interface ActivityApplyItem {
   id: number;
   active_id: string;
   active_name: string;
   active_title: string;
-  agent_id: string;
   apply_time: string;
-  content: string;
   coupon_money: string;
   deposit_money: string;
-  email: string;
-  ip: string;
-  issue_mode: string;
+
+  // ip: string;
+  // issue_mode: string;
   level: string;
   memo: string;
-  mobile: string;
   process_time: string;
-  state: string;
+  // state: string;
   status: string;
-  type_id: string;
-  type_name: string;
-  user_id: string;
-  user_name: string;
+  // type_id: string;
   withdraw_require: string;
+  // type_name: string;
+  // user_id: string;
+
+  mobile: string;
+  email: string;
+  content: string;
+  user_name: string;
 }
 
-export const ApplyItemFragment = gql`
-  fragment ApplyItemFragment on ApplyItem {
+export const ActivityApplyItemFragment = gql`
+  fragment ActivityApplyItemFragment on ActivityApplyItem {
     id
     active_id
     active_name

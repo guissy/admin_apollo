@@ -1,32 +1,22 @@
 ---
 to: src/pages/<%= name %>/<%= Name %>.model.ts
 ---
-import { Model, Action, EffectsCommandMap, SubscriptionAPI } from 'dva';
-import { showMessageForResult } from '../../utils/showMessage';
-import { queryHttp, saveHttp } from './<%= Name %>.service.ts'
-
-export <%= Name %>State {
-
-}
+import { Model } from 'dva';
+import gql from 'graphql-tag';
 
 const <%= name %>: Model = {
   namespace: '<%= name %>',
-  state: {
-
-  },
-  effects: {
-   *query({ payload }: Action, { load }: EffectsCommandMap ) {
-     return yield load(queryHttp, payload);
-   }
-   *register({ payload }: Action, { call }: EffectsCommandMap ) {
-     return showMessageForResult(yield call(saveHttp, payload));
-   }
-  },
-  reducers: {
-    update(state: <%= Name %>State, action: Action) {
-      return { ...state, ...action.payload };
-    },
-  }
+  state: {},
 };
 
 export default <%= name %>;
+
+export interface <%= Name %>Item {
+  id: number;
+}
+
+export const <%= Name %>Fragment = gql`
+  fragment <%= Name %>ItemFragment on <%= Name %>Item {
+    id
+  }
+`

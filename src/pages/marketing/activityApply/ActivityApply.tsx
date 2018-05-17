@@ -3,21 +3,18 @@ import { autobind } from 'core-decorators';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import { ApplyItem, ApplyItemFragment } from './Apply.model';
-import { Modal, Button, Icon } from 'antd';
+import { ActivityApplyItem, ActivityApplyItemFragment } from './ActivityApply.model';
+import { Modal, Button } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import { EditFormComponent } from '../../components/form/EditFormComponent';
-import { WrappedFormUtils } from 'antd/es/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
-import ApplyField from './Apply.field';
+import ActivityApplyField from './ActivityApply.field';
 import { SearchComponent } from '../../components/form/SearchComponent';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
-import ApplyEdit from './Apply.edit';
-import { PureComponent } from 'react';
+import ActivityApplyEdit from './ActivityApply.edit';
 
 interface Hoc {
   client: ApolloClient<object>;
-  form: WrappedFormUtils;
   site: (p: string) => React.ReactNode;
 }
 
@@ -27,27 +24,25 @@ interface Props extends Partial<Hoc> {}
 @withLocale
 @compose(withApollo)
 @autobind
-export default class Apply extends React.PureComponent<Props, {}> {
+export default class ActivityApply extends React.PureComponent<Props, {}> {
   refetch: Function;
   state = {
     detail: {
       visible: false,
-      record: {} as ApplyItem
+      record: {} as ActivityApplyItem
     },
     memo: {
       visible: false,
-      record: {} as ApplyItem
+      record: {} as ActivityApplyItem
     },
     coupon: {
       visible: false,
-      record: {} as ApplyItem
+      record: {} as ActivityApplyItem
     },
     withdraw: {
       visible: false,
-      record: {} as ApplyItem
+      record: {} as ActivityApplyItem
     },
-    page: 1,
-    pageSize: 10,
     searchValues: {}
   };
 
@@ -57,11 +52,12 @@ export default class Apply extends React.PureComponent<Props, {}> {
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
-    const fields = new ApplyField(this as PureComponent<Hoc>);
+    const fields = new ActivityApplyField(this as React.PureComponent<Hoc>);
     const editFields = fields.filterBy('edit');
     const couponFields = fields.filterBy('coupon');
     const withdrawFields = fields.filterBy('withdraw');
     const searchFields = fields.filterBy('search');
+    const detailFields = fields.detail(this.state.detail.record);
     const tableFields = fields.table(this);
     const setState = this.setState.bind(this);
     return (
@@ -105,15 +101,15 @@ export default class Apply extends React.PureComponent<Props, {}> {
                   active_title: $active_title
                   apply_time_from: $apply_time_from
                   apply_time_to: $apply_time_to
-                ) @rest(type: "ApplyResult", pathBuilder: $pathBuilder) {
+                ) @rest(type: "ActivityApplyResult", pathBuilder: $pathBuilder) {
                   state
                   message
                   data {
-                    ...ApplyItemFragment
+                    ...ActivityApplyItemFragment
                   }
                 }
               }
-              ${ApplyItemFragment}
+              ${ActivityApplyItemFragment}
             ` // tslint:enable
           }
           variables={{
@@ -144,27 +140,20 @@ export default class Apply extends React.PureComponent<Props, {}> {
           title={site('详情')}
           onCancel={() => {
             this.setState({
-              detail: { visible: false, record: {} }
+              detail: { visible: false }
             });
           }}
           footer={
             <Button
               onClick={() => {
-                this.setState({ detail: { visible: false, record: {} } });
+                this.setState({ detail: { visible: false } });
               }}
             >
               关闭
             </Button>
           }
         >
-          <div>
-            <p>用户名称：{this.state.detail.record.user_name}</p>
-            <p>联系电话：{this.state.detail.record.mobile}</p>
-            <p>邮箱：{this.state.detail.record.email}</p>
-            <p>申请活动： {this.state.detail.record.active_name}</p>
-            <p>活动内容：{this.state.detail.record.content}</p>
-            <p>备注：{this.state.detail.record.memo}</p>
-          </div>
+          <div>{detailFields}</div>
         </Modal>
         {/* 编辑 */}
         <Mutation
@@ -194,10 +183,10 @@ export default class Apply extends React.PureComponent<Props, {}> {
                   memo: { visible: false, record: {} }
                 });
               }}
-              onSubmit={(values: ApplyItem) => {
+              onSubmit={(values: ActivityApplyItem) => {
                 return memo({ variables: { body: values, id: values.id } }).then(
                   (v: GqlResult<'memo'>) => {
-                    writeFragment(client, 'ApplyItem', values);
+                    writeFragment(client, 'ActivityApplyItem', values);
                     this.setState({
                       memo: { visible: false, record: {} }
                     });
@@ -209,7 +198,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
             />
           )}
         </Mutation>
-        <ApplyEdit
+        <ActivityApplyEdit
           withdraw={this.state.withdraw}
           withdrawFields={withdrawFields}
           coupon={this.state.coupon}

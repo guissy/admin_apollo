@@ -2,7 +2,7 @@ import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import { ApplyItem } from './Apply.model';
+import { ActivityApplyItem } from './ActivityApply.model';
 import withLocale from '../../../utils/withLocale';
 import { EditFormComponent, EditFormConfig } from '../../components/form/EditFormComponent';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
@@ -13,8 +13,8 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  coupon: { visible: boolean; record: ApplyItem };
-  withdraw: { visible: boolean; record: ApplyItem };
+  coupon: { visible: boolean; record: ActivityApplyItem };
+  withdraw: { visible: boolean; record: ActivityApplyItem };
   couponFields: EditFormConfig[];
   withdrawFields: EditFormConfig[];
   setState: (state: object) => void;
@@ -23,7 +23,7 @@ interface Props extends Partial<Hoc> {
 /** 编辑优惠和取款 */
 @withLocale
 @compose(withApollo)
-export default class ApplyEdit extends React.PureComponent<Props, {}> {
+export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
   render(): React.ReactNode {
     const { site = () => '', client } = this.props as Hoc;
     return (
@@ -56,10 +56,10 @@ export default class ApplyEdit extends React.PureComponent<Props, {}> {
                   coupon: { visible: false, record: {} }
                 });
               }}
-              onSubmit={(values: ApplyItem) => {
+              onSubmit={(values: ActivityApplyItem) => {
                 return coupon({ variables: { body: values, id: values.id } }).then(
                   (v: GqlResult<'coupon'>) => {
-                    writeFragment(client, 'ApplyItem', values);
+                    writeFragment(client, 'ActivityApplyItem', values);
                     this.props.setState({
                       coupon: { visible: false, record: {} }
                     });
@@ -100,10 +100,10 @@ export default class ApplyEdit extends React.PureComponent<Props, {}> {
                   withdraw: { visible: false, record: {} }
                 });
               }}
-              onSubmit={(values: ApplyItem) => {
+              onSubmit={(values: ActivityApplyItem) => {
                 return withdraw({ variables: { body: values, id: values.id } }).then(
                   (v: GqlResult<'withdraw'>) => {
-                    writeFragment(client, 'ApplyItem', values);
+                    writeFragment(client, 'ActivityApplyItem', values);
                     this.props.setState({
                       withdraw: { visible: false, record: {} }
                     });

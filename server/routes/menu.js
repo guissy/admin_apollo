@@ -197,7 +197,7 @@ module.exports = [
         id: 42,
         name: '手动优惠',
         action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/contentManagement'
+        path: '/activityContent'
       },
       {
         id: 43,

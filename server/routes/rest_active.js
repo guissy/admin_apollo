@@ -92,6 +92,54 @@ router.put('/active/apply/status', async function save(req, res, next) {
   res.json(resultOk(actives))
 });
 
+
+
+const { activities } = mockjs.mock({'activities|20': [{
+        'id|+1': 1,
+        begin_time: moment().format('YYYY-MM-DD hh:mm:ss'),
+        cover: `https://placeholdit.imgix.net/~text?txtsize=23&bg=a9160f&txtclr=ffffff&txt=${mockjs.Random.cname()}&w=360&h=60`,
+        created: moment().format('YYYY-MM-DD hh:mm:ss'),
+        created_uname: '@cname',
+        description: '@city',
+        end_time: moment().format('YYYY-MM-DD hh:mm:ss'),
+        issue_mode: '1',
+        language_id: '1',
+        language_name: '中文',
+        'name|1': ['充一百送一百', '充话费送老婆', '送上月球，送飞船', '买一送一', '活不见人'],
+        rule: '充1000000才送',
+        sort: '送100',
+        state: '1',
+        status: '',
+        'title|1': ['充一百送一百', '充话费送老婆', '送上月球，送飞船', '买一送一', '活不见人'],
+        types: ['1'],
+        updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+        updated_uname: '@cname',
+    }]});
+// 列表
+router.get('/activity/content', async function list(req, res, next) {
+  res.json(resultOk(activities))
+});
+// 开始
+router.patch('/active/manual/:id', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+// 删除
+router.delete('/active/manual/:id', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+// 添加
+router.put('/active/manual', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+// 详情
+router.get('/active/manual/:id', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+// 修改
+router.put('/active/manual/:id', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+
 module.exports = {
   Active,
   router,

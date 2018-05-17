@@ -43,7 +43,7 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 营销
 //    优惠申请
-import ApplyModel, { ApplyItem } from './pages/marketing/apply/Apply.model';
+import ActivityApplyModel from './pages/marketing/activityApply/ActivityApply.model';
 //    优惠类型
 import TypeListModel from './pages/marketing/typeList/TypeList.model';
 //    自动优惠模板
@@ -170,6 +170,7 @@ import { effectLoadingLoadError, loadReducer, effectErrorMessage } from './utils
 import { moneyForResult, yuan } from './utils/money';
 import environment from './utils/environment';
 import { addTypePatcher } from './utils/graphTypename';
+import ActivityApply from './pages/marketing/activityApply/ActivityApply';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -203,7 +204,7 @@ app.model(throttleEffect(IdleAccountModel));
 app.model(throttleEffect(OtherMemberModel));
 app.model(throttleEffect(AgentAuditModel));
 app.model(throttleEffect(ProxyCopyModel));
-app.model(throttleEffect(ApplyModel));
+app.model(throttleEffect(ActivityApplyModel));
 app.model(throttleEffect(TypeListModel));
 app.model(throttleEffect(SettingModel));
 app.model(throttleEffect(HeaderModel));
@@ -249,10 +250,11 @@ const client = new ApolloClient({
       typePatcher: {
         ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
+        ...addTypePatcher('ActivityContentResult', 'ActivityContent'),
         ...addTypePatcher(
-          'ApplyResult',
-          'ApplyItem',
-          moneyForResult<ApplyItem[]>({
+          'ActivityApply',
+          'ActivityApplyItem',
+          moneyForResult<ActivityApply[]>({
             data: {
               $for: {
                 coupon_money: yuan, // 分转元

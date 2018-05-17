@@ -33,7 +33,7 @@ import ResourceManage from '../web/resourceManage/ResourceManage';
 
 // 营销
 //    优惠申请
-import Apply from '../marketing/apply/Apply';
+import ActivityApply from '../marketing/activityApply/ActivityApply';
 //    优惠类型
 import TypeList from '../marketing/typeList/TypeList';
 //    自动优惠模板
@@ -178,6 +178,7 @@ import EmailSetting from '../system/emailSetting/EmailSetting';
 import DomainSetting from '../system/domainSetting/DomainSetting';
 //    游戏后台帐号
 import GameAccount from '../system/gameAccount/GameAccount';
+import ActivityContent from '../marketing/activityContent/ActivityContent';
 
 export default () => {
   return (
@@ -195,7 +196,7 @@ export default () => {
       <Route path="/notice" component={Notice} />
       <Route path="/noticeManage" component={NoticeManage} />
       <Route path="/resourceManage" component={ResourceManage} />
-      <Route path="/apply" component={Apply} />
+      <Route path="/apply" component={ActivityApply} />
       <Route path="/typeList" component={TypeList} />
       {/* <Route path="/activeSet" component={ActiveSet} /> */}
       <Route path="/discount" component={Discount} />
@@ -211,6 +212,7 @@ export default () => {
       {/* <Route path="/activeMode_8" component={ActiveMode_8} /> */}
       {/* <Route path="/activeMode_9" component={ActiveMode_9} /> */}
       {/* <Route path="/activeMode_email" component={ActiveMode_email} /> */}
+      <Route path="/activityContent" component={ActivityContent} />
       <Route path="/contentManagement" component={ContentManage} />
       {/* <Route path="/discountQuery" component={DiscountQuery} /> */}
       {/* <Route path="/discountSetting" component={DiscountSetting} /> */}

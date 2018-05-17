@@ -2,6 +2,8 @@ import { isFunction } from 'lodash/fp';
 import * as React from 'react';
 import { constant, isPlainObject, isString } from 'lodash/fp';
 import { PureComponent } from 'react';
+import ApolloClient from 'apollo-client/ApolloClient';
+import withLocale from './withLocale';
 
 function notStateProps(key: string) {
   return !['state', 'props', 'setState'].includes(key);
@@ -11,9 +13,10 @@ function notStateProps(key: string) {
 export default class TableFormField<T> {
   protected setState: (state: object) => void;
   protected state: Readonly<{}>;
-  protected props: Readonly<{ children?: React.ReactNode }> & Readonly<T>;
+  protected props: Readonly<{ children?: React.ReactNode }> &
+    Readonly<T & { client: ApolloClient<{}> }>;
 
-  constructor(view: PureComponent<T>) {
+  constructor(view: PureComponent<T & { client: ApolloClient<{}> }>) {
     this.setState = view.setState.bind(view);
     this.state = view.state;
     this.props = view.props;
@@ -28,6 +31,24 @@ export default class TableFormField<T> {
           formItemRender: () => opt[field]
         };
       });
+  }
+  detail(record: object) {
+    return (
+      record &&
+      Object.entries(this)
+        .filter(([dataIndex, opt]) => !!opt.detail && notStateProps(dataIndex))
+        .map(([dataIndex, opt]) => {
+          const cloneElement = React.cloneElement(opt.detail, { value: record[dataIndex] }, '');
+          return (
+            <div key={dataIndex}>
+              <small style={{ display: 'inline-block', width: 70, textAlign: 'right' }}>
+                {opt.title}
+              </small>：
+              {cloneElement}
+            </div>
+          );
+        })
+    );
   }
   table(view: React.PureComponent<{}>) {
     return Object.entries(this)
