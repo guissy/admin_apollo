@@ -13,6 +13,7 @@ import ApplyField from './Apply.field';
 import { SearchComponent } from '../../components/form/SearchComponent';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import ApplyEdit from './Apply.edit';
+import { PureComponent } from 'react';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -56,7 +57,7 @@ export default class Apply extends React.PureComponent<Props, {}> {
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
-    const fields = new ApplyField();
+    const fields = new ApplyField(this as PureComponent<Hoc>);
     const editFields = fields.filterBy('edit');
     const couponFields = fields.filterBy('coupon');
     const withdrawFields = fields.filterBy('withdraw');

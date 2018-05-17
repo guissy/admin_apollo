@@ -12,6 +12,8 @@ import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
+import { PureComponent } from 'react';
+import ApolloClient from 'apollo-client/ApolloClient';
 
 const site = withLocale.site;
 
@@ -32,7 +34,7 @@ interface Activity {
 }
 
 /** 优惠字段 */
-export default class ApplyField extends TableFormField {
+export default class ApplyField<T extends { client: ApolloClient<{}> }> extends TableFormField<T> {
   id = {
     edit: <input type="hidden" />,
     coupon: <input type="hidden" />,
@@ -110,7 +112,7 @@ export default class ApplyField extends TableFormField {
       ) : (
         <span
           onClick={() => {
-            view.setState({
+            this.setState({
               coupon: { visible: true, record }
             });
           }}
@@ -143,7 +145,7 @@ export default class ApplyField extends TableFormField {
       ) : (
         <span
           onClick={() => {
-            view.setState({
+            this.setState({
               withdraw: { visible: true, record }
             });
           }}
@@ -162,7 +164,7 @@ export default class ApplyField extends TableFormField {
       ) : (
         <a
           onClick={() => {
-            view.setState({
+            this.setState({
               detail: { visible: true, record }
             });
           }}
@@ -229,7 +231,7 @@ export default class ApplyField extends TableFormField {
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(view.props.client, 'ApplyItem', {
+                            writeFragment(this.props.client, 'ApplyItem', {
                               id: record.id,
                               status: 'pass'
                             });
@@ -245,7 +247,7 @@ export default class ApplyField extends TableFormField {
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(view.props.client, 'ApplyItem', {
+                            writeFragment(this.props.client, 'ApplyItem', {
                               id: record.id,
                               status: 'rejected'
                             });
@@ -259,7 +261,7 @@ export default class ApplyField extends TableFormField {
                 )}
                 <LinkComponent
                   onClick={() => {
-                    view.setState({
+                    this.setState({
                       memo: { visible: true, record }
                     });
                   }}
@@ -273,4 +275,7 @@ export default class ApplyField extends TableFormField {
       );
     }
   };
+  constructor(view: PureComponent<T>) {
+    super(view);
+  }
 }
