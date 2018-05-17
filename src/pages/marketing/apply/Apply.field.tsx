@@ -10,8 +10,8 @@ import TableActionComponent from '../../components/table/TableActionComponent';
 import QuickDateComponent from '../../components/date/QuickDateComponent';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { GqlResult } from '../../../utils/result';
 import { messageResult } from '../../../utils/showMessage';
+import { GqlResult, writeFragment } from '../../../utils/apollo';
 
 const site = withLocale.site;
 
@@ -19,11 +19,14 @@ interface ActivityItem {
   id: number;
   name: string;
   title: string;
+
   [other: string]: string | number;
 }
+
 interface ActivityResult {
   data: ActivityItem[];
 }
+
 interface Activity {
   actives: ActivityResult;
 }
@@ -105,7 +108,13 @@ export default class ApplyField extends TableFormField {
       return record.isTotalRow ? (
         text
       ) : (
-        <span onClick={() => view.onEditDiscount(record)}>
+        <span
+          onClick={() => {
+            view.setState({
+              coupon: { visible: true, record }
+            });
+          }}
+        >
           <Tag color="blue">{text}</Tag>
         </span>
       );
@@ -132,7 +141,13 @@ export default class ApplyField extends TableFormField {
       return record.isTotalRow ? (
         text
       ) : (
-        <span onClick={() => view.onEditWithdraw(record)}>
+        <span
+          onClick={() => {
+            view.setState({
+              withdraw: { visible: true, record }
+            });
+          }}
+        >
           <Tag color="blue">{text}</Tag>
         </span>
       );
@@ -142,7 +157,19 @@ export default class ApplyField extends TableFormField {
   apply_detail = {
     title: site('申请详情'),
     table: ({ text, record, view }: FieldProps<string, ApplyItem, Apply>) =>
-      record.isTotalRow ? '' : <a onClick={() => view.onShowDetail(record)}>详情</a>
+      record.isTotalRow ? (
+        ''
+      ) : (
+        <a
+          onClick={() => {
+            view.setState({
+              detail: { visible: true, record }
+            });
+          }}
+        >
+          详情
+        </a>
+      )
   };
 
   apply_time = {
@@ -201,19 +228,12 @@ export default class ApplyField extends TableFormField {
                       onClick={() =>
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
-                          .then((v: GqlResult<'status'>) => v.data.status)
-                          .then(v => {
-                            if (view.props.client) {
-                              view.props.client.writeFragment({
-                                id: `ApplyItem:${record.id}`,
-                                fragment: ApplyItemFragment,
-                                data: {
-                                  ...record,
-                                  status: 'pass'
-                                }
-                              });
-                            }
-                            return v;
+                          .then((v: GqlResult<'status'>) => {
+                            writeFragment(view.props.client, 'ApplyItem', {
+                              id: record.id,
+                              status: 'pass'
+                            });
+                            return v.data.status;
                           })
                       }
                     >
@@ -224,19 +244,12 @@ export default class ApplyField extends TableFormField {
                       onClick={() =>
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
-                          .then((v: GqlResult<'status'>) => v.data.status)
-                          .then(v => {
-                            if (view.props.client) {
-                              view.props.client.writeFragment({
-                                id: `ApplyItem:${record.id}`,
-                                fragment: ApplyItemFragment,
-                                data: {
-                                  ...record,
-                                  status: 'rejected'
-                                }
-                              });
-                            }
-                            return v;
+                          .then((v: GqlResult<'status'>) => {
+                            writeFragment(view.props.client, 'ApplyItem', {
+                              id: record.id,
+                              status: 'rejected'
+                            });
+                            return v.data.status;
                           })
                       }
                     >
@@ -244,7 +257,15 @@ export default class ApplyField extends TableFormField {
                     </LinkComponent>
                   </>
                 )}
-                <LinkComponent onClick={() => view.onEditMemo(record)}>写备注</LinkComponent>
+                <LinkComponent
+                  onClick={() => {
+                    view.setState({
+                      memo: { visible: true, record }
+                    });
+                  }}
+                >
+                  写备注
+                </LinkComponent>
               </TableActionComponent>
             )}
           </Mutation>

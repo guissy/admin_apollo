@@ -1,8 +1,15 @@
 import { Model } from 'dva';
-import { Result } from '../../../utils/result';
 import gql from 'graphql-tag';
+import * as React from 'react';
+
+const ApplyModel: Model = {
+  namespace: 'apply',
+  state: {}
+};
+export default ApplyModel;
 
 export interface ApplyItem {
+  id: number;
   active_id: string;
   active_name: string;
   active_title: string;
@@ -12,7 +19,6 @@ export interface ApplyItem {
   coupon_money: string;
   deposit_money: string;
   email: string;
-  id: string;
   ip: string;
   issue_mode: string;
   level: string;
@@ -27,17 +33,6 @@ export interface ApplyItem {
   user_name: string;
   withdraw_require: string;
 }
-
-export interface ApplyState {
-  data: Array<ApplyItem>;
-  isDetailLoading: boolean;
-  // detailData: ApplyItem;
-}
-
-const ApplyModel: Model = {
-  namespace: 'apply',
-  state: {}
-};
 
 export const ApplyItemFragment = gql`
   fragment ApplyItemFragment on ApplyItem {
@@ -66,6 +61,3 @@ export const ApplyItemFragment = gql`
     withdraw_require
   }
 `;
-
-export default ApplyModel;
-export interface ApplyState extends Result<object> {}
