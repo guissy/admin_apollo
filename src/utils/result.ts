@@ -12,12 +12,6 @@ export interface Result<T> {
   /** @see Response#status */
   status: number; // http状态码：用于model.effects里处理错误
 }
-/**
- * 经过graphQL包装的数据格式
- */
-export type GqlResult<T extends string = string> = {
-  data: { [key in T]: Result<object> };
-};
 
 interface Attr {
   number: number; // 相当于传给后端的 page
