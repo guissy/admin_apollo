@@ -251,6 +251,8 @@ const client = new ApolloClient({
         ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
         ...addTypePatcher('ActivityContentResult', 'ActivityContent'),
+        ...addTypePatcher('ActivityTypeResult', 'ActivityType'),
+        ...addTypePatcher('ActivityEditResult', 'ActivityEdit'),
         ...addTypePatcher(
           'ActivityApply',
           'ActivityApplyItem',

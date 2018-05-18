@@ -13,6 +13,21 @@ export interface ActivityContentItem {
   types: { name: string }[];
   name: string;
   title: string;
+  cover: string;
+  begin_time: string;
+  end_time: string;
+  language_name: string;
+  description: string;
+  sort: number;
+  open_type: number;
+  link: string;
+  content: string;
+  content2: string;
+  apply_times: string;
+  created: string;
+  created_uname: string;
+  updated: string;
+  updated_uname: string;
 }
 
 export const ActivityContentItemFragment = gql`
@@ -21,5 +36,25 @@ export const ActivityContentItemFragment = gql`
     types
     name
     title
+    cover
+    begin_time
+    end_time
+    language_name
+    description
+    sort
+    open_type
+    link
+    content
+    content2
+    apply_times
+    created
+    created_uname
+    updated
+    updated_uname
   }
 `;
+
+export interface ActivityType {
+  name: string;
+  id: number;
+}

@@ -55,7 +55,7 @@ router.get('/copywriter/float', async function login(req, res, next) {
       ip: '127.0.0.1',
       issue_mode: '1',
       level: '1',
-      memo: '@cnname',
+      memo: '@cname',
       mobile: '13500119988',
       process_time: moment().format('YYYY-MM-DD hh:mm:ss'),
       'state|1': ['pending', 'pass', 'rejected'],
@@ -91,13 +91,20 @@ router.get('/actives', async function save(req, res, next) {
 router.put('/active/apply/status', async function save(req, res, next) {
   res.json(resultOk(actives))
 });
-
+// 优惠类型
+router.get('/active/types', async function save(req, res, next) {
+    res.json(resultOk([
+        { 'name': '充值', id: 1 },
+        { 'name': '满减', id: 2 },
+        { 'name': '幸运', id: 3 }
+    ]));
+});
 
 
 const { activities } = mockjs.mock({'activities|20': [{
         'id|+1': 1,
         begin_time: moment().format('YYYY-MM-DD hh:mm:ss'),
-        cover: `https://placeholdit.imgix.net/~text?txtsize=23&bg=a9160f&txtclr=ffffff&txt=${mockjs.Random.cname()}&w=360&h=60`,
+        cover: `https://placeholdit.imgix.net/~text?txtsize=23&bg=a9160f&txtclr=ffffff&txt=@cname&w=360&h=60`,
         created: moment().format('YYYY-MM-DD hh:mm:ss'),
         created_uname: '@cname',
         description: '@city',
@@ -111,7 +118,7 @@ const { activities } = mockjs.mock({'activities|20': [{
         state: '1',
         status: '',
         'title|1': ['充一百送一百', '充话费送老婆', '送上月球，送飞船', '买一送一', '活不见人'],
-        types: [{name: '充值'}, {name: '满减'}],
+        'types|1-2': [{ 'name|1': ['充值','满减','幸运'] }],
         updated: moment().format('YYYY-MM-DD hh:mm:ss'),
         updated_uname: '@cname',
     }]});

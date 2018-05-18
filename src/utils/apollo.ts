@@ -14,8 +14,8 @@ export const pathBuilder = curry(pathBuilderInner);
 /**
  * 经过graphQL包装的数据格式
  */
-export type GqlResult<T extends string = string> = {
-  data: { [key in T]: Result<object> };
+export type GqlResult<T extends string = string, R = object> = {
+  data?: { [key in T]: Result<R> };
 };
 
 function writeFragmentInner(

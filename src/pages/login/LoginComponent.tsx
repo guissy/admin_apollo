@@ -38,20 +38,10 @@ const PageLayout = styled(Layout)`
 @Form.create()
 export default class LoginComponent extends React.PureComponent<Props, State> {
   state = {
-    username: '',
-    password: '',
+    username: 'xiaoming',
+    password: '123456',
     rememberPwd: false
   };
-
-  componentDidMount() {
-    const localName = window.localStorage.getItem('username');
-    const localPwd = window.localStorage.getItem('password');
-    this.setState({
-      username: localName ? localName : '',
-      password: localPwd ? localPwd : '',
-      rememberPwd: true
-    });
-  }
 
   onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

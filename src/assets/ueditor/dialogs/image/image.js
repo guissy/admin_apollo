@@ -798,7 +798,7 @@
             $file.append('<span class="success"></span>');
           } else {
             // linguowei modify 2018.01.20
-            parent.window.VUE.$message('权限不足！');
+            // parent.window.VUE.$message('权限不足！');
             $file
               .find('.error')
               .text(json.state)
@@ -806,7 +806,7 @@
           }
         } catch (e) {
           // linguowei modify 2018.01.20
-          VUE.$message('权限不足！');
+          // VUE.$message('权限不足！');
           $file
             .find('.error')
             .text(lang.errorServerUpload)
@@ -816,13 +816,13 @@
 
       uploader.on('uploadError', function(file, code) {
         // linguowei modify 2018.01.20
-        parent.window.VUE.$message('权限不足！');
+        // parent.window.VUE.$message('权限不足！');
       });
       uploader.on('error', function(code, file) {
         if (code == 'Q_TYPE_DENIED' || code == 'F_EXCEED_SIZE') {
           addFile(file);
           // linguowei modify 2018.01.20
-          parent.window.VUE.$message('权限不足！');
+          // parent.window.VUE.$message('权限不足！');
         }
       });
       uploader.on('uploadComplete', function(file, ret) {});

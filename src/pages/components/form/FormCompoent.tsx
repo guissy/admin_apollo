@@ -222,6 +222,7 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
                     text={initialValue}
                     record={this.props.record}
                     view={this.props.view}
+                    form={this.props.form}
                   />
                 );
               }

@@ -8520,19 +8520,19 @@
                   me._serverConfigLoaded = true;
                 } catch (e) {
                   // linguowei modify 2018.01.20
-                  VUE.$message('权限不足！');
+                  // VUE.$message('权限不足！');
                   showErrorMsg(me.getLang('loadconfigFormatError'));
                 }
               },
               onerror: function() {
                 // linguowei modify 2018.01.20
-                VUE.$message('权限不足！');
+                // VUE.$message('权限不足！');
                 showErrorMsg(me.getLang('loadconfigHttpError'));
               }
             });
         } catch (e) {
           // linguowei modify 2018.01.20
-          VUE.$message('权限不足！');
+          // VUE.$message('权限不足！');
           showErrorMsg(me.getLang('loadconfigError'));
         }
       });

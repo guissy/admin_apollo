@@ -4,6 +4,7 @@ import { constant, isPlainObject, isString } from 'lodash/fp';
 import { PureComponent } from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import withLocale from './withLocale';
+import { WrappedFormUtils } from 'antd/es/form/Form';
 
 function notStateProps(key: string) {
   return !['state', 'props', 'setState'].includes(key);
@@ -79,6 +80,7 @@ export interface FieldProps<
   text: T;
   record: R & { isTotalRow?: boolean };
   view: C;
+  form: WrappedFormUtils;
   onChange: (value: string) => void;
   value: string;
 }

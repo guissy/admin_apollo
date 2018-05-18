@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { compose, Query, withApollo } from 'react-apollo';
+import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { SearchComponent } from '../../components/form/SearchComponent';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { pathBuilder } from '../../../utils/apollo';
+import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import gql from 'graphql-tag';
 import { getPagination, default as TableComponent } from '../../components/table/TableComponent';
-import { ActivityContentItemFragment } from './ActivityContent.model';
+import { ActivityContentItem, ActivityContentItemFragment } from './ActivityContent.model';
+import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
+import { EditFormComponent } from '../../components/form/EditFormComponent';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -24,6 +26,10 @@ interface Props extends Partial<Hoc> {}
 @autobind
 export default class ActivityContent extends React.PureComponent<Props, {}> {
   state = {
+    edit: {
+      visible: false,
+      record: {} as ActivityContentItem
+    },
     searchValues: {}
   };
   refetch: Function;
@@ -31,7 +37,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
     const fields = new ActivityContentField(this as React.PureComponent<Hoc>);
-    const editFields = fields.filterBy('edit');
+    const editFields = fields.filterBy('form');
     const searchFields = fields.filterBy('search');
     const tableFields = fields.table(this);
     const setState = this.setState.bind(this);
@@ -82,6 +88,50 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
             );
           }}
         </Query>
+
+        {/* 编辑 */}
+        <Mutation
+          mutation={gql`
+            mutation editMutation($body: ActivityEditInput!, $id: Int!) {
+              edit(body: $body, id: $id)
+                @rest(
+                  bodyKey: "body"
+                  path: "/active/manual/:id"
+                  method: "put"
+                  type: "ActivityEditResult"
+                ) {
+                state
+                message
+              }
+            }
+          `}
+        >
+          {edit => (
+            <EditFormComponent
+              fieldConfig={editFields}
+              modalTitle={site('编辑')}
+              modalOk={site('修改成功')}
+              modalVisible={this.state.edit.visible}
+              onCancel={() => {
+                this.setState({
+                  edit: { visible: false, record: {} }
+                });
+              }}
+              onSubmit={(values: ActivityApplyItem) => {
+                return edit({ variables: { body: values, id: values.id } }).then(
+                  (v: GqlResult<'edit'>) => {
+                    writeFragment(client, 'ActivityContentItem', values);
+                    this.setState({
+                      edit: { visible: false, record: {} }
+                    });
+                    return v.data.edit;
+                  }
+                );
+              }}
+              values={this.state.edit.record}
+            />
+          )}
+        </Mutation>
       </>
     );
   }
