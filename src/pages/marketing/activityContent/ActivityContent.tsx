@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { compose, Mutation, Query, withApollo } from 'react-apollo';
+import { compose, Query, withApollo } from 'react-apollo';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { SearchComponent } from '../../components/form/SearchComponent';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
+import { pathBuilder } from '../../../utils/apollo';
 import gql from 'graphql-tag';
-import { getPagination, default as TableComponent } from '../../components/table/TableComponent';
+import { default as TableComponent, getPagination } from '../../components/table/TableComponent';
 import { ActivityContentItem, ActivityContentItemFragment } from './ActivityContent.model';
-import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import ActivityContentEdit from './ActivityContent.edit';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -26,6 +25,10 @@ interface Props extends Partial<Hoc> {}
 @autobind
 export default class ActivityContent extends React.PureComponent<Props, {}> {
   state = {
+    create: {
+      visible: false,
+      record: {} as ActivityContentItem
+    },
     edit: {
       visible: false,
       record: {} as ActivityContentItem
@@ -48,7 +51,9 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
         {/* 新增按钮 */}
         <ButtonBarComponent
           onCreate={() => {
-            console.log('☞☞☞ 9527 ActivityContent 50');
+            this.setState({
+              create: { visible: true, record: { open_type: '2' } }
+            });
           }}
         />
         <Query
@@ -89,51 +94,24 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
           }}
         </Query>
 
-        {/* 编辑 */}
-        <Mutation
-          mutation={gql`
-            mutation editMutation($body: ActivityEditInput!, $id: Int!) {
-              edit(body: $body, id: $id)
-                @rest(
-                  bodyKey: "body"
-                  path: "/active/manual/:id"
-                  method: "put"
-                  type: "ActivityEditResult"
-                ) {
-                state
-                message
-              }
-            }
-          `}
-        >
-          {edit => (
-            <EditFormComponent
-              size="large"
-              fieldConfig={editFields}
-              modalTitle={site('编辑')}
-              modalOk={site('修改成功')}
-              modalVisible={this.state.edit.visible}
-              onCancel={() => {
-                this.setState({
-                  edit: { visible: false, record: {} }
-                });
-              }}
-              onSubmit={(values: ActivityApplyItem) => {
-                return edit({ variables: { body: values, id: values.id } }).then(
-                  (v: GqlResult<'edit'>) => {
-                    writeFragment(client, 'ActivityContentItem', values);
-                    this.setState({
-                      edit: { visible: false, record: {} }
-                    });
-                    return v.data.edit;
-                  }
-                );
-              }}
-              values={this.state.edit.record}
-              view={this}
-            />
-          )}
-        </Mutation>
+        <ActivityContentEdit
+          edit={this.state.create}
+          editFields={editFields}
+          onDone={() => {
+            this.setState({ create: { visible: false, record: {} } });
+          }}
+          modalTitle="创建"
+          modalOk="创建成功"
+        />
+        <ActivityContentEdit
+          edit={this.state.edit}
+          editFields={editFields}
+          onDone={() => {
+            this.setState({ edit: { visible: false, record: {} } });
+          }}
+          modalTitle="编辑"
+          modalOk="编辑成功"
+        />
       </>
     );
   }

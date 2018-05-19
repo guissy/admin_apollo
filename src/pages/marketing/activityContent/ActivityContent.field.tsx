@@ -1,24 +1,19 @@
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, Tag, DatePicker, InputNumber, Radio, Select } from 'antd';
-import { Query, ChildProps, Mutation } from 'react-apollo';
+import { DatePicker, Input, InputNumber, Radio, Select, Tag } from 'antd';
+import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import { moneyPattern } from '../../../utils/formRule';
 import LinkComponent from '../../components/link/LinkComponent';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import { messageResult, messageSuccess } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { ActivityContentItem, ActivityContentItemFragment } from './Activitycontent.model';
+import { ActivityContentItem } from './Activitycontent.model';
 import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
 import ActivityApply from '../activityApply/ActivityApply';
 import ActivityContent from './ActivityContent';
 import { ActivityType } from './ActivityContent.model';
-import { Result } from '../../../utils/result';
-import environment from '../../../utils/environment';
-import { getFullSrc } from '../../../utils/env.utils';
-import { Record } from '../content/ContentManage.model';
 import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import UploadComponent from '../../components/upload/UploadComponent';
@@ -85,9 +80,14 @@ export default class ActivityContentField<T> extends TableFormField<T> {
     )
   };
 
+  type_id = {
+    search: this.types.form
+  };
+
   name = {
     title: site('优惠活动名称'),
-    form: <Input />
+    form: <Input />,
+    search: <Input />
   };
 
   title = {
@@ -215,6 +215,10 @@ export default class ActivityContentField<T> extends TableFormField<T> {
     )
   };
 
+  memo = {
+    title: site('备注')
+  };
+
   oparation = {
     title: site('操作'),
     table: ({ record, view }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
@@ -235,26 +239,42 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                 }
               }
             `}
+            refetchQueries={['activityContentQuery']}
           >
-            {(pass, { data }) => (
-              <TableActionComponent>
-                {record.status === 'pending' && (
-                  <>
+            {remove => (
+              <Mutation
+                mutation={gql`
+                  mutation statusMutation($body: StatusInput!) {
+                    status(body: $body)
+                      @rest(
+                        bodyKey: "body"
+                        path: "/active/apply/status"
+                        method: "PUT"
+                        type: "StatusResult"
+                      ) {
+                      state
+                      message
+                    }
+                  }
+                `}
+              >
+                {pass => (
+                  <TableActionComponent>
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityApplyItem', {
+                            writeFragment(this.props.client, 'ActivityContentItem', {
                               id: record.id,
-                              status: 'pass'
+                              status: 'enabled'
                             });
-                            return v.data.status;
+                            return v.data && v.data.status;
                           })
                       }
                     >
-                      {site('通过')}
+                      {site('启用')}
                     </LinkComponent>
                     <LinkComponent
                       confirm={true}
@@ -262,28 +282,40 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityApplyItem', {
+                            writeFragment(this.props.client, 'ActivityContentItem', {
                               id: record.id,
-                              status: 'rejected'
+                              status: 'disabled'
                             });
-                            return v.data.status;
+                            return v.data && v.data.status;
                           })
                       }
                     >
-                      {site('拒绝')}
+                      {site('停用')}
                     </LinkComponent>
-                  </>
+                    <LinkComponent
+                      confirm={true}
+                      onClick={() =>
+                        remove({ variables: { body: { id: record.id, status: 'rejected' } } })
+                          .then(messageResult('status'))
+                          .then((v: GqlResult<'status'>) => {
+                            return v.data && v.data.status;
+                          })
+                      }
+                    >
+                      {site('删除')}
+                    </LinkComponent>
+                    <LinkComponent
+                      onClick={() => {
+                        this.setState({
+                          edit: { visible: true, record }
+                        });
+                      }}
+                    >
+                      编辑
+                    </LinkComponent>
+                  </TableActionComponent>
                 )}
-                <LinkComponent
-                  onClick={() => {
-                    this.setState({
-                      edit: { visible: true, record }
-                    });
-                  }}
-                >
-                  编辑
-                </LinkComponent>
-              </TableActionComponent>
+              </Mutation>
             )}
           </Mutation>
         )

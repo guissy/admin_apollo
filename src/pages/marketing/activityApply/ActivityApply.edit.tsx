@@ -63,7 +63,7 @@ export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
                     this.props.setState({
                       coupon: { visible: false, record: {} }
                     });
-                    return v.data.coupon;
+                    return v.data && v.data.coupon;
                   }
                 );
               }}
@@ -107,7 +107,7 @@ export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
                     this.props.setState({
                       withdraw: { visible: false, record: {} }
                     });
-                    return v.data.withdraw;
+                    return v.data && v.data.withdraw;
                   }
                 );
               }}

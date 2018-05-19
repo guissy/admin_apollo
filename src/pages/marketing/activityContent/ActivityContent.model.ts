@@ -20,7 +20,7 @@ export interface ActivityContentItem {
   language_name: string;
   description: string;
   sort: number;
-  open_type: number;
+  open_type: string;
   link: string;
   content: string;
   content2: string;
@@ -29,6 +29,8 @@ export interface ActivityContentItem {
   created_uname: string;
   updated: string;
   updated_uname: string;
+  status: string;
+  memo: string;
 }
 
 export const ActivityContentItemFragment = gql`
@@ -53,6 +55,8 @@ export const ActivityContentItemFragment = gql`
     created_uname
     updated
     updated_uname
+    status
+    memo
   }
 `;
 

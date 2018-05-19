@@ -65,7 +65,6 @@ import Discount from '../marketing/discount/Discount';
 //    模板优惠设置(邮箱验证)
 // import ActiveMode_email from ''
 //    手动优惠
-import ContentManage from '../marketing/content/ContentManage';
 //    返水优惠查询
 // import DiscountQuery from ''
 //    返水优惠设定
@@ -213,7 +212,6 @@ export default () => {
       {/* <Route path="/activeMode_9" component={ActiveMode_9} /> */}
       {/* <Route path="/activeMode_email" component={ActiveMode_email} /> */}
       <Route path="/activityContent" component={ActivityContent} />
-      <Route path="/contentManagement" component={ContentManage} />
       {/* <Route path="/discountQuery" component={DiscountQuery} /> */}
       {/* <Route path="/discountSetting" component={DiscountSetting} /> */}
       {/* <Route path="/lotterPeriodManagement" component={LotterPeriodManagement} /> */}

@@ -66,8 +66,6 @@ import QueryDetailModel from './pages/marketing/discount/query/QueryDetail.model
 //    存款优惠模板优惠设置
 //    模板优惠设置(邮箱验证)
 //    手动优惠
-import ContentManageModel from './pages/marketing/content/ContentManage.model';
-
 //    返水优惠查询
 //    返水优惠设定
 
@@ -222,7 +220,6 @@ app.model(throttleEffect(SubAgentRebateModel));
 app.model(throttleEffect(AgentLinkModel));
 app.model(throttleEffect(PromotionResourceModel));
 app.model(throttleEffect(NoticeManageModel));
-app.model(throttleEffect(ContentManageModel));
 app.model(throttleEffect(AnnouncementManageModel));
 app.model(throttleEffect(AgentAccountModel));
 app.model(throttleEffect(AgentInformationModel));

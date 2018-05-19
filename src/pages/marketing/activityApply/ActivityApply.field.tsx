@@ -12,7 +12,6 @@ import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { PureComponent } from 'react';
 import Label from '../../components/label/Label';
 import ApolloClient from 'apollo-client/ApolloClient';
 
@@ -279,7 +278,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                               id: record.id,
                               status: 'pass'
                             });
-                            return v.data.status;
+                            return v.data && v.data.status;
                           })
                       }
                     >
@@ -295,7 +294,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                               id: record.id,
                               status: 'rejected'
                             });
-                            return v.data.status;
+                            return v.data && v.data.status;
                           })
                       }
                     >

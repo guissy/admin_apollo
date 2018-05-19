@@ -55,7 +55,9 @@ export default class TableFormField<T> {
     return Object.entries(this)
       .filter(([dataIndex, opt]) => opt.table !== notInTable && notStateProps(dataIndex))
       .map(([dataIndex, opt]) => {
-        const fn = (text: string, record: object) => opt.table({ text, record, view });
+        const fn = (text: string, record: object) => {
+          return opt.table({ text, record, view });
+        };
         const hasTable = opt.hasOwnProperty('table');
         let render = {} as { render: Function };
         if (hasTable) {

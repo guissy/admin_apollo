@@ -190,7 +190,7 @@ export default class ActivityApply extends React.PureComponent<Props, {}> {
                     this.setState({
                       memo: { visible: false, record: {} }
                     });
-                    return v.data.memo;
+                    return v.data && v.data.memo;
                   }
                 );
               }}
