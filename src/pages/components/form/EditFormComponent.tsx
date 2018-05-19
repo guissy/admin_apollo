@@ -151,7 +151,8 @@ export class EditFormComponent extends React.PureComponent<Props, State> {
       submitText = site('确定'),
       onCancel,
       onDone,
-      values
+      values,
+      size
     } = this.props;
     const editContextOk = Object.assign(this.state.editContext || {}, {
       form: this.props.form,
@@ -164,12 +165,28 @@ export class EditFormComponent extends React.PureComponent<Props, State> {
         }
       }
     });
+    let width = 0;
+    let formItemProps = {};
+    switch (size) {
+      case 'large':
+        width = 1200;
+        formItemProps = { labelCol: { span: 5 }, wrapperCol: { span: 18 } };
+        break;
+      case 'small':
+        width = 520;
+        formItemProps = { labelCol: { span: 6 }, wrapperCol: { span: 13 } };
+        break;
+      default:
+        width = 800;
+        formItemProps = { labelCol: { span: 6 }, wrapperCol: { span: 13 } };
+        break;
+    }
     return (
       <ModalWrap
         title={modalTitle}
         // onOk={}
         onCancel={onCancel}
-        width={800}
+        width={width}
         footer={null}
         visible={visible}
         destroyOnClose={true}
@@ -180,6 +197,7 @@ export class EditFormComponent extends React.PureComponent<Props, State> {
             actionType={actionType}
             onSubmit={onSubmit}
             submitText={submitText}
+            defaultFormItemProps={formItemProps}
             formLayout={'horizontal'}
             showMessage={this.showMessage}
             onCancel={onCancel}
@@ -195,13 +213,13 @@ export class EditFormComponent extends React.PureComponent<Props, State> {
 
 interface Props {
   form?: WrappedFormUtils;
-
   fieldConfig: EditFormConfig[]; // 字段配置
   actionType?: string; // namespace/effect
   modalTitle?: string | React.ReactNode; // 模态框标题
   submitText?: string; // 确认按钮文字
   modalVisible?: boolean; // 是否显示模态框
   site?: (words: string) => string;
+  size?: 'large' | 'small'; // modal 宽
   values?: { isTotalRow?: boolean } & { [key: string]: any }; // tslint:disable-line
   editContext?: Partial<EditContext>; // 上下文
   onSubmit?: (values: object) => Promise<Result<object> | void>; // 提交事件，返回Promise，用于关闭模态框，清理表单

@@ -72,7 +72,6 @@ export default class CheckboxComponent extends React.PureComponent<Props, State>
   render() {
     const { site = () => '' } = this.props;
     const checkedList = this.state.checkedList;
-    console.log(this.props.value);
     const indeterminate = !!checkedList.length && checkedList.length < this.props.options.length;
     return (
       <div>

@@ -108,6 +108,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
         >
           {edit => (
             <EditFormComponent
+              size="large"
               fieldConfig={editFields}
               modalTitle={site('编辑')}
               modalOk={site('修改成功')}
@@ -129,6 +130,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
                 );
               }}
               values={this.state.edit.record}
+              view={this}
             />
           )}
         </Mutation>

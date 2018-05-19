@@ -6,6 +6,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import { UploadChangeParam } from 'antd/lib/upload';
 import withLocale from '../../../utils/withLocale';
 import { messageError } from '../../../utils/showMessage';
+import { getFullSrc } from '../../../utils/env.utils';
 
 const UploadContainer = styled.div`
   .tip {
@@ -16,7 +17,7 @@ const UploadContainer = styled.div`
 function initValue(props: Props): UploadFile[] {
   const { value = '' } = props;
   const file: UploadFile = {
-    url: `${environment.imgHost}/${value}`,
+    url: getFullSrc(value),
     uid: Date.now(),
     size: 0,
     name: value,
@@ -123,7 +124,7 @@ export default class UploadComponent extends React.PureComponent<Props, State> {
     });
   }
   handleCancel = () => this.setState({ previewVisible: false });
-  handlePreview = (file: UploadFile) => {
+  onPreview = (file: UploadFile) => {
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true
@@ -145,7 +146,7 @@ export default class UploadComponent extends React.PureComponent<Props, State> {
           beforeUpload={this.beforeUpload}
           onChange={this.onChange}
           onRemove={this.onRemove}
-          onPreview={this.handlePreview}
+          onPreview={this.onPreview}
         >
           <Button>
             <Icon type="upload" /> {site('点击上传文件')}

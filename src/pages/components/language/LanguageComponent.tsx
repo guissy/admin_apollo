@@ -26,10 +26,20 @@ export default withLocale(function LanguageComponent({
   placeholder,
   children,
   site = (words: string) => '',
+  value,
   ...props
 }: Props & SelectProps) {
+  let valueOk = value;
+  if (props.labelInValue && typeof value === 'string') {
+    const found = language.find(item => item.value === value);
+    if (found) {
+      valueOk = { key: value, label: found.text } as any; // tslint:disable-line
+    } else {
+      valueOk = undefined;
+    }
+  }
   return (
-    <Select placeholder={placeholder || site('请选择语言')} {...props}>
+    <Select placeholder={placeholder || site('请选择语言')} value={valueOk} {...props}>
       {language.map(item => <Option key={item.value}>{item.text}</Option>)}
     </Select>
   );

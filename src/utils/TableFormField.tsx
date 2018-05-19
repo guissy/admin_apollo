@@ -29,7 +29,7 @@ export default class TableFormField<T> {
         return {
           ...opt,
           dataIndex,
-          formItemRender: () => opt[field]
+          formItemRender: opt[field]
         };
       });
   }
@@ -81,8 +81,8 @@ export interface FieldProps<
   record: R & { isTotalRow?: boolean };
   view: C;
   form: WrappedFormUtils;
-  onChange: (value: string) => void;
-  value: string;
+  onChange: (value: any) => void; // tslint:disable-line
+  value: any; // tslint:disable-line
 }
 
 /** 不出现在表格的字段 */

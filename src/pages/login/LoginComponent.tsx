@@ -43,15 +43,6 @@ export default class LoginComponent extends React.PureComponent<Props, State> {
     rememberPwd: false
   };
 
-  onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    this.props.form!.validateFields((err: object, values: object) => {
-      if (!err) {
-        // this.props.dispatch!({ type: this.props.actionType, payload: values });
-      }
-    });
-  }
-
   onChange = () => {
     this.setState({ rememberPwd: !this.state.rememberPwd });
   }
@@ -115,10 +106,8 @@ export default class LoginComponent extends React.PureComponent<Props, State> {
                                     loading: false,
                                     payload: result
                                   });
-                                  const lastUrl = window.sessionStorage.getItem('lastUrl');
-                                  const url = lastUrl ? `/${lastUrl}` : `/`;
-                                  window.sessionStorage.removeItem('lastUrl');
-                                  dispatch!(push(url));
+                                  const lastUrl = window.localStorage.getItem(environment.lastUrl);
+                                  dispatch!(push(lastUrl || '/'));
                                 });
                             }
                           );

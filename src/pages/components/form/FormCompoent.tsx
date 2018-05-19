@@ -11,11 +11,14 @@ import { Result } from '../../../utils/result';
 import { FormItemProps, ValidationRule } from 'antd/lib/form';
 import { toClass } from 'recompose';
 import moment from 'moment';
+import { isEqual, omit } from 'lodash/fp';
 import { FieldProps } from '../../../utils/TableFormField';
+import { WrappedFormUtils } from 'antd/es/form/Form';
+import FormItemUI from './FormItemUI';
 
 moment.locale('zh-cn');
 
-const Wrap = styled.section`
+const Section = styled.section`
   background: #fff;
 
   .ant-select {
@@ -23,32 +26,18 @@ const Wrap = styled.section`
   }
 `;
 
-type DefaultProps = { autoFocus?: boolean; placeholder?: string; ref?: Function };
-
 /** 表单 */
 @withLocale
 @Form.create()
 @select('setting')
-export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
+export class FormComponent extends React.Component<FormComponentProps, {}> {
   state = {
     loading: false,
     visibleModal: false
   };
   hasSubmit: boolean;
+  foundFirst: boolean;
 
-  autoFocus(isFirst?: boolean) {
-    return isFirst
-      ? {
-          autoFocus: true,
-          ref: (ref: React.ReactInstance) => {
-            const component = ReactDOM.findDOMNode(ref) as HTMLInputElement;
-            if (component) {
-              requestAnimationFrame(() => component.focus());
-            }
-          }
-        }
-      : {};
-  }
   // 提交
   onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +75,8 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
           }
           this.setState({ loading: false });
           if (resetFields) {
-            this.props.form.resetFields();
+            const { form } = this.props as Hoc;
+            form.resetFields();
           }
           if (onCancel) {
             onCancel();
@@ -129,124 +119,68 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
     this.setState({ loading: false });
   }
 
-  shouldComponentUpdate(nextProps: Readonly<FormComponentProps>, nextState: Readonly<{}>): boolean {
-    return nextProps.resetFields ? !this.hasSubmit : true; // 提交之后不更新，避免表单字段闪回原来的值
+  shouldComponentUpdate(
+    nextProps: Readonly<FormComponentProps>,
+    nextState: Readonly<{}>,
+    nextContext: object
+  ): boolean {
+    const omitForm = omit(['form']);
+    const changedState = !isEqual(this.state, nextState);
+    const changedProps = !isEqual(omitForm(this.props), omitForm(nextProps));
+    const changedContext = !isEqual(this.context, nextContext);
+    const needUpdate = changedState || changedProps || changedContext;
+    const dontUpdate = nextProps.resetFields && this.hasSubmit; // 提交之后不更新，避免表单字段闪回原来的值
+    return !dontUpdate;
+  }
+
+  // tslint:disable-next-line
+  isFirst(render: React.ReactElement<any> | React.PureComponent<any>): boolean {
+    if (
+      !(typeof render === 'function') &&
+      render.props &&
+      render.props.hidden !== false &&
+      !this.foundFirst
+    ) {
+      this.foundFirst = true;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public render() {
-    const { getFieldDecorator } = this.props.form;
     const {
       fieldConfig,
-      site = () => '',
       formLayout = 'inline',
       submitText,
       resetText,
       hasResetBtn = false,
-      setting
+      defaultFormItemProps
     } = this.props;
+    const { form } = this.props as Hoc;
 
     // hasResetBt为true认为是搜索表单
     const formStyle = hasResetBtn ? { padding: '20px 20px 10px' } : {};
-    let inputIndex = 0;
+    this.foundFirst = false;
     return (
-      <Wrap style={formStyle}>
+      <Section style={formStyle}>
         <Form onSubmit={this.onSubmit} layout={formLayout}>
           <fieldset disabled={this.state.loading}>
-            {fieldConfig.map(v => {
-              // 当前语言
-              const currentLang = setting && setting.lang === 'en_US' ? ' ' : '';
-              const formItemProps: FormItemProps = v.formItemProps ? v.formItemProps() : {};
-
-              // 控件布局
-              let defaultItemLayout =
-                formLayout === 'horizontal'
-                  ? {
-                      labelCol: {
-                        span: 6
-                      },
-                      wrapperCol: {
-                        span: 13
-                      }
-                    }
-                  : {};
-
-              // 校验规则
-              const rules: ValidationRule[] = v.formRules ? v.formRules() : [];
-              if (rules[0] && !rules[0].message && typeof v.title === 'string') {
-                const text = `${v.title}${currentLang}${site('为必填')}`;
-                rules[0].message = text;
-              }
-
-              // 元素
-              const element = v.formItemRender
-                ? v.formItemRender()
-                : console.info(`🐞: `, '缺少formItemRender');
-
-              // 初始值
-              // 排除formInitialValue缺省时值为undefined，而提交时缺少字段，(有时后台必须的字段值可以为空)
-              const initialValue = v.formInitialValue ? v.formInitialValue : '';
-
-              let defaultProps = {} as DefaultProps;
-
-              // 字段提示信息
-              if (element) {
-                if (
-                  element.type === Input ||
-                  element.type === InputComponent ||
-                  element.type === Input.TextArea
-                ) {
-                  defaultProps = {
-                    placeholder: `${site('请输入')}${currentLang}${v.title}`,
-                    ...this.autoFocus(inputIndex === 0)
-                  };
-                  inputIndex += 1;
-                } else if (element.type === Select) {
-                  defaultProps = {
-                    placeholder: `${site('请选择')}${currentLang}${v.title}`,
-                    ...this.autoFocus(inputIndex === 0)
-                  };
-                  inputIndex += 1;
-                }
-              }
-
-              let itemStyle: object = { marginBottom: '10px' };
-              // hasResetBt为true认为是搜索表单
-              if (formItemProps.style) {
-                itemStyle = { ...itemStyle, ...formItemProps.style };
-              }
-              let elementOk = element;
-              if (typeof element === 'function') {
-                const Component = toClass<Partial<FieldProps>>(element);
-                elementOk = (
-                  <Component
-                    text={initialValue}
-                    record={this.props.record}
-                    view={this.props.view}
-                    form={this.props.form}
-                  />
-                );
-              }
-              return element ? (
-                <Form.Item
-                  label={v.title}
-                  key={v.dataIndex}
-                  {...defaultItemLayout}
-                  {...formItemProps}
-                  style={itemStyle}
-                >
-                  {getFieldDecorator(v.dataIndex, {
-                    initialValue: initialValue,
-                    rules: rules
-                  })(
-                    React.cloneElement(
-                      elementOk,
-                      { ...defaultProps, ...elementOk.props },
-                      elementOk.props.children
-                    )
-                  )}
-                </Form.Item>
-              ) : null;
-            })}
+            {fieldConfig.map(v => (
+              <FormItemUI
+                key={v.dataIndex}
+                form={form}
+                title={v.title}
+                dataIndex={v.dataIndex}
+                formItemProps={{ ...defaultFormItemProps, ...v.formItemProps }}
+                formItemRender={v.formItemRender}
+                initialValue={v.formInitialValue}
+                formRules={v.formRules}
+                record={this.props.record}
+                view={this.props.view}
+                isFirst={this.isFirst(v.formItemRender)}
+              />
+            ))}
             <Form.Item className="submitItem" style={hasResetBtn ? { marginBottom: '10px' } : {}}>
               <Button htmlType="submit" type="primary" loading={this.state.loading}>
                 {submitText}
@@ -264,17 +198,21 @@ export class FormComponent extends React.PureComponent<FormComponentProps, {}> {
             {this.props.footer}
           </fieldset>
         </Form>
-      </Wrap>
+      </Section>
     );
   }
 }
 
+interface Hoc {
+  form: WrappedFormUtils;
+  site: (words: string) => React.ReactNode;
+}
+
 /** EditForm & Search 字段 */
-export interface FormComponentProps {
-  form?: any; // tslint:disable-line:no-any
+export interface FormComponentProps extends Partial<Hoc> {
+  defaultFormItemProps?: FormItemProps;
   fieldConfig: FormConfig[]; // 字段配置
   actionType?: string; // namespace/effect
-  site?: (words: string) => React.ReactNode;
   dispatch?: Dispatch;
   formLayout?: 'inline' | 'horizontal' | 'vertical'; // 表单排版类型
   submitText?: string; // 提交按钮文字
@@ -282,7 +220,6 @@ export interface FormComponentProps {
   hasResetBtn?: boolean; // 是否显示重置按钮，默认false
   pageSize?: number; // 查询记录数量
   showMessage?: (result: Result<object>) => void; // 是否显示返回结果提示信息
-  setting?: SettingState; // 获取全局设置
   onSubmit?: (values: object) => Promise<Result<object> | void>; // 提交事件，返回Promise，用于关闭模态框，清理表单
   onCancel?: Function; // 成功后关闭模态框
   onDone?: (result?: Result<object> | void) => void; // onSubmit后的回调
@@ -297,8 +234,8 @@ export interface FormConfig {
   title?: React.ReactNode; // 字段标题
   dataIndex: string; // 字段键名
   notInTable?: boolean; // 是否在表格中显示
-  formItemProps?: (form?: object) => {}; // 控件属性
-  formItemRender: Function; // 控件
+  formItemProps?: { style: object }; // 控件属性
+  formItemRender: React.ReactElement<any> | React.PureComponent<any>; // tslint:disable-line
   formInitialValue?: string | number | Array<number> | object;
   formRules?: () => {}[]; // 字段验证规则
   render?: (text: string, record: object) => React.ReactNode; // 表格行操作

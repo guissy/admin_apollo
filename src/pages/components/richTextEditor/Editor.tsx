@@ -106,6 +106,7 @@ export interface Props {
   id: string;
   value?: string;
   config?: object;
+  hidden?: boolean;
   onChange?: (value: string) => void;
 }
 
@@ -121,6 +122,8 @@ declare global {
     export function getEditor(e: string, t?: object): typeof UE;
     /** 销毁 */
     export function destroy(): void;
+    /** iframe 容器 */
+    export const container: HTMLElement;
     /** 初始化值 */
     export function setContent(value: string | undefined): void;
     /** 初始化回调 */
@@ -180,7 +183,7 @@ export default class Editor extends React.PureComponent<Props, State> {
 
   componentWillReceiveProps(nextProps: Props) {
     if (this.state.ready) {
-      this.UE.setContent(nextProps.value);
+      this.UE.setContent(nextProps.value || '');
     }
     this.setState({
       value: nextProps.value || ''
@@ -188,12 +191,14 @@ export default class Editor extends React.PureComponent<Props, State> {
   }
 
   componentWillUnmount() {
-    this.UE.destroy();
+    if (this.UE.container) {
+      this.UE.destroy();
+    }
   }
 
   render() {
     return (
-      <div>
+      <div hidden={this.props.hidden}>
         <script style={{ width: '100%' }} id={this.props.id} type="text/plain" />
       </div>
     );

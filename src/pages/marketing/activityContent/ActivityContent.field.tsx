@@ -22,7 +22,7 @@ import { Record } from '../content/ContentManage.model';
 import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import UploadComponent from '../../components/upload/UploadComponent';
-import Editor, { default as Editor } from '../../components/richTextEditor/Editor';
+import Editor from '../../components/richTextEditor/Editor';
 
 const site = withLocale.site;
 
@@ -51,7 +51,13 @@ export default class ActivityContentField<T> extends TableFormField<T> {
       ));
       return <div>{types}</div>;
     },
-    form: ({ text, record, view }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+    form: ({
+      text,
+      record,
+      view,
+      value,
+      onChange
+    }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
       <Query
         query={gql`
           query {
@@ -67,7 +73,13 @@ export default class ActivityContentField<T> extends TableFormField<T> {
         {({
           data: { activityTypes = { data: [] } } = {}
         }: GqlResult<'activityTypes', ActivityType[]>) => (
-          <CheckboxComponent options={activityTypes.data} name="name" formatOut={['name', 'id']} />
+          <CheckboxComponent
+            options={activityTypes.data}
+            name="name"
+            formatOut={['name', 'id']}
+            value={value}
+            onChange={onChange}
+          />
         )}
       </Query>
     )
@@ -102,11 +114,14 @@ export default class ActivityContentField<T> extends TableFormField<T> {
     title: site('结束时间')
   };
 
-  language = {
+  language_id = {
     title: site('语言'),
-    table: ({ record }: FieldProps<string, ActivityContentItem, ActivityContent>) =>
-      record.language_name,
+    table: notInTable,
     form: <LanguageComponent labelInValue={true} />
+  };
+
+  language_name = {
+    title: site('语言')
   };
 
   description = {
@@ -142,15 +157,27 @@ export default class ActivityContentField<T> extends TableFormField<T> {
   content = {
     title: site('PC优惠规则编辑'),
     notInTable: true,
-    form: ({ form }: FieldProps<string, ActivityContentItem, ActivityContent>) =>
-      form.getFieldValue('open_type') !== '4' ? <Editor id={'contentpc'} value={''} /> : null
+    form: ({ form, value, onChange }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+      <Editor
+        id={'contentpc'}
+        hidden={form.getFieldValue('open_type') === '4'}
+        value={value}
+        onChange={onChange}
+      />
+    )
   };
 
   content2 = {
     title: site('h5优惠规则编辑'),
     notInTable: true,
-    form: ({ form }: FieldProps<string, ActivityContentItem, ActivityContent>) =>
-      form.getFieldValue('open_type') !== '4' ? <Editor id={'contentpc'} value={''} /> : null
+    form: ({ form, value, onChange }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+      <Editor
+        id={'contenth5'}
+        hidden={form.getFieldValue('open_type') === '4'}
+        value={value}
+        onChange={onChange}
+      />
+    )
   };
 
   apply_times = {
@@ -181,7 +208,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
       return <div>{STATUS[text]}</div>;
     },
     form: (
-      <Select defaultValue="enabled" style={{ width: 120 }}>
+      <Select style={{ width: 120 }}>
         <Select.Option value="enabled">{site('启用')}</Select.Option>
         <Select.Option value="disabled">{site('停用')}</Select.Option>
       </Select>

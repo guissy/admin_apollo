@@ -16,6 +16,7 @@ export interface ActivityContentItem {
   cover: string;
   begin_time: string;
   end_time: string;
+  language_id: number;
   language_name: string;
   description: string;
   sort: number;
@@ -39,6 +40,7 @@ export const ActivityContentItemFragment = gql`
     cover
     begin_time
     end_time
+    language_id
     language_name
     description
     sort

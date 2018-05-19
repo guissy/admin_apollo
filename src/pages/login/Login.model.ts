@@ -30,7 +30,7 @@ export default {
         const userInfo = JSON.parse(window.sessionStorage.getItem(environment.userInfo) || 'null');
         if (userInfo) {
           dispatch({
-            type: 'loginSuccess',
+            type: 'update',
             payload: { ...userInfo, hasLogin: true }
           });
           dispatch({
@@ -44,7 +44,7 @@ export default {
         }
       } else {
         if (location.pathname === '/') {
-          window.location.href = `${location.origin}/login`;
+          dispatch(routerRedux.push('/'));
         }
       }
       history.listen((location: Location, action: LocationAction) => {
@@ -113,6 +113,7 @@ export default {
           isInsert
         }
       });
+      window.localStorage.setItem(environment.lastUrl, payload);
     }
   },
   reducers: {

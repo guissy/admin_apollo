@@ -46,6 +46,7 @@ const environment = {
   sound_message: 'sound_message', // localStorage Key
   sound_deposit: 'sound_deposit', // localStorage Key
   sound_withdraw: 'sound_withdraw', // localStorage Key
+  lastUrl: 'lastUrl', // localStorage Key
 
   userFirstPage: '/',
 
