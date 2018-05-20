@@ -10,7 +10,7 @@ import DetailModal from '../../components/modal/DetailModal';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -310,7 +310,7 @@ export default class AdHome extends React.PureComponent<AdProps, State> {
     return (
       <div>
         <ButtonBarComponent onCreate={this.addAdHome} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增文案管理')}
@@ -319,7 +319,7 @@ export default class AdHome extends React.PureComponent<AdProps, State> {
           onSubmit={this.onSubmit}
           onCancel={this.closeAdd}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑文案')}

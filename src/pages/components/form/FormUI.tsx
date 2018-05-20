@@ -1,18 +1,13 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
-import { Button, Form, Input, Select } from 'antd';
-import InputComponent from '../input/InputComponent';
-import { SettingState } from '../../home/header/setting/Setting.model';
+import { Button, Form } from 'antd';
 import { Result } from '../../../utils/result';
-import { FormItemProps, ValidationRule } from 'antd/lib/form';
-import { toClass } from 'recompose';
+import { FormItemProps } from 'antd/lib/form';
 import moment from 'moment';
 import { isEqual, omit } from 'lodash/fp';
-import { FieldProps } from '../../../utils/TableFormField';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import FormItemUI from './FormItemUI';
 
@@ -30,7 +25,7 @@ const Section = styled.section`
 @withLocale
 @Form.create()
 @select('setting')
-export class FormComponent extends React.Component<FormComponentProps, {}> {
+export class FormUI extends React.Component<FormUIProps, {}> {
   state = {
     loading: false,
     visibleModal: false
@@ -120,7 +115,7 @@ export class FormComponent extends React.Component<FormComponentProps, {}> {
   }
 
   shouldComponentUpdate(
-    nextProps: Readonly<FormComponentProps>,
+    nextProps: Readonly<FormUIProps>,
     nextState: Readonly<{}>,
     nextContext: object
   ): boolean {
@@ -138,7 +133,7 @@ export class FormComponent extends React.Component<FormComponentProps, {}> {
     if (
       !(typeof render === 'function') &&
       render.props &&
-      render.props.hidden !== false &&
+      (render.props.hidden !== true || render.props.type !== 'hidden') &&
       !this.foundFirst
     ) {
       this.foundFirst = true;
@@ -209,7 +204,7 @@ interface Hoc {
 }
 
 /** EditForm & Search 字段 */
-export interface FormComponentProps extends Partial<Hoc> {
+export interface FormUIProps extends Partial<Hoc> {
   defaultFormItemProps?: FormItemProps;
   fieldConfig: FormConfig[]; // 字段配置
   actionType?: string; // namespace/effect

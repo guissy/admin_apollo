@@ -4,7 +4,7 @@ import { Modal, Button, Form, Tag } from 'antd';
 import ImagePreview from './ImagePreview';
 import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
-import { SearchFormConfig } from '../form/SearchComponent';
+import { SearchFormConfig } from '../form/SearchUI';
 
 interface Props {
   site?: (p: IntlKeys) => React.ReactNode;

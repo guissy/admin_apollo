@@ -11,8 +11,9 @@
 
 ## 开发新功能模块的文件角色：
 一般有3个文件分别是
-- MyFeature.tsx         组件：负责表现层（多用生命周期，少用Promise）
+- MyFeature.page.tsx         组件：负责表现层（多用生命周期，少用Promise）
 - MyFeature.field.tsx   实体：负责表格字段属性（格式化、控件、表单验证）
+- MyFeature.edit.tsx    表单：弹出用于编辑/创建的表单
 - MyFeature.model.ts    模型：负责共享状态管理（同步异步更新）
 
 

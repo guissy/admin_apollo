@@ -168,7 +168,7 @@ import { effectLoadingLoadError, loadReducer, effectErrorMessage } from './utils
 import { moneyForResult, yuan } from './utils/money';
 import environment from './utils/environment';
 import { addTypePatcher } from './utils/graphTypename';
-import ActivityApply from './pages/marketing/activityApply/ActivityApply';
+import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -253,7 +253,7 @@ const client = new ApolloClient({
         ...addTypePatcher(
           'ActivityApply',
           'ActivityApplyItem',
-          moneyForResult<ActivityApply[]>({
+          moneyForResult<ActivityApplyPage[]>({
             data: {
               $for: {
                 coupon_money: yuan, // 分转元

@@ -6,10 +6,13 @@ import gql from 'graphql-tag';
 import { ActivityApplyItem, ActivityApplyItemFragment } from './ActivityApply.model';
 import { Modal, Button } from 'antd';
 import withLocale from '../../../utils/withLocale';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
-import TableComponent, { getPagination } from '../../components/table/TableComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
+import TableComponent, {
+  getPagination,
+  graphPagination
+} from '../../components/table/TableComponent';
 import ActivityApplyField from './ActivityApply.field';
-import { SearchComponent } from '../../components/form/SearchComponent';
+import { SearchUI } from '../../components/form/SearchUI';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import ActivityApplyEdit from './ActivityApply.edit';
 
@@ -24,7 +27,7 @@ interface Props extends Partial<Hoc> {}
 @withLocale
 @compose(withApollo)
 @autobind
-export default class ActivityApply extends React.PureComponent<Props, {}> {
+export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
   refetch: Function;
   state = {
     detail: {
@@ -46,10 +49,6 @@ export default class ActivityApply extends React.PureComponent<Props, {}> {
     searchValues: {}
   };
 
-  onChange(page: number, pageSize: number) {
-    // todo: 翻页
-  }
-
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
     const fields = new ActivityApplyField(this as React.PureComponent<Hoc>);
@@ -62,7 +61,7 @@ export default class ActivityApply extends React.PureComponent<Props, {}> {
     const setState = this.setState.bind(this);
     return (
       <>
-        <SearchComponent
+        <SearchUI
           fieldConfig={searchFields}
           pageSize={20}
           onSubmit={(values: { apply_time: string[]; pathBuilder: (o: object) => string }) => {
@@ -123,14 +122,14 @@ export default class ActivityApply extends React.PureComponent<Props, {}> {
             pathBuilder: pathBuilder('/active/applys')
           }}
         >
-          {({ data: { apply = { data: [], attributes: {} } }, loading, refetch }) => {
+          {({ data: { apply = { data: [], attributes: {} } }, loading, refetch, fetchMore }) => {
             this.refetch = refetch;
             return (
               <TableComponent
                 loading={loading}
                 dataSource={apply.data}
                 columns={tableFields}
-                pagination={getPagination(apply.attributes, this.onChange)}
+                pagination={graphPagination(apply.attributes, fetchMore)}
               />
             );
           }}
@@ -173,7 +172,7 @@ export default class ActivityApply extends React.PureComponent<Props, {}> {
           `}
         >
           {memo => (
-            <EditFormComponent
+            <EditFormUI
               fieldConfig={editFields}
               modalTitle={site('编辑')}
               modalOk={site('修改备注成功')}

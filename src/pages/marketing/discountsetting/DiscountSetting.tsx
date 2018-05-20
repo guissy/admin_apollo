@@ -4,7 +4,7 @@ import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
 import { DiscountSettingState, Record } from './DiscountSetting.model';
-import { SearchComponent } from '../../components/form/SearchComponent';
+import { SearchUI } from '../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { Form, Input } from 'antd';
 import { WrappedFormUtils } from 'antd/es/form/Form';

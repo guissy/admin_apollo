@@ -3,7 +3,7 @@ import { select } from '../../../utils/model';
 import { connect, Dispatch } from 'dva';
 import { IdleAccountState } from './IdleAccount.model';
 
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -96,7 +96,7 @@ export default class IdleAccount extends React.PureComponent<Props, {}> {
     const { data, attributes } = idleAccount;
     return (
       <div>
-        <SearchComponent
+        <SearchUI
           form={form}
           fieldConfig={this.config('search')}
           actionType="idleAccount/queryUnusedAccount"

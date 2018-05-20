@@ -6,7 +6,7 @@ import { MemberManageState } from './MemberManage.model';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
 import DetailModal, { ViewFormConfig } from '../../components/modal/DetailModal';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import QuickDate from '../../components/date/QuickDateComponent';
 import MemberDetail from './MemberDetail';
@@ -425,7 +425,7 @@ export default class MemberManage extends React.PureComponent<Props, State> {
           onClose={this.onViewCallback}
         />
         {/* 搜索 */}
-        <SearchComponent
+        <SearchUI
           form={form}
           fieldConfig={this.config('search')}
           actionType="memberManage/queryTableData"

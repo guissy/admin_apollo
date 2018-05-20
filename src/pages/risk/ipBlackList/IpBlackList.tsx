@@ -5,8 +5,8 @@ import { IpBlackListState } from './IpBlackList.model';
 import styled from 'styled-components';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
 import { IntlKeys } from '../../../locale/zh_CN';
@@ -260,14 +260,14 @@ export default class IpBlackList extends React.PureComponent<Props, State> {
           </Button>
         </div>
         {/* 搜索 */}
-        <SearchComponent
+        <SearchUI
           form={this.props.form}
           fieldConfig={this.config('search')}
           actionType="ipBlackList/loadData"
           pageSize={20}
         />
         {/* 新增 */}
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增IP')}
@@ -276,7 +276,7 @@ export default class IpBlackList extends React.PureComponent<Props, State> {
           onSubmit={this.onAddSubmit}
         />
         {/* 编辑 */}
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑IP')}

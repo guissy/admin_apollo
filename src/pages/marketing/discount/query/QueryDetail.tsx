@@ -4,7 +4,7 @@ import withLocale from '../../../../utils/withLocale';
 import { select } from '../../../../utils/model';
 import { Dispatch } from 'dva';
 import { QueryDetailState, Record, Game } from './QueryDetail.model';
-import { SearchComponent, SearchFormConfig } from '../../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../../components/table/TableComponent';
 import { Form, Button, Tag } from 'antd';
 import { showMessageForResult } from '../../../../utils/showMessage';

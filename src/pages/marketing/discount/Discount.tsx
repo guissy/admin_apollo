@@ -4,7 +4,7 @@ import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
 import { DiscountState, Record } from './Discount.model';
-import { SearchComponent } from '../../components/form/SearchComponent';
+import { SearchUI } from '../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import DiscountDetail from './detail/DiscountDetail';
 import AddDiscount from './add/AddDiscount';
@@ -145,7 +145,7 @@ export default class Discount extends React.PureComponent<Props, State> {
         {this.state.tableVisible ? (
           <div>
             <ButtonBarComponent onCreate={this.onNew} />
-            <SearchComponent
+            <SearchUI
               form={this.props.form}
               fieldConfig={this.config()}
               actionType="discount/loadData"

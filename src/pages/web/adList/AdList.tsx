@@ -12,7 +12,7 @@ import UploadComponent from '../../components/upload/UploadComponent';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -414,7 +414,7 @@ export default class AdList extends React.PureComponent<Props, State> {
             </Button>
           </Col>
         </WrapRow>
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增轮播广告')}
@@ -423,7 +423,7 @@ export default class AdList extends React.PureComponent<Props, State> {
           onSubmit={this.handleSubmit}
           onCancel={this.closeAdd}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑轮播广告')}

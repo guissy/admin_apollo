@@ -11,8 +11,8 @@ import UploadComponent from '../../components/upload/UploadComponent';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { SearchComponent } from '../../components/form/SearchComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { SearchUI } from '../../components/form/SearchUI';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -417,13 +417,13 @@ export default class FloatAd extends React.PureComponent<Props, State> {
     const { addVisible, editVisible, detailViewVisible, editObj, itemObj } = this.state;
     return (
       <div>
-        <SearchComponent
+        <SearchUI
           form={form}
           fieldConfig={this.config('search')}
           actionType="floatAd/query"
           pageSize={20}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           onSubmit={this.handleSubmit}
@@ -432,7 +432,7 @@ export default class FloatAd extends React.PureComponent<Props, State> {
           modalVisible={addVisible}
           onCancel={this.closeAdd}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           onSubmit={this.handleSubmit}

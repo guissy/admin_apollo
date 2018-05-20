@@ -10,7 +10,7 @@ import TableActionComponent from '../../components/table/TableActionComponent';
 import Editor from '../../components/richTextEditor/Editor';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import DetailModal, { ViewFormConfig } from '../../components/modal/DetailModal';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import LinkComponent from '../../components/link/LinkComponent';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
@@ -314,7 +314,7 @@ export default class ProxyCopy extends React.PureComponent<Props, State> {
     return (
       <div>
         <ButtonBarComponent onCreate={this.addProxy} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增轮播广告')}
@@ -323,7 +323,7 @@ export default class ProxyCopy extends React.PureComponent<Props, State> {
           onSubmit={this.handleSubmit}
           onCancel={this.closeAdd}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑代理文案')}

@@ -10,7 +10,7 @@ import TableComponent, { getPagination } from '../../components/table/TableCompo
 import LinkComponent from '../../components/link/LinkComponent';
 import showMessage from '../../../utils/showMessage';
 import QuickDate from '../../components/date/QuickDateComponent';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 const Option = Select.Option;
 
@@ -210,7 +210,7 @@ export default class FundDetail extends React.PureComponent<Props, State> {
 
     return (
       <div>
-        <SearchComponent
+        <SearchUI
           form={this.props.form}
           fieldConfig={this.config('search')}
           actionType="fundDetail/loadData"

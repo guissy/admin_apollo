@@ -2,7 +2,7 @@ import * as React from 'react';
 import { select } from '../../../utils/model';
 import { connect, Dispatch } from 'dva';
 import { OtherMemberState } from './OtherMember.model';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -92,7 +92,7 @@ export default class OtherMember extends React.PureComponent<Props, {}> {
     return (
       <div>
         {/* 搜索 */}
-        <SearchComponent
+        <SearchUI
           form={form}
           fieldConfig={this.config('search')}
           actionType="otherMember/queryOtherMember"

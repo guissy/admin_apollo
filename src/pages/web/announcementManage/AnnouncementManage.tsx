@@ -7,9 +7,9 @@ import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
-import { SearchComponent } from '../../components/form/SearchComponent';
+import { SearchUI } from '../../components/form/SearchUI';
 import moment from 'moment';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -335,14 +335,14 @@ export default class AnnouncementManage extends React.PureComponent<NoticeProps,
     const { addVisible, editVisible, editobj } = this.state;
     return (
       <div>
-        <SearchComponent
+        <SearchUI
           form={form}
           fieldConfig={this.config('search')}
           actionType="announcementManage/query"
           pageSize={20}
         />
         <ButtonBarComponent onCreate={this.addNotice} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑')}

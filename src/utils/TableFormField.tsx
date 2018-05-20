@@ -1,9 +1,8 @@
 import { isFunction } from 'lodash/fp';
 import * as React from 'react';
-import { constant, isPlainObject, isString } from 'lodash/fp';
+import { constant } from 'lodash/fp';
 import { PureComponent } from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import withLocale from './withLocale';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 
 function notStateProps(key: string) {
@@ -82,6 +81,7 @@ export interface FieldProps<
   text: T;
   record: R & { isTotalRow?: boolean };
   view: C;
+  hide: (visible: boolean) => void;
   form: WrappedFormUtils;
   onChange: (value: any) => void; // tslint:disable-line
   value: any; // tslint:disable-line

@@ -4,7 +4,7 @@ import { connect, Dispatch } from 'dva';
 import { AgentAuditState } from './AgentAudit.model';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import { showMessageForResult } from '../../../utils/showMessage';
@@ -177,7 +177,7 @@ export default class AgentAudit extends React.PureComponent<Props, {}> {
     return (
       <div>
         {/* 搜索 */}
-        <SearchComponent
+        <SearchUI
           form={form}
           fieldConfig={this.config('search')}
           actionType="agentAudit/queryAgentAudit"

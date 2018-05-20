@@ -4,7 +4,7 @@ import { connect, Dispatch } from 'dva';
 import { Select, Tag, Form, Input } from 'antd';
 import { DepositCopyState, DepositCopyData } from './DepositCopy.model';
 import TableActionComponent from '../../components/table/TableActionComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import LanguageComponent from '../../components/language/LanguageComponent';
@@ -311,7 +311,7 @@ export default class DepositCopy extends React.PureComponent<Depositprops, {}> {
     return (
       <div>
         <ButtonBarComponent onCreate={this.addDeposit} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           onSubmit={this.onSubmit}
@@ -320,7 +320,7 @@ export default class DepositCopy extends React.PureComponent<Depositprops, {}> {
           modalVisible={addVisible}
           onCancel={this.closeAdd}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑代理文案')}

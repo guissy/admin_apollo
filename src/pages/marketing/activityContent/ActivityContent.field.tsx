@@ -9,25 +9,16 @@ import TableFormField, { FieldProps, notInTable } from '../../../utils/TableForm
 import TableActionComponent from '../../components/table/TableActionComponent';
 import { messageResult, messageSuccess } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { ActivityContentItem } from './Activitycontent.model';
+import { ActivityContent, ActivityType } from './ActivityContent.model';
 import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
-import ActivityApply from '../activityApply/ActivityApply';
-import ActivityContent from './ActivityContent';
-import { ActivityType } from './ActivityContent.model';
+import ActivityApplyPage from '../activityApply/ActivityApply.page';
+import ActivityContentPage from './ActivityContent.page';
 import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import UploadComponent from '../../components/upload/UploadComponent';
 import Editor from '../../components/richTextEditor/Editor';
 
 const site = withLocale.site;
-
-interface ActivityContentResult {
-  data: ActivityContentItem[];
-}
-
-interface Activitycontent {
-  activityContent: ActivityContentResult;
-}
 
 /** Activitycontent字段 */
 export default class ActivityContentField<T> extends TableFormField<T> {
@@ -38,7 +29,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
 
   types = {
     title: site('优惠类型'),
-    table: ({ text, record, view }: FieldProps<string, ActivityContentItem, ActivityContent>) => {
+    table: ({ text, record, view }: FieldProps<string, ActivityContent, ActivityContentPage>) => {
       let types: React.ReactNode = record.types.map((item: { name: string }, index: number) => (
         <span key={index} style={{ display: 'inline-block', padding: 2 }}>
           {item.name}
@@ -52,7 +43,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
       view,
       value,
       onChange
-    }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+    }: FieldProps<string, ActivityContent, ActivityContentPage>) => (
       <Query
         query={gql`
           query {
@@ -97,7 +88,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
 
   cover = {
     title: site('活动图片'),
-    table: ({ text, record, view }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+    table: ({ text, record, view }: FieldProps<string, ActivityContent, ActivityContentPage>) => (
       <img src={text} style={{ height: '20px' }} />
     ),
     form: <UploadComponent onDone={() => messageSuccess(site('上传成功'))} />
@@ -105,7 +96,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
 
   'begin_time,end_time' = {
     title: site('开始时间'),
-    table: ({ record }: FieldProps<string, ActivityContentItem, ActivityContent>) =>
+    table: ({ record }: FieldProps<string, ActivityContent, ActivityContentPage>) =>
       record.begin_time,
     form: <DatePicker.RangePicker />
   };
@@ -150,17 +141,24 @@ export default class ActivityContentField<T> extends TableFormField<T> {
   link = {
     title: site('链接'),
     notInTable: true,
-    form: ({ form }: FieldProps<string, ActivityContentItem, ActivityContent>) =>
-      form.getFieldValue('open_type') !== '4' ? <Input /> : null
+    form: ({ form, hide }: FieldProps<string, ActivityContent, ActivityContentPage>) => (
+      <Input ref={() => hide(form.getFieldValue('open_type') === '4')} />
+    )
   };
 
   content = {
     title: site('PC优惠规则编辑'),
     notInTable: true,
-    form: ({ form, value, onChange }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+    form: ({
+      form,
+      value,
+      onChange,
+      hide
+    }: FieldProps<string, ActivityContent, ActivityContentPage>) => (
       <Editor
         id={'contentpc'}
         hidden={form.getFieldValue('open_type') === '4'}
+        ref={() => hide(form.getFieldValue('open_type') === '4')}
         value={value}
         onChange={onChange}
       />
@@ -170,10 +168,16 @@ export default class ActivityContentField<T> extends TableFormField<T> {
   content2 = {
     title: site('h5优惠规则编辑'),
     notInTable: true,
-    form: ({ form, value, onChange }: FieldProps<string, ActivityContentItem, ActivityContent>) => (
+    form: ({
+      form,
+      value,
+      onChange,
+      hide
+    }: FieldProps<string, ActivityContent, ActivityContentPage>) => (
       <Editor
         id={'contenth5'}
         hidden={form.getFieldValue('open_type') === '4'}
+        ref={() => hide(form.getFieldValue('open_type') === '4')}
         value={value}
         onChange={onChange}
       />
@@ -200,7 +204,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
   };
   status = {
     title: site('状态'),
-    table: ({ text, record }: FieldProps<string, ActivityContentItem, ActivityContent>) => {
+    table: ({ text, record }: FieldProps<string, ActivityContent, ActivityContentPage>) => {
       const STATUS = {
         enabled: <Tag className="audit-ed">{site('启用')}</Tag>,
         disabled: <Tag className="audit-refused">{site('停用')}</Tag>
@@ -221,7 +225,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
 
   oparation = {
     title: site('操作'),
-    table: ({ record, view }: FieldProps<string, ActivityApplyItem, ActivityApply>) => {
+    table: ({ record, view }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
       return (
         !record.isTotalRow && (
           <Mutation
@@ -266,7 +270,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityContentItem', {
+                            writeFragment(this.props.client, 'ActivityContent', {
                               id: record.id,
                               status: 'enabled'
                             });
@@ -282,7 +286,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityContentItem', {
+                            writeFragment(this.props.client, 'ActivityContent', {
                               id: record.id,
                               status: 'disabled'
                             });

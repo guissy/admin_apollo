@@ -2,14 +2,14 @@ import * as React from 'react';
 import { compose, Query, withApollo } from 'react-apollo';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
-import { SearchComponent } from '../../components/form/SearchComponent';
+import { SearchUI } from '../../components/form/SearchUI';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { pathBuilder } from '../../../utils/apollo';
 import gql from 'graphql-tag';
-import { default as TableComponent, getPagination } from '../../components/table/TableComponent';
-import { ActivityContentItem, ActivityContentItemFragment } from './ActivityContent.model';
+import { default as TableComponent, graphPagination } from '../../components/table/TableComponent';
+import { ActivityContent, ActivityContentFragment } from './ActivityContent.model';
 import ActivityContentEdit from './ActivityContent.edit';
 
 interface Hoc {
@@ -23,15 +23,15 @@ interface Props extends Partial<Hoc> {}
 @withLocale
 @compose(withApollo)
 @autobind
-export default class ActivityContent extends React.PureComponent<Props, {}> {
+export default class ActivityContentPage extends React.PureComponent<Props, {}> {
   state = {
     create: {
       visible: false,
-      record: {} as ActivityContentItem
+      record: {} as ActivityContent
     },
     edit: {
       visible: false,
-      record: {} as ActivityContentItem
+      record: {} as ActivityContent
     },
     searchValues: {}
   };
@@ -47,7 +47,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
     return (
       <>
         {/* 搜索 */}
-        <SearchComponent fieldConfig={searchFields} pageSize={30} />
+        <SearchUI fieldConfig={searchFields} pageSize={30} />
         {/* 新增按钮 */}
         <ButtonBarComponent
           onCreate={() => {
@@ -64,11 +64,11 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
                 state
                 message
                 data {
-                  ...ActivityContentItemFragment
+                  ...ActivityContentFragment
                 }
               }
             }
-            ${ActivityContentItemFragment}
+            ${ActivityContentFragment}
           `}
           variables={{
             page: 1,
@@ -88,7 +88,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
                 loading={loading}
                 dataSource={activityContent.data}
                 columns={tableFields}
-                pagination={getPagination(activityContent.attributes, fetchMore)}
+                pagination={graphPagination(activityContent.attributes, fetchMore)}
               />
             );
           }}
@@ -102,6 +102,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
           }}
           modalTitle="创建"
           modalOk="创建成功"
+          view={this}
         />
         <ActivityContentEdit
           edit={this.state.edit}
@@ -111,6 +112,7 @@ export default class ActivityContent extends React.PureComponent<Props, {}> {
           }}
           modalTitle="编辑"
           modalOk="编辑成功"
+          view={this}
         />
       </>
     );

@@ -4,9 +4,7 @@ import { AnnouncementState } from './AnnouncementManage.model';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { throttle } from 'lodash/fp';
-import { Dispatch } from 'dva';
-import { WrappedFormUtils } from 'antd/es/form/Form';
-import { EditConsumer, EditContext } from '../../components/form/EditFormComponent';
+// import { EditConsumer, EditContext } from '../../components/form/EditFormUI';
 import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
 import { delay } from 'redux-saga';
 interface NoticeState {
@@ -40,7 +38,7 @@ export default class RecipientSwitch extends React.PureComponent<
   });
 
   // tslint:disable-next-line:no-any
-  input(editContext: Partial<EditContext>, announcementManage: any) {
+  input(editContext: Partial<{}>, announcementManage: any) {
     const { userLevel } = announcementManage;
     switch (editContext.sendType) {
       case 1:
@@ -97,11 +95,7 @@ export default class RecipientSwitch extends React.PureComponent<
   render() {
     const { announcementManage } = this.props;
     console.log();
-    return (
-      <EditConsumer>
-        {(editContext: EditContext) => this.input(editContext, announcementManage)}
-      </EditConsumer>
-    );
+    return null; // this.input(editContext, announcementManage);
   }
 }
 interface RecipientSwitchProps {

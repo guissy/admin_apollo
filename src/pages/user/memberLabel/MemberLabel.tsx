@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { MemberLabelState } from './MemberLabel.model';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
@@ -184,7 +184,7 @@ export default class MemberLabel extends React.PureComponent<Props, State> {
       <MemberLabelCon>
         <ButtonBarComponent onCreate={this.onAddLabel} />
         {/* 新增 */}
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config()}
           modalTitle={site('新增')}
@@ -193,7 +193,7 @@ export default class MemberLabel extends React.PureComponent<Props, State> {
           onSubmit={this.onAddLabelSubmit}
         />
         {/* 编辑 */}
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config()}
           modalTitle={site('编辑')}

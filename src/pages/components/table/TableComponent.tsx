@@ -119,6 +119,35 @@ export function getPagination(
   };
 }
 
+type PageParam = { page: number; page_size: number };
+/**
+ * antd 分页 for apollo
+ * @see PaginationProps
+ */
+export function graphPagination(
+  attributes: Attributes,
+  fetchMode: (p: { variables: PageParam }) => void
+): TablePaginationConfigWithTotal {
+  // tslint:disable-next-line:variable-name
+  const { number, size, total } = attributes || { number: 1, size: 20, total: 0 };
+  const totalRows = attributes ? getTotalRows(attributes).filter(Boolean) : [];
+  const onPageChange = (page: number, page_size: number) => {
+    fetchMode({ variables: { page, page_size } });
+  };
+  return {
+    showSizeChanger: true,
+    showTotal: (totalNum: number) => withLocale.site('总共 {totalNum} 条', { totalNum }),
+    onShowSizeChange: onPageChange,
+    onChange: onPageChange,
+    pageSize: size + totalRows.length,
+    defaultCurrent: 1,
+    current: number,
+    total: total,
+    showQuickJumper: true,
+    totalRows: totalRows
+  };
+}
+
 function getTotalRows(attributes: Attributes): [object, object] {
   const [subTotalRow, totalRow] = Object.entries(attributes)
     .filter(([key, record]) => /(subTotal|total)\w+/.test(key) && typeof record === 'object')

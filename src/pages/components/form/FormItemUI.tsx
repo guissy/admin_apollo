@@ -1,19 +1,15 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import styled from 'styled-components';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
-import { Dispatch } from 'dva';
-import { Button, Form, Input, Select } from 'antd';
-import InputComponent from '../input/InputComponent';
+import { Form, Input, Select } from 'antd';
 import { SettingState } from '../../home/header/setting/Setting.model';
-import { Result } from '../../../utils/result';
-import { FormItemProps, ValidationRule } from 'antd/lib/form';
+import { ValidationRule } from 'antd/lib/form';
 import { toClass } from 'recompose';
-import moment from 'moment';
-import { isEqual, omit } from 'lodash/fp';
 import { FieldProps } from '../../../utils/TableFormField';
 import { WrappedFormUtils } from 'antd/es/form/Form';
+import { autobind } from 'core-decorators';
+
 interface Hoc {
   setting: SettingState; // 获取全局设置
   site: (words: string) => string;
@@ -37,8 +33,10 @@ type DefaultProps = { autoFocus?: boolean; placeholder?: string; ref?: Function 
 /** FormItemUi */
 @withLocale
 @select('setting')
+@autobind
 export default class FormItemUI extends React.PureComponent<Props, {}> {
   state = {
+    hidden: false,
     element: <div />,
     itemProps: {},
     rules: []
@@ -73,7 +71,7 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
 
     let defaultElementProps = {} as DefaultProps;
     let defaultItemStyle: object = { marginBottom: '10px' };
-    let elementOk = element as React.ReactElement<any>; // tslint:disable-line
+    let elementOk = element as React.ReactElement<any> | null; // tslint:disable-line
 
     // 字段提示信息
     if (elementOk) {
@@ -90,8 +88,13 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
     }
     if (typeof element === 'function') {
       const Component = toClass<Partial<FieldProps>>(element);
-      elementOk = <Component text={initialValue} record={record} view={view} form={form} />;
-    } else {
+      elementOk = (
+        <Component text={initialValue} record={record} view={view} form={form} hide={this.hide} />
+      );
+      if (elementOk.props.children === null) {
+        elementOk = null;
+      }
+    } else if (elementOk !== null) {
       elementOk = React.cloneElement(
         elementOk,
         { ...defaultElementProps, ...element.props },
@@ -107,6 +110,10 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
       rules,
       element: elementOk
     });
+  }
+
+  hide(visible: boolean) {
+    this.setState({ hidden: visible });
   }
 
   autoFocus(isFirst?: boolean) {
@@ -133,8 +140,9 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
       initialValue = '' // 排除formInitialValue缺省时值为undefined，而提交时缺少字段，(有时后台必须的字段值可以为空)
     } = this.props;
     const { element, itemProps, rules } = this.state;
-    return Element ? (
-      <Form.Item label={title} key={dataIndex} {...itemProps}>
+    const display = { display: this.state.hidden ? 'none' : '' };
+    return element ? (
+      <Form.Item label={title} key={dataIndex} style={display} {...itemProps}>
         {getFieldDecorator(dataIndex, {
           initialValue: initialValue,
           rules: rules

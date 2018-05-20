@@ -8,7 +8,7 @@ const activityContent: Model = {
 
 export default activityContent;
 
-export interface ActivityContentItem {
+export interface ActivityContent {
   id: number;
   types: { name: string }[];
   name: string;
@@ -33,8 +33,8 @@ export interface ActivityContentItem {
   memo: string;
 }
 
-export const ActivityContentItemFragment = gql`
-  fragment ActivityContentItemFragment on ActivityContentItem {
+export const ActivityContentFragment = gql`
+  fragment ActivityContentFragment on ActivityContent {
     id
     types
     name

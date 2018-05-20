@@ -10,7 +10,7 @@ import SystemSetting from '../../components/richTextEditor/Editor';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import environment from '../../../utils/environment';
 import UploadComponent from '../../components/upload/UploadComponent';
@@ -322,7 +322,7 @@ export default class PromotionResource extends React.PureComponent<PromotionReso
     return (
       <div>
         <ButtonBarComponent onCreate={this.addResources} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增代理推广资源')}
@@ -331,7 +331,7 @@ export default class PromotionResource extends React.PureComponent<PromotionReso
           onSubmit={this.onSubmit}
           onCancel={this.closeAdd}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑推广资源')}

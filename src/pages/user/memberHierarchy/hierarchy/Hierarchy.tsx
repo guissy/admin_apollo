@@ -4,8 +4,8 @@ import { connect, Dispatch } from 'dva';
 import { HierarchyState } from './Hierarchy.model';
 import TableActionComponent from '../../../components/table/TableActionComponent';
 import LinkComponent from '../../../components/link/LinkComponent';
-import { SearchComponent, SearchFormConfig } from '../../../components/form/SearchComponent';
-import { EditFormComponent, EditConsumer } from '../../../components/form/EditFormComponent';
+import { SearchUI, SearchFormConfig } from '../../../components/form/SearchUI';
+import { EditFormUI, EditConsumer } from '../../../components/form/EditFormUI';
 import TableComponent, { getPagination } from '../../../components/table/TableComponent';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import ButtonBarComponent from '../../../components/buttonBar/ButtonBarComponent';
@@ -491,7 +491,7 @@ export default class Hierarchy extends React.PureComponent<Props, {}> {
       <div>
         <ButtonBarComponent onCreate={this.onNew} />
         {/* 新增 */}
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增')}
@@ -500,7 +500,7 @@ export default class Hierarchy extends React.PureComponent<Props, {}> {
           onSubmit={this.onAddSubmit}
         />
         {/* 编辑 */}
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑')}

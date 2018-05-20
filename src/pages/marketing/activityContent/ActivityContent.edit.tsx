@@ -5,8 +5,8 @@ import gql from 'graphql-tag';
 import withLocale from '../../../utils/withLocale';
 import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { EditFormComponent, EditFormConfig } from '../../components/form/EditFormComponent';
-import { ActivityContentItem } from './ActivityContent.model';
+import { EditFormUI, EditFormConfig } from '../../components/form/EditFormUI';
+import { ActivityContent } from './ActivityContent.model';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -14,11 +14,12 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  edit: { visible: boolean; record: ActivityContentItem };
+  edit: { visible: boolean; record: ActivityContent };
   editFields: EditFormConfig[];
   onDone: () => void;
   modalTitle: string;
   modalOk: string;
+  view: React.PureComponent<{}>;
 }
 
 /** ActivityContentEdit */
@@ -28,7 +29,7 @@ export default class ActivityContentEdit extends React.PureComponent<Props, {}> 
   state = {};
 
   render(): React.ReactNode {
-    const { site = () => '', client } = this.props as Hoc;
+    const { client } = this.props as Hoc;
     return (
       <Mutation
         mutation={gql`
@@ -47,7 +48,7 @@ export default class ActivityContentEdit extends React.PureComponent<Props, {}> 
         `}
       >
         {edit => (
-          <EditFormComponent
+          <EditFormUI
             size="large"
             fieldConfig={this.props.editFields}
             modalTitle={this.props.modalTitle}
@@ -59,14 +60,14 @@ export default class ActivityContentEdit extends React.PureComponent<Props, {}> 
             onSubmit={(values: ActivityApplyItem) => {
               return edit({ variables: { body: values, id: values.id } }).then(
                 (v: GqlResult<'edit'>) => {
-                  writeFragment(client, 'ActivityContentItem', values);
+                  writeFragment(client, 'ActivityContent', values);
                   this.props.onDone();
                   return v.data && v.data.edit;
                 }
               );
             }}
             values={this.props.edit.record}
-            view={this}
+            view={this.props.view}
           />
         )}
       </Mutation>

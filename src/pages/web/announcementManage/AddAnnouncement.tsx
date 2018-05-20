@@ -1,23 +1,19 @@
 import * as React from 'react';
 import { Form, Radio, Tabs, Select, message, Input, Checkbox } from 'antd';
 import { AnnouncementState } from './AnnouncementManage.model';
-import { IntlKeys } from '../../../locale/zh_CN';
+import { string } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import showMessage, { showMessageForResult } from '../../../utils/showMessage';
 import { Result } from '../../../utils/result';
-import { FormComponent } from '../../components/form/FormCompoent';
-import { SearchFormConfig } from '../../components/form/SearchComponent';
+import { FormUI } from '../../components/form/FormUI';
+import { SearchFormConfig } from '../../components/form/SearchUI';
 import styled from 'styled-components';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import Editor from '../../components/richTextEditor/Editor';
 import { select } from '../../../utils/model';
 import { Dispatch } from 'dva';
 import { WrappedFormUtils } from 'antd/es/form/Form';
-import {
-  EditConsumer,
-  EditFormComponent,
-  EditContext
-} from '../../components/form/EditFormComponent';
+import { EditFormUI, EditContext } from '../../components/form/EditFormUI';
 import { DatePicker } from 'antd';
 import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
 import RecipientSwitch from './RecipientSwitch';
@@ -36,9 +32,9 @@ const Option = Select.Option;
 /** 弹出框和接收人联动 */
 // tslint:disable-next-line:no-any
 function TypesSwitch(props: any) {
-  return (
-    <EditConsumer>{(editContext: EditContext) => SendTypeSwitch(editContext, props)}</EditConsumer>
-  );
+  return {
+    /*<EditConsumer>{(editContext: EditContext) => SendTypeSwitch(editContext, props)}</EditConsumer>*/
+  };
 }
 
 // tslint:disable-next-line:no-any
@@ -80,7 +76,7 @@ function SendTypeSwitch(editContext: EditContext, props: any) {
 /** 弹出类型和内容联动 */
 // tslint:disable-next-line:no-any
 function ContentSwitch(props: any) {
-  return <EditConsumer>{(editContext: EditContext) => Content(editContext, props)}</EditConsumer>;
+  // return <EditConsumer>{(editContext: EditContext) => Content(editContext, props)}</EditConsumer>;
 }
 // tslint:disable-next-line:no-any
 function Content(editContext: EditContext, props: any) {
@@ -255,7 +251,7 @@ export default class AddAnnouncement extends React.PureComponent<NoticeProps, No
     const { getFieldDecorator } = form;
     const { newVisible, editVisible, editContext } = this.state;
     return (
-      <EditFormComponent
+      <EditFormUI
         form={form}
         fieldConfig={this.config('login')}
         modalTitle={site('新增公告')}

@@ -8,8 +8,8 @@ import { TypeListState, Record } from './TypeList.model';
 import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 
-import { EditFormComponent } from '../../components/form/EditFormComponent';
-import { SearchFormConfig } from '../../components/form/SearchComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
+import { SearchFormConfig } from '../../components/form/SearchUI';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import LinkComponent from '../../components/link/LinkComponent';
@@ -203,7 +203,7 @@ export default class TypeList extends React.PureComponent<Props, State> {
     return (
       <div>
         <ButtonBarComponent onCreate={this.doAdd} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           modalTitle={site('编辑')}
@@ -212,7 +212,7 @@ export default class TypeList extends React.PureComponent<Props, State> {
           onSubmit={this.onEditSubmit}
           values={this.state.editing}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增')}

@@ -3,7 +3,7 @@ import { select } from '../../../../utils/model';
 import { connect, Dispatch } from 'dva';
 import styled from 'styled-components';
 import { BankCardState } from './BankDetail.model';
-import { EditFormComponent } from '../../../components/form/EditFormComponent';
+import { EditFormUI } from '../../../components/form/EditFormUI';
 import TableActionComponent from '../../../components/table/TableActionComponent';
 import LinkComponent from '../../../components/link/LinkComponent';
 import { IntlKeys } from '../../../../locale/zh_CN';
@@ -297,7 +297,7 @@ export default class BankDetail extends React.PureComponent<Props, State> {
             </Button>
           </div>
         </div>
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('添加银行账号')}
@@ -305,7 +305,7 @@ export default class BankDetail extends React.PureComponent<Props, State> {
           onCancel={this.onNew}
           onSubmit={this.onAddSubmit}
         />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('edit')}
           onSubmit={this.onEditSubmit}

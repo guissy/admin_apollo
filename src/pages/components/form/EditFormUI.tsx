@@ -2,21 +2,13 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { select } from '../../../utils/model';
 import { Modal, Form } from 'antd';
-import { FormComponent, FormConfig } from './FormCompoent';
+import { FormUI, FormConfig } from './FormUI';
 import withLocale from '../../../utils/withLocale';
 import { Result } from '../../../utils/result';
 import { RangePickerValue } from 'antd/lib/date-picker/interface';
 import moment, { Moment } from 'moment-timezone';
 import { WrappedFormUtils } from 'antd/es/form/Form';
 import { messageError, messageSuccess } from '../../../utils/showMessage';
-
-const { Provider: EditProvider, Consumer } = React.createContext({
-  setState: () => ''
-} as EditContext);
-/**
- * 表单上下文
- */
-export const EditConsumer = Consumer;
 
 // tslint:disable-next-line:no-any
 const ModalWrap = styled(Modal as any)`
@@ -67,7 +59,7 @@ function getMomentFromString(value: string[] | number[]) {
  * onSubmit 手动：自行保存数据等，此方法必须返回Promise组件才能够关闭模态框
  * actionType 自动：组件会dispatch, 弹成功失败消息，重置表单，关闭模态框
  * @example
- * <EditFormComponent
+ * <EditFormUI
  *  modalTitle={'编辑'}
  *  modalVisible={true}
  *  fieldConfig={this.config('edit')}
@@ -82,7 +74,7 @@ function getMomentFromString(value: string[] | number[]) {
 @withLocale
 @select('')
 @Form.create()
-export class EditFormComponent extends React.PureComponent<Props, State> {
+export class EditFormUI extends React.PureComponent<Props, State> {
   static getDerivedStateFromProps = (nextProps: Props, prevState: State) => {
     const fieldConfig = nextProps.fieldConfig;
     const values = nextProps.values;
@@ -152,19 +144,9 @@ export class EditFormComponent extends React.PureComponent<Props, State> {
       onCancel,
       onDone,
       values,
-      size
+      size,
+      view
     } = this.props;
-    const editContextOk = Object.assign(this.state.editContext || {}, {
-      form: this.props.form,
-      setState: (editContextNext: object) => {
-        const hasChanged = Object.entries(editContextNext).some(
-          ([key, value]) => value !== this.state.editContext[key]
-        );
-        if (hasChanged) {
-          this.setState({ editContext: { ...this.state.editContext, ...editContextNext } });
-        }
-      }
-    });
     let width = 0;
     let formItemProps = {};
     switch (size) {
@@ -191,21 +173,20 @@ export class EditFormComponent extends React.PureComponent<Props, State> {
         visible={visible}
         destroyOnClose={true}
       >
-        <EditProvider value={editContextOk}>
-          <FormComponent
-            fieldConfig={fieldConfig}
-            actionType={actionType}
-            onSubmit={onSubmit}
-            submitText={submitText}
-            defaultFormItemProps={formItemProps}
-            formLayout={'horizontal'}
-            showMessage={this.showMessage}
-            onCancel={onCancel}
-            onDone={onDone}
-            resetFields={true}
-            record={values}
-          />
-        </EditProvider>
+        <FormUI
+          fieldConfig={fieldConfig}
+          actionType={actionType}
+          onSubmit={onSubmit}
+          submitText={submitText}
+          defaultFormItemProps={formItemProps}
+          formLayout={'horizontal'}
+          showMessage={this.showMessage}
+          onCancel={onCancel}
+          onDone={onDone}
+          resetFields={true}
+          record={values}
+          view={view}
+        />
       </ModalWrap>
     );
   }

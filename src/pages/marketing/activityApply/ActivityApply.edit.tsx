@@ -4,7 +4,7 @@ import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import { ActivityApplyItem } from './ActivityApply.model';
 import withLocale from '../../../utils/withLocale';
-import { EditFormComponent, EditFormConfig } from '../../components/form/EditFormComponent';
+import { EditFormUI, EditFormConfig } from '../../components/form/EditFormUI';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 
 interface Hoc {
@@ -46,7 +46,7 @@ export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
           `}
         >
           {coupon => (
-            <EditFormComponent
+            <EditFormUI
               fieldConfig={this.props.couponFields}
               modalTitle={site('修改优惠金额')}
               modalOk={site('修改优惠金额成功')}
@@ -90,7 +90,7 @@ export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
           `}
         >
           {withdraw => (
-            <EditFormComponent
+            <EditFormUI
               fieldConfig={this.props.withdrawFields}
               modalTitle={site('修改取款条件')}
               modalOk={site('修改取款条件成功')}

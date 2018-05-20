@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Table, Icon, Divider, Tag, Input, Select, DatePicker } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import { IntlKeys } from '../../../locale/zh_CN';
 import { MemberLogState } from './MemberLog.model';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -156,7 +156,7 @@ export default class MemberLog extends React.PureComponent<Props, State> {
     ];
     return (
       <div>
-        <SearchComponent
+        <SearchUI
           form={this.props.form}
           fieldConfig={this.config('search')}
           actionType="memberLog/loadData"

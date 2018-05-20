@@ -7,7 +7,7 @@ import { IntlKeys } from '../../../locale/zh_CN';
 import { SubAgentRebateState, TableRow } from './SubAgentRebate.model';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import TagButton from '../../components/tagButton/TagButtonComponent';
 import showMessage from '../../../utils/showMessage';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -256,7 +256,7 @@ export default class SubAgentRebate extends React.PureComponent<Props, State> {
             rowKey={(index: number) => ''}
           />
         </Modal>
-        <SearchComponent
+        <SearchUI
           form={this.props.form}
           fieldConfig={this.config('search')}
           actionType="subAgentRebate/loadData"

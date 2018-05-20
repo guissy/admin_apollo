@@ -9,13 +9,13 @@ import withLocale from '../../../utils/withLocale';
 import { FormComponentProps } from 'antd/lib/form';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import LinkComponent from '../../components/link/LinkComponent';
-import { EditFormComponent } from '../../components/form/EditFormComponent';
+import { EditFormUI } from '../../components/form/EditFormUI';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import { adminPageSize, adminPage } from '../../../utils/constant';
-import { SearchComponent, SearchFormConfig } from '../../components/form/SearchComponent';
+import { SearchUI, SearchFormConfig } from '../../components/form/SearchUI';
 import QuickDateComponent from '../../components/date/QuickDateComponent';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import AgentDetail from './AgentDetail';
@@ -316,9 +316,9 @@ export default class AgentAccount extends React.PureComponent<Props, State> {
     const { addVisible, agentId, agentType, isDetailVisible, isDestroyOnClose } = this.state;
     return (
       <div>
-        <SearchComponent form={form} fieldConfig={this.config('search')} pageSize={20} />
+        <SearchUI form={form} fieldConfig={this.config('search')} pageSize={20} />
         <ButtonBarComponent onCreate={this.addAgent} />
-        <EditFormComponent
+        <EditFormUI
           form={form}
           fieldConfig={this.config('create')}
           modalTitle={site('新增代理')}
