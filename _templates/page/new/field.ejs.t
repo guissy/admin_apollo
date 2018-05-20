@@ -1,6 +1,7 @@
 ---
-    to: src/pages/<%= name %>/<%= Name %>.field.tsx
+    to: src/pages/<%= h.inflection.camelize(name, true) %>/<%= h.inflection.camelize(name) %>.field.tsx
 ---
+<% Page = h.inflection.camelize(name); page = h.inflection.camelize(name, true) -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { Input, Tag, Select } from 'antd';
@@ -13,21 +14,21 @@ import TableFormField, { FieldProps, notInTable } from '../../../utils/TableForm
 import TableActionComponent from '../../components/table/TableActionComponent';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import <%= Name %> from './<%= Name %>';
-import { <%= Name %>Item, <%= Name %>ItemFragment } from './<%= Name %>.model';
+import <%= Page %> from './<%= Page %>';
+import { <%= Page %>Item, <%= Page %>ItemFragment } from './<%= Page %>.model';
 
 const site = withLocale.site;
 
-interface <%= Name %>Result {
-  data: <%= Name %>Item[];
+interface <%= Page %>Result {
+  data: <%= Page %>Item[];
 }
 
-interface <%= Name %> {
-  <%= name %>: <%= Name %>Result;
+interface <%= Page %> {
+  <%= name %>: <%= Page %>Result;
 }
 
-/** <%= Name %>字段 */
-export default class <%= Name %>Field<T extends { client: ApolloClient<{}> }> extends TableFormField<T> {
+/** <%= Page %>字段 */
+export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> extends TableFormField<T> {
   id = {
     edit: <input type="hidden" />,
     table: notInTable
