@@ -2,7 +2,7 @@ import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import { ActivityApplyItem } from './ActivityApply.model';
+import { ActivityApply } from './ActivityApply.model';
 import withLocale from '../../../utils/withLocale';
 import { EditFormUI, EditFormConfig } from '../../components/form/EditFormUI';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
@@ -13,8 +13,8 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  coupon: { visible: boolean; record: ActivityApplyItem };
-  withdraw: { visible: boolean; record: ActivityApplyItem };
+  coupon: { visible: boolean; record: ActivityApply };
+  withdraw: { visible: boolean; record: ActivityApply };
   couponFields: EditFormConfig[];
   withdrawFields: EditFormConfig[];
   setState: (state: object) => void;
@@ -56,10 +56,10 @@ export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
                   coupon: { visible: false, record: {} }
                 });
               }}
-              onSubmit={(values: ActivityApplyItem) => {
+              onSubmit={(values: ActivityApply) => {
                 return coupon({ variables: { body: values, id: values.id } }).then(
                   (v: GqlResult<'coupon'>) => {
-                    writeFragment(client, 'ActivityApplyItem', values);
+                    writeFragment(client, 'ActivityApply', values);
                     this.props.setState({
                       coupon: { visible: false, record: {} }
                     });
@@ -100,10 +100,10 @@ export default class ActivityApplyEdit extends React.PureComponent<Props, {}> {
                   withdraw: { visible: false, record: {} }
                 });
               }}
-              onSubmit={(values: ActivityApplyItem) => {
+              onSubmit={(values: ActivityApply) => {
                 return withdraw({ variables: { body: values, id: values.id } }).then(
                   (v: GqlResult<'withdraw'>) => {
-                    writeFragment(client, 'ActivityApplyItem', values);
+                    writeFragment(client, 'ActivityApply', values);
                     this.props.setState({
                       withdraw: { visible: false, record: {} }
                     });

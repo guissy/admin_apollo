@@ -4,7 +4,7 @@ import { moneyPattern } from '../../../utils/formRule';
 import LinkComponent from '../../components/link/LinkComponent';
 import withLocale from '../../../utils/withLocale';
 import ActivityApplyPage from './ActivityApply.page';
-import { ActivityApplyItem } from './ActivityApply.model';
+import { ActivityApply } from './ActivityApply.model';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
 import TableActionComponent from '../../components/table/TableActionComponent';
 import QuickDateComponent from '../../components/date/QuickDateComponent';
@@ -33,7 +33,7 @@ interface Activity {
   actives: ActivityResult;
 }
 
-type ActivityApplyConfig = { [key in keyof ActivityApplyItem]: ActivityApplyConfigValue };
+type ActivityApplyConfig = { [key in keyof ActivityApply]: ActivityApplyConfigValue };
 type ActivityApplyConfigValue = {
   edit?: React.ReactNode;
   title?: React.ReactNode;
@@ -81,7 +81,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
       view,
       value,
       onChange
-    }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => (
+    }: FieldProps<string, ActivityApply, ActivityApplyPage>) => (
       <Query
         query={gql`
           query {
@@ -116,7 +116,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
   pre_coupon_money = {
     title: site('原优惠金额'),
     // 修改优惠金额
-    coupon: ({ text, record }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
+    coupon: ({ text, record }: FieldProps<string, ActivityApply, ActivityApplyPage>) => {
       return <span>{record.coupon_money}</span>;
     },
     table: notInTable
@@ -130,7 +130,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
       { required: true, message: '请输入优惠金额' },
       { pattern: moneyPattern(), message: '请输入小数点后小于两位的正数' }
     ],
-    table: ({ text, record, view }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
+    table: ({ text, record, view }: FieldProps<string, ActivityApply, ActivityApplyPage>) => {
       return record.isTotalRow ? (
         text
       ) : (
@@ -150,7 +150,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
   pre_withdraw_require = {
     title: site('原取款条件'),
     // 修改取款条件
-    withdraw: ({ text, record }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => (
+    withdraw: ({ text, record }: FieldProps<string, ActivityApply, ActivityApplyPage>) => (
       <span>{record.withdraw_require}</span>
     ),
     table: notInTable
@@ -163,7 +163,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
       { required: true, message: '请输入优惠金额' },
       { pattern: moneyPattern(), message: '请输入小数点后小于两位的正数' }
     ],
-    table: ({ text, record, view }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
+    table: ({ text, record, view }: FieldProps<string, ActivityApply, ActivityApplyPage>) => {
       return record.isTotalRow ? (
         text
       ) : (
@@ -182,7 +182,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
 
   apply_detail = {
     title: site('申请详情'),
-    table: ({ text, record, view }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) =>
+    table: ({ text, record, view }: FieldProps<string, ActivityApply, ActivityApplyPage>) =>
       record.isTotalRow ? (
         ''
       ) : (
@@ -209,7 +209,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
 
   status = {
     title: site('状态'),
-    table: ({ text }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
+    table: ({ text }: FieldProps<string, ActivityApply, ActivityApplyPage>) => {
       const STATUS = {
         pending: <Tag className="audit-ing">{site('未处理')}</Tag>,
         rejected: <Tag className="audit-refused">{site('已拒绝')}</Tag>,
@@ -245,7 +245,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
 
   oparation = {
     title: site('操作'),
-    table: ({ record, view }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
+    table: ({ record, view }: FieldProps<string, ActivityApply, ActivityApplyPage>) => {
       return (
         !record.isTotalRow && (
           <Mutation
@@ -274,7 +274,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                         pass({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityApplyItem', {
+                            writeFragment(this.props.client, 'ActivityApply', {
                               id: record.id,
                               status: 'pass'
                             });
@@ -290,7 +290,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                         pass({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityApplyItem', {
+                            writeFragment(this.props.client, 'ActivityApply', {
                               id: record.id,
                               status: 'rejected'
                             });

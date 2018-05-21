@@ -7,7 +7,7 @@ const ActivityApplyModel: Model = {
 };
 export default ActivityApplyModel;
 
-export interface ActivityApplyItem {
+export interface ActivityApply {
   id: number;
   active_id: string;
   active_name: string;
@@ -34,8 +34,8 @@ export interface ActivityApplyItem {
   user_name: string;
 }
 
-export const ActivityApplyItemFragment = gql`
-  fragment ActivityApplyItemFragment on ActivityApplyItem {
+export const ActivityApplyFragment = gql`
+  fragment ActivityApplyFragment on ActivityApply {
     id
     active_id
     active_name

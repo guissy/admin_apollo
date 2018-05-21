@@ -267,34 +267,25 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        pass({ variables: { body: { id: record.id, status: 'pass' } } })
+                        pass({
+                          variables: {
+                            body: {
+                              id: record.id,
+                              status: record.status === 'enabled' ? 'disabled' : 'enabled'
+                            }
+                          }
+                        })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
                             writeFragment(this.props.client, 'ActivityContent', {
                               id: record.id,
-                              status: 'enabled'
+                              status: record.status === 'enabled' ? 'disabled' : 'enabled'
                             });
                             return v.data && v.data.status;
                           })
                       }
                     >
-                      {site('启用')}
-                    </LinkComponent>
-                    <LinkComponent
-                      confirm={true}
-                      onClick={() =>
-                        pass({ variables: { body: { id: record.id, status: 'rejected' } } })
-                          .then(messageResult('status'))
-                          .then((v: GqlResult<'status'>) => {
-                            writeFragment(this.props.client, 'ActivityContent', {
-                              id: record.id,
-                              status: 'disabled'
-                            });
-                            return v.data && v.data.status;
-                          })
-                      }
-                    >
-                      {site('停用')}
+                      {record.status === 'enabled' ? site('停用') : site('启用')}
                     </LinkComponent>
                     <LinkComponent
                       confirm={true}

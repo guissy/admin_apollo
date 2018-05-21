@@ -3,7 +3,7 @@ import { autobind } from 'core-decorators';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import { ActivityApplyItem, ActivityApplyItemFragment } from './ActivityApply.model';
+import { ActivityApply, ActivityApplyFragment } from './ActivityApply.model';
 import { Modal, Button } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import { EditFormUI } from '../../components/form/EditFormUI';
@@ -32,19 +32,19 @@ export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
   state = {
     detail: {
       visible: false,
-      record: {} as ActivityApplyItem
+      record: {} as ActivityApply
     },
     memo: {
       visible: false,
-      record: {} as ActivityApplyItem
+      record: {} as ActivityApply
     },
     coupon: {
       visible: false,
-      record: {} as ActivityApplyItem
+      record: {} as ActivityApply
     },
     withdraw: {
       visible: false,
-      record: {} as ActivityApplyItem
+      record: {} as ActivityApply
     },
     searchValues: {}
   };
@@ -104,11 +104,11 @@ export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
                   state
                   message
                   data {
-                    ...ActivityApplyItemFragment
+                    ...ActivityApplyFragment
                   }
                 }
               }
-              ${ActivityApplyItemFragment}
+              ${ActivityApplyFragment}
             ` // tslint:enable
           }
           variables={{
@@ -182,10 +182,10 @@ export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
                   memo: { visible: false, record: {} }
                 });
               }}
-              onSubmit={(values: ActivityApplyItem) => {
+              onSubmit={(values: ActivityApply) => {
                 return memo({ variables: { body: values, id: values.id } }).then(
                   (v: GqlResult<'memo'>) => {
-                    writeFragment(client, 'ActivityApplyItem', values);
+                    writeFragment(client, 'ActivityApply', values);
                     this.setState({
                       memo: { visible: false, record: {} }
                     });

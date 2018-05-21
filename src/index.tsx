@@ -247,12 +247,12 @@ const client = new ApolloClient({
       typePatcher: {
         ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
-        ...addTypePatcher('ActivityContentResult', 'ActivityContentItem'),
+        ...addTypePatcher('ActivityContentResult', 'ActivityContent'),
         ...addTypePatcher('ActivityTypeResult', 'ActivityType'),
         ...addTypePatcher('ActivityEditResult', 'ActivityEdit'),
         ...addTypePatcher(
+          'ActivityApplyResult',
           'ActivityApply',
-          'ActivityApplyItem',
           moneyForResult<ActivityApplyPage[]>({
             data: {
               $for: {
