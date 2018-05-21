@@ -1,11 +1,6 @@
----
-to: src/pages/<%= h.folder(name) %>.field.tsx
-unless_exists: true
----
-<% Page = h.Page(name); page = h.page(name) -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, Tag, Select } from 'antd';
+import { InputNumber, Input, Tag, Select } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
@@ -15,38 +10,63 @@ import TableFormField, { FieldProps, notInTable } from '../../../utils/TableForm
 import TableActionComponent from '../../components/table/TableActionComponent';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import <%= Page %>Page from './<%= Page %>.page';
-import { <%= Page %>, <%= Page %>Fragment } from './<%= Page %>.model';
+import ActivityTypePage from './ActivityType.page';
+import { ActivityType, ActivityTypeFragment } from './ActivityType.model';
 
 const site = withLocale.site;
 
-/** <%= Page %>字段 */
-export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> extends TableFormField<T> {
+/** ActivityType字段 */
+export default class ActivityTypeField<
+  T extends { client: ApolloClient<{}> }
+> extends TableFormField<T> {
   id = {
     form: <input type="hidden" />,
     table: notInTable
   };
 
-oparation = {
+  name = {
+    title: site('优惠类型'),
+    form: <Input />
+  };
+
+  description = {
+    title: site('优惠类型描述'),
+    form: <Input.TextArea />
+  };
+
+  sort = {
+    title: site('排序'),
+    form: <InputNumber />
+  };
+
+  created_uname = {
+    title: site('创建人')
+  };
+
+  created = {
+    title: site('创建时间')
+  };
+
+  updated = {
+    title: site('修改时间')
+  };
+
+  oparation = {
     title: site('操作'),
-    table: ({ record, view }: FieldProps<string, <%= Page %>, <%= Page %>Page>) => {
+    table: ({ record, view }: FieldProps<string, ActivityType, ActivityTypePage>) => {
       return (
         !record.isTotalRow && (
           <Mutation
             mutation={gql`
               mutation removeMutation($id: RemoveInput!) {
                 status(id: $id)
-                  @rest(
-                    path: "/<%= page %>/:id"
-                    method: "DELETE"
-                    type: "RemoveResult"
-                  ) {
+                  @rest(path: "/active/types/:id", method: "DELETE", type: "RemoveResult") {
                   state
                   message
                 }
               }
             `}
-            refetchQueries={['<%= page %>Query']}
+            refetchQueries={['activityTypeQuery']}
           >
             {remove => (
               <TableActionComponent>

@@ -1,12 +1,16 @@
+---
+to: src/pages/<%= h.folder(name) %>.edit.tsx
+unless_exists: true
+---
+<% Page = h.Page(name); page = h.page(name) -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import withLocale from '../../../utils/withLocale';
-import { ActivityApply } from '../activityApply/ActivityApply.model';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { EditFormUI, EditFormConfig } from '../../components/form/EditFormUI';
-import { ActivityContent } from './ActivityContent.model';
+import { <%= Page %> } from './<%= Page %>.model';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -14,7 +18,7 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  edit: { visible: boolean; record: ActivityContent };
+  edit: { visible: boolean; record: <%= Page %> };
   editFields: EditFormConfig[];
   onDone: () => void;
   modalTitle: string;
@@ -22,10 +26,10 @@ interface Props extends Partial<Hoc> {
   view: React.PureComponent<{}>;
 }
 
-/** ActivityContentEdit */
+/** <%= Page %>Edit */
 @withLocale
 @compose(withApollo)
-export default class ActivityContentEdit extends React.PureComponent<Props, {}> {
+export default class <%= Page %>Edit extends React.PureComponent<Props, {}> {
   state = {};
 
   render(): React.ReactNode {
@@ -33,13 +37,13 @@ export default class ActivityContentEdit extends React.PureComponent<Props, {}> 
     return (
       <Mutation
         mutation={gql`
-          mutation editMutation($body: ActivityEditInput!, $id: Int!) {
+          mutation editMutation($body: <%= Page %>EditInput!, $id: Int!) {
             edit(body: $body, id: $id)
               @rest(
                 bodyKey: "body"
-                path: "/active/manual/:id"
+                path: "/<%= page %>/:id"
                 method: "put"
-                type: "ActivityEditResult"
+                type: "<%= Page %>EditResult"
               ) {
               state
               message
@@ -57,10 +61,10 @@ export default class ActivityContentEdit extends React.PureComponent<Props, {}> 
             onCancel={() => {
               this.props.onDone();
             }}
-            onSubmit={(values: ActivityApply) => {
+            onSubmit={(values: <%= Page %>) => {
               return edit({ variables: { body: values, id: values.id } }).then(
                 (v: GqlResult<'edit'>) => {
-                  writeFragment(client, 'ActivityContent', values);
+                  writeFragment(client, '<%= Page %>', values);
                   this.props.onDone();
                   return v.data && v.data.edit;
                 }

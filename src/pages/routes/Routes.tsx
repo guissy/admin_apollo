@@ -178,6 +178,7 @@ import DomainSetting from '../system/domainSetting/DomainSetting';
 //    游戏后台帐号
 import GameAccount from '../system/gameAccount/GameAccount';
 import ActivityContentPage from '../marketing/activityContent/ActivityContent.page';
+import ActivityTypePage from '../marketing/activityType/ActivityType.page';
 
 export default () => {
   return (
@@ -196,7 +197,7 @@ export default () => {
       <Route path="/noticeManage" component={NoticeManage} />
       <Route path="/resourceManage" component={ResourceManage} />
       <Route path="/apply" component={ActivityApplyPage} />
-      <Route path="/typeList" component={TypeList} />
+      <Route path="/typeList" component={ActivityTypePage} />
       {/* <Route path="/activeSet" component={ActiveSet} /> */}
       <Route path="/discount" component={Discount} />
       {/* <Route path="/discountCounting" component={DiscountCounting} /> */}

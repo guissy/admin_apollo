@@ -3,10 +3,9 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import withLocale from '../../../utils/withLocale';
-import { ActivityApply } from '../activityApply/ActivityApply.model';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { EditFormUI, EditFormConfig } from '../../components/form/EditFormUI';
-import { ActivityContent } from './ActivityContent.model';
+import { ActivityType } from './ActivityType.model';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -14,7 +13,8 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  edit: { visible: boolean; record: ActivityContent };
+  method: string;
+  edit: { visible: boolean; record: ActivityType };
   editFields: EditFormConfig[];
   onDone: () => void;
   modalTitle: string;
@@ -22,24 +22,26 @@ interface Props extends Partial<Hoc> {
   view: React.PureComponent<{}>;
 }
 
-/** ActivityContentEdit */
+/** ActivityTypeEdit */
 @withLocale
 @compose(withApollo)
-export default class ActivityContentEdit extends React.PureComponent<Props, {}> {
+export default class ActivityTypeEdit extends React.PureComponent<Props, {}> {
   state = {};
 
   render(): React.ReactNode {
     const { client } = this.props as Hoc;
+    const method = this.props.method;
+    const path = '/active/types/:id';
     return (
       <Mutation
         mutation={gql`
-          mutation editMutation($body: ActivityEditInput!, $id: Int!) {
+          mutation editMutation($body: ActivityTypeEditInput!, $id: Int!) {
             edit(body: $body, id: $id)
               @rest(
                 bodyKey: "body"
-                path: "/active/manual/:id"
-                method: "put"
-                type: "ActivityEditResult"
+                path: "${path}"
+                method: ${method}
+                type: "ActivityTypeEditResult"
               ) {
               state
               message
@@ -57,10 +59,10 @@ export default class ActivityContentEdit extends React.PureComponent<Props, {}> 
             onCancel={() => {
               this.props.onDone();
             }}
-            onSubmit={(values: ActivityApply) => {
+            onSubmit={(values: ActivityType) => {
               return edit({ variables: { body: values, id: values.id } }).then(
                 (v: GqlResult<'edit'>) => {
-                  writeFragment(client, 'ActivityContent', values);
+                  writeFragment(client, 'ActivityType', values);
                   this.props.onDone();
                   return v.data && v.data.edit;
                 }

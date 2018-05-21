@@ -1,8 +1,3 @@
----
-to: src/pages/<%= h.folder(name) %>.page.tsx
-unless_exists: true
----
-<% Page = h.Page(name); page = h.page(name) -%>
 import * as React from 'react';
 import styled from 'styled-components';
 import ApolloClient from 'apollo-client/ApolloClient';
@@ -14,83 +9,79 @@ import { SearchUI } from '../../components/form/SearchUI';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
-import <%= Page %>Field from './<%= Page %>.field';
-import { <%= Page %>Fragment, <%= Page %> } from './<%= Page %>.model';
-import <%= Page %>Edit from './<%= Page %>.edit';
+import ActivityTypeField from './ActivityType.field';
+import { ActivityTypeFragment, ActivityType } from './ActivityType.model';
+import ActivityTypeEdit from './ActivityType.edit';
 
 interface Hoc {
   client: ApolloClient<object>;
   site: (p: string) => React.ReactNode;
 }
 
-interface Props extends Partial<Hoc> {
-}
+interface Props extends Partial<Hoc> {}
 
-/** <%= Page %>Page */
+/** ActivityTypePage */
 @withLocale
 @compose(withApollo)
 @autobind
-export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
+export default class ActivityTypePage extends React.PureComponent<Props, {}> {
   state = {
     create: {
       visible: false,
-      record: {} as <%= Page %>
+      record: {} as ActivityType
     },
     edit: {
       visible: false,
-      record: {} as <%= Page %>
-    },
+      record: {} as ActivityType
+    }
   };
   refetch: Function;
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
-    const fields = new <%= Page %>Field(this as React.PureComponent<Hoc>);
+    const fields = new ActivityTypeField(this as React.PureComponent<Hoc>);
     const tableFields = fields.table(this);
     const editFields = fields.filterBy('form');
     return (
       <>
         <Query
-          query={
-            gql`
-              query <%= page %>Query(
-                $page: Int
-                $page_size: Int
-                $pathBuilder: any
-              ) {
-                <%= page %>(
-                  page: $page
-                  page_size: $page_size
-                ) @rest(type: "<%= Page %>Result", pathBuilder: $pathBuilder) {
-                  state
-                  message
-                  data {
-                    ...<%= Page %>Fragment
-                  }
+          query={gql`
+            query activityTypeQuery($page: Int, $page_size: Int, $pathBuilder: any) {
+              activityType(page: $page, page_size: $page_size)
+                @rest(type: "ActivityTypeResult", pathBuilder: $pathBuilder) {
+                state
+                message
+                data {
+                  ...ActivityTypeFragment
                 }
               }
-              ${<%= Page %>Fragment}
-            `
-          }
+            }
+            ${ActivityTypeFragment}
+          `}
           variables={{
             page: 1,
             page_size: 20,
-            pathBuilder: pathBuilder('/<%= page %>')
+            pathBuilder: pathBuilder('/active/types')
           }}
         >
-          {({ data: { <%= page %> = { data: [], attributes: {} } } = {}, loading, refetch, fetchMore }) => {
+          {({
+            data: { activityType = { data: [], attributes: {} } } = {},
+            loading,
+            refetch,
+            fetchMore
+          }) => {
             this.refetch = refetch;
             return (
               <TableComponent
                 loading={loading}
-                dataSource={<%= page %>.data}
+                dataSource={activityType.data}
                 columns={tableFields}
-                pagination={graphPagination(<%= page %>.attributes, fetchMore)}
+                pagination={graphPagination(activityType.attributes, fetchMore)}
               />
             );
           }}
         </Query>
-        <<%= Page %>Edit
+        <ActivityTypeEdit
           edit={this.state.create}
           editFields={editFields}
           onDone={() => {
@@ -98,9 +89,10 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
           }}
           modalTitle="创建"
           modalOk="创建成功"
+          method="post"
           view={this}
         />
-        <<%= Page %>Edit
+        <ActivityTypeEdit
           edit={this.state.edit}
           editFields={editFields}
           onDone={() => {
@@ -108,6 +100,7 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
           }}
           modalTitle="编辑"
           modalOk="编辑成功"
+          method="put"
           view={this}
         />
       </>

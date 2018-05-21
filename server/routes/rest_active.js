@@ -87,18 +87,36 @@ router.patch('/active.discount/:id', async function save(req, res, next) {
 router.get('/actives', async function save(req, res, next) {
   res.json(resultOk(actives))
 });
-// 优惠活动标题
+// 优惠活动状态
 router.put('/active/apply/status', async function save(req, res, next) {
   res.json(resultOk(actives))
 });
+
+
+const { types } = mockjs.mock({'types|3': [{
+    'id|+1': 1,
+    'name|+1': ['充值', '满减', '幸运'],
+    'description|+1': ['充值送啊送', '满多少减多少', '随机送'],
+    'sort|1-100': 1,
+    created: moment().format('YYYY-MM-DD hh:mm:ss'),
+    created_uname: '@cname',
+    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+    updated_uname: '@cname',
+  }]});
 // 优惠类型
 router.get('/active/types', async function save(req, res, next) {
-    res.json(resultOk([
-        { 'name': '充值', id: 1 },
-        { 'name': '满减', id: 2 },
-        { 'name': '幸运', id: 3 }
-    ]));
+  res.json(resultOk(types));
 });
+router.delete('/active/types/:id', async function save(req, res, next) {
+  res.json(resultOk(types[0]))
+});
+router.post('/active/types/:id', async function save(req, res, next) {
+  res.json(resultOk(types[0]))
+});
+router.put('/active/types/:id', async function save(req, res, next) {
+  res.json(resultOk(types[0]))
+});
+
 
 
 const { activities } = mockjs.mock({'activities|20': [{

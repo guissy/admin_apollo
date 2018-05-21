@@ -13,7 +13,7 @@ import { ActivityContent, ActivityType } from './ActivityContent.model';
 import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
 import ActivityApplyPage from '../activityApply/ActivityApply.page';
 import ActivityContentPage from './ActivityContent.page';
-import { ActivityApplyItem } from '../activityApply/ActivityApply.model';
+import { ActivityApply } from '../activityApply/ActivityApply.model';
 import LanguageComponent from '../../components/language/LanguageComponent';
 import UploadComponent from '../../components/upload/UploadComponent';
 import Editor from '../../components/richTextEditor/Editor';
@@ -225,18 +225,17 @@ export default class ActivityContentField<T> extends TableFormField<T> {
 
   oparation = {
     title: site('操作'),
-    table: ({ record, view }: FieldProps<string, ActivityApplyItem, ActivityApplyPage>) => {
+    table: ({ record, view }: FieldProps<string, ActivityApply, ActivityApplyPage>) => {
       return (
         !record.isTotalRow && (
           <Mutation
             mutation={gql`
-              mutation statusMutation($body: StatusInput!) {
-                status(body: $body)
+              mutation removeMutation($id: RemoveInput!) {
+                status($id: $id)
                   @rest(
-                    bodyKey: "body"
-                    path: "/active/apply/status"
-                    method: "PUT"
-                    type: "StatusResult"
+                    path: "/active/apply/:id"
+                    method: "Delete"
+                    type: "RemoveResult"
                   ) {
                   state
                   message
@@ -290,10 +289,10 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        remove({ variables: { body: { id: record.id, status: 'rejected' } } })
-                          .then(messageResult('status'))
-                          .then((v: GqlResult<'status'>) => {
-                            return v.data && v.data.status;
+                        remove({ variables: { id: record.id } })
+                          .then(messageResult('remove'))
+                          .then((v: GqlResult<'remove'>) => {
+                            return v.data && v.data.remove;
                           })
                       }
                     >

@@ -1,23 +1,27 @@
 ---
-to: src/pages/<%= h.inflection.camelize(name, true) %>/<%= h.inflection.camelize(name) %>.model.ts
+to: src/pages/<%= h.folder(name) %>.model.tsx
+unless_exists: true
 ---
-<% Page = h.inflection.camelize(name); page = h.inflection.camelize(name, true) -%>
+<% Page = h.Page(name); page = h.page(name) -%>
 import { Model } from 'dva';
 import gql from 'graphql-tag';
 
-const <%= name %>: Model = {
+const <%= page %>: Model = {
   namespace: '<%= page %>',
   state: {},
 };
 
+/** dva 模型 */
 export default <%= page %>;
 
-export interface <%= Page %>Item {
+/** 实体类型 */
+export interface <%= Page %> {
   id: number;
 }
 
+/** 缓存数据：实体类型 */
 export const <%= Page %>Fragment = gql`
-  fragment <%= Page %>ItemFragment on <%= Page %>Item {
+  fragment <%= Page %>Fragment on <%= Page %> {
     id
   }
 `
