@@ -27,7 +27,7 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
     table: notInTable
   };
 
-oparation = {
+  oparation = {
     title: site('操作'),
     table: ({ record, view }: FieldProps<string, <%= Page %>, <%= Page %>Page>) => {
       return (
@@ -35,7 +35,7 @@ oparation = {
           <Mutation
             mutation={gql`
               mutation removeMutation($id: RemoveInput!) {
-                status(id: $id)
+                remove(id: $id)
                   @rest(
                     path: "/<%= page %>/:id"
                     method: "DELETE"

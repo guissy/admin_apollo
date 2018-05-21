@@ -51,7 +51,6 @@ export default class ActivityTypeEdit extends React.PureComponent<Props, {}> {
       >
         {edit => (
           <EditFormUI
-            size="large"
             fieldConfig={this.props.editFields}
             modalTitle={this.props.modalTitle}
             modalOk={this.props.modalOk}

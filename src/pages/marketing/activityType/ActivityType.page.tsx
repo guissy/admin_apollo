@@ -44,6 +44,14 @@ export default class ActivityTypePage extends React.PureComponent<Props, {}> {
     const editFields = fields.filterBy('form');
     return (
       <>
+        {/* 新增按钮 */}
+        <ButtonBarComponent
+          onCreate={() => {
+            this.setState({
+              create: { visible: true, record: {} }
+            });
+          }}
+        />
         <Query
           query={gql`
             query activityTypeQuery($page: Int, $page_size: Int, $pathBuilder: any) {

@@ -1,13 +1,4 @@
-import { Model } from 'dva';
 import gql from 'graphql-tag';
-
-const activityType: Model = {
-  namespace: 'activityType',
-  state: {}
-};
-
-/** dva 模型 */
-export default activityType;
 
 /** 实体类型 */
 export interface ActivityType {

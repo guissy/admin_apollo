@@ -43,9 +43,7 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 营销
 //    优惠申请
-import ActivityApplyModel from './pages/marketing/activityApply/ActivityApply.model';
 //    优惠类型
-import TypeListModel from './pages/marketing/typeList/TypeList.model';
 //    自动优惠模板
 //    返水活动
 import DiscountModel from './pages/marketing/discount/Discount.model';
@@ -168,7 +166,7 @@ import { effectLoadingLoadError, loadReducer, effectErrorMessage } from './utils
 import { moneyForResult, yuan } from './utils/money';
 import environment from './utils/environment';
 import { addTypePatcher } from './utils/graphTypename';
-import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply';
+import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply.page';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -202,8 +200,6 @@ app.model(throttleEffect(IdleAccountModel));
 app.model(throttleEffect(OtherMemberModel));
 app.model(throttleEffect(AgentAuditModel));
 app.model(throttleEffect(ProxyCopyModel));
-app.model(throttleEffect(ActivityApplyModel));
-app.model(throttleEffect(TypeListModel));
 app.model(throttleEffect(SettingModel));
 app.model(throttleEffect(HeaderModel));
 app.model(throttleEffect(DepositCopyModel));
@@ -249,6 +245,7 @@ const client = new ApolloClient({
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
         ...addTypePatcher('ActivityContentResult', 'ActivityContent'),
         ...addTypePatcher('ActivityTypeResult', 'ActivityType'),
+        ...addTypePatcher('DiscountSettingResult', 'DiscountSetting'),
         ...addTypePatcher('ActivityEditResult', 'ActivityEdit'),
         ...addTypePatcher(
           'ActivityApplyResult',

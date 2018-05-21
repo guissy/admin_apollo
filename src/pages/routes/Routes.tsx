@@ -179,6 +179,7 @@ import DomainSetting from '../system/domainSetting/DomainSetting';
 import GameAccount from '../system/gameAccount/GameAccount';
 import ActivityContentPage from '../marketing/activityContent/ActivityContent.page';
 import ActivityTypePage from '../marketing/activityType/ActivityType.page';
+import DiscountSettingPage from '../marketing/discountSetting/DiscountSetting.page';
 
 export default () => {
   return (
@@ -214,7 +215,7 @@ export default () => {
       {/* <Route path="/activeMode_email" component={ActiveMode_email} /> */}
       <Route path="/activityContent" component={ActivityContentPage} />
       {/* <Route path="/discountQuery" component={DiscountQuery} /> */}
-      {/* <Route path="/discountSetting" component={DiscountSetting} /> */}
+      <Route path="/discountSetting" component={DiscountSettingPage} />
       {/* <Route path="/lotterPeriodManagement" component={LotterPeriodManagement} /> */}
       <Route path="/ipBlacklist" component={IpBlacklist} />
       {/* <Route path="/duplicateAccount" component={DuplicateAccount} /> */}

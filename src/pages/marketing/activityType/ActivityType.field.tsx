@@ -59,7 +59,7 @@ export default class ActivityTypeField<
           <Mutation
             mutation={gql`
               mutation removeMutation($id: RemoveInput!) {
-                status(id: $id)
+                remove(id: $id)
                   @rest(path: "/active/types/:id", method: "DELETE", type: "RemoveResult") {
                   state
                   message

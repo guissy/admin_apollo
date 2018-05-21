@@ -1,11 +1,4 @@
-import { Model } from 'dva';
 import gql from 'graphql-tag';
-
-const ActivityApplyModel: Model = {
-  namespace: 'apply',
-  state: {}
-};
-export default ActivityApplyModel;
 
 export interface ActivityApply {
   id: number;

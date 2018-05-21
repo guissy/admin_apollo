@@ -108,7 +108,9 @@ router.get('/active/types', async function save(req, res, next) {
   res.json(resultOk(types));
 });
 router.delete('/active/types/:id', async function save(req, res, next) {
-  res.json(resultOk(types[0]))
+  const n = types.findIndex(v => req.params.id === String(v.id));
+  types.splice(n, 1);
+  res.json(resultOk({}))
 });
 router.post('/active/types/:id', async function save(req, res, next) {
   res.json(resultOk(types[0]))
@@ -169,3 +171,32 @@ module.exports = {
   Active,
   router,
 }
+
+
+// 返水活动
+const { discountSetting } = mockjs.mock({'discountSetting|3': [{
+    'id|+1': 1,
+    'valid_money|1-100.1-2': 1.0,
+    memo: '反水好',
+    status: 'enabled',
+    'upper_limit|1-100.1-2': 1.0,
+    created: moment().format('YYYY-MM-DD hh:mm:ss'),
+    created_uname: '@cname',
+    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+    updated_uname: '@cname',
+  }]});
+
+// 列表
+router.get('/discountSetting', async function list(req, res, next) {
+  res.json(resultOk(discountSetting))
+});
+// 修改
+router.put('/discountSetting/:id?', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+// 删除
+router.delete('/discountSetting/:id', async function save(req, res, next) {
+  const n = discountSetting.findIndex(v => req.params.id === String(v.id));
+  discountSetting.splice(n, 1);
+  res.json(resultOk(activities[0]))
+});
