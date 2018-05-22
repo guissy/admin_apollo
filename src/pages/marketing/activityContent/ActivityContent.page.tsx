@@ -47,7 +47,13 @@ export default class ActivityContentPage extends React.PureComponent<Props, {}> 
     return (
       <>
         {/* 搜索 */}
-        <SearchUI fieldConfig={searchFields} pageSize={30} />
+        <SearchUI
+          fieldConfig={searchFields}
+          onSubmit={values => {
+            this.setState({ searchValues: values });
+            return this.refetch(values);
+          }}
+        />
         {/* 新增按钮 */}
         <ButtonBarComponent
           onCreate={() => {
@@ -88,7 +94,11 @@ export default class ActivityContentPage extends React.PureComponent<Props, {}> 
                 loading={loading}
                 dataSource={activityContent.data}
                 columns={tableFields}
-                pagination={graphPagination(activityContent.attributes, fetchMore)}
+                pagination={graphPagination(
+                  activityContent.attributes,
+                  fetchMore,
+                  this.state.searchValues
+                )}
               />
             );
           }}

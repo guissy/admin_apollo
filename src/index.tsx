@@ -46,10 +46,6 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 //    优惠类型
 //    自动优惠模板
 //    返水活动
-import DiscountModel from './pages/marketing/discount/Discount.model';
-import DiscountDetailModel from './pages/marketing/discount/detail/DiscountDetail.model';
-import AddDiscountModel from './pages/marketing/discount/add/AddDiscount.model';
-import QueryDetailModel from './pages/marketing/discount/query/QueryDetail.model';
 //    返水查询
 //    创建活动模板
 //    每日签到模板优惠设置
@@ -167,6 +163,7 @@ import { moneyForResult, yuan } from './utils/money';
 import environment from './utils/environment';
 import { addTypePatcher } from './utils/graphTypename';
 import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply.page';
+import { DiscountManage } from './pages/marketing/discountManage/DiscountManage.model';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -210,8 +207,6 @@ app.model(throttleEffect(DomainSettingModel));
 app.model(throttleEffect(GameAccountModel));
 app.model(throttleEffect(FloatAdModel));
 app.model(throttleEffect(ResourceManageModel));
-app.model(throttleEffect(DiscountModel));
-app.model(throttleEffect(DiscountDetailModel));
 app.model(throttleEffect(SubAgentRebateModel));
 app.model(throttleEffect(AgentLinkModel));
 app.model(throttleEffect(PromotionResourceModel));
@@ -220,10 +215,8 @@ app.model(throttleEffect(AnnouncementManageModel));
 app.model(throttleEffect(AgentAccountModel));
 app.model(throttleEffect(AgentInformationModel));
 app.model(throttleEffect(promotionInfoModel));
-app.model(throttleEffect(AddDiscountModel));
 app.model(throttleEffect(FundDetailModel));
 app.model(throttleEffect(TransferRecordModel));
-app.model(throttleEffect(QueryDetailModel));
 
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(environment.tokenName);
@@ -247,6 +240,9 @@ const client = new ApolloClient({
         ...addTypePatcher('ActivityTypeResult', 'ActivityType'),
         ...addTypePatcher('DiscountSettingResult', 'DiscountSetting'),
         ...addTypePatcher('ActivityEditResult', 'ActivityEdit'),
+        ...addTypePatcher('DiscountManageResult', 'DiscountManage'),
+        ...addTypePatcher('DiscountDetailResult', 'DiscountDetail'),
+        ...addTypePatcher('UserLevelResult', 'UserLevel'),
         ...addTypePatcher(
           'ActivityApplyResult',
           'ActivityApply',

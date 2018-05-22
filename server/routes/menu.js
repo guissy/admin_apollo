@@ -99,30 +99,30 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/typeList'
       },
-      {
-        id: 28,
-        name: '自动优惠模板',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/activeSet'
-      },
+      // {
+      //   id: 28,
+      //   name: '自动优惠模板',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/activeSet'
+      // },
       {
         id: 29,
         name: '返水活动',
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/discount'
       },
-      {
-        id: 30,
-        name: '返水查询',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/discountCounting'
-      },
-      {
-        id: 31,
-        name: '优惠模板',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/addActiveSet'
-      },
+      // {
+      //   id: 30,
+      //   name: '返水查询',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/discountCounting'
+      // },
+      // {
+      //   id: 31,
+      //   name: '优惠模板',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/addActiveSet'
+      // },
       {
         id: 32,
         name: '每日签到模板优惠设置',
@@ -199,12 +199,12 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/activityContent'
       },
-      {
-        id: 43,
-        name: '返水优惠查询',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/discountQuery'
-      },
+      // {
+      //   id: 43,
+      //   name: '返水优惠查询',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/discountQuery'
+      // },
       {
         id: 44,
         name: '返水优惠设定',

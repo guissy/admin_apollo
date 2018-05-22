@@ -126,13 +126,14 @@ type PageParam = { page: number; page_size: number };
  */
 export function graphPagination(
   attributes: Attributes,
-  fetchMode: (p: { variables: PageParam }) => void
+  fetchMode: (p: { variables: PageParam }) => void,
+  searchValues: object = {}
 ): TablePaginationConfigWithTotal {
   // tslint:disable-next-line:variable-name
   const { number, size, total } = attributes || { number: 1, size: 20, total: 0 };
   const totalRows = attributes ? getTotalRows(attributes).filter(Boolean) : [];
   const onPageChange = (page: number, page_size: number) => {
-    fetchMode({ variables: { page, page_size } });
+    fetchMode({ variables: { ...searchValues, page, page_size } });
   };
   return {
     showSizeChanger: true,

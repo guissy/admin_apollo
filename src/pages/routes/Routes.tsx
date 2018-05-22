@@ -35,11 +35,9 @@ import ResourceManage from '../web/resourceManage/ResourceManage';
 //    优惠申请
 import ActivityApplyPage from '../marketing/activityApply/ActivityApply.page';
 //    优惠类型
-import TypeList from '../marketing/typeList/TypeList';
 //    自动优惠模板
 // import ActiveSet from ''
 //    返水活动
-import Discount from '../marketing/discount/Discount';
 //    返水查询
 // import DiscountCounting from ''
 //    创建活动模板
@@ -180,6 +178,7 @@ import GameAccount from '../system/gameAccount/GameAccount';
 import ActivityContentPage from '../marketing/activityContent/ActivityContent.page';
 import ActivityTypePage from '../marketing/activityType/ActivityType.page';
 import DiscountSettingPage from '../marketing/discountSetting/DiscountSetting.page';
+import DiscountManagePage from '../marketing/discountManage/DiscountManage.page';
 
 export default () => {
   return (
@@ -200,7 +199,7 @@ export default () => {
       <Route path="/apply" component={ActivityApplyPage} />
       <Route path="/typeList" component={ActivityTypePage} />
       {/* <Route path="/activeSet" component={ActiveSet} /> */}
-      <Route path="/discount" component={Discount} />
+      <Route path="/discount" component={DiscountManagePage} />
       {/* <Route path="/discountCounting" component={DiscountCounting} /> */}
       {/* <Route path="/addActiveSet" component={AddActiveSet} /> */}
       {/* <Route path="/activeMode_1" component={ActiveMode_1} /> */}

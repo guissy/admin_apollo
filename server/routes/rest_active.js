@@ -152,7 +152,9 @@ router.patch('/active/manual/:id', async function save(req, res, next) {
 });
 // 删除
 router.delete('/active/manual/:id', async function save(req, res, next) {
-  res.json(resultOk(activities[0]))
+  const n = activities.findIndex(v => req.params.id === String(v.id));
+  activities.splice(n, 1);
+  res.json(resultOk({}))
 });
 // 添加
 router.put('/active/manual', async function save(req, res, next) {
@@ -173,7 +175,7 @@ module.exports = {
 }
 
 
-// 返水活动
+// 返水活动设置
 const { discountSetting } = mockjs.mock({'discountSetting|3': [{
     'id|+1': 1,
     'valid_money|1-100.1-2': 1.0,
@@ -199,4 +201,65 @@ router.delete('/discountSetting/:id', async function save(req, res, next) {
   const n = discountSetting.findIndex(v => req.params.id === String(v.id));
   discountSetting.splice(n, 1);
   res.json(resultOk(activities[0]))
+});
+
+//反水活动
+// 返水活动
+const { discount } = mockjs.mock({'discount|20': [{
+    'id|+1': 1,
+    'name|1': ['充一百送一百', '充话费送老婆', '送上月球，送飞船', '买一送一', '活不见人'],
+    effect_time: moment().format('YYYY-MM-DD hh:mm:ss'),
+    'people_coupon': '@integer(1, 100) / @integer(500, 10000)',
+    'withdraw_per|1-100': 1,
+    'member_level|1-5': 1,
+    'games|+1': ['竞技', '角色'],
+    'valid_money|1-100.1-2': 1.0,
+    memo: '反水好',
+    status: 'enabled',
+    'upper_limit|1-100.1-2': 1.0,
+    created: moment().format('YYYY-MM-DD hh:mm:ss'),
+    created_uname: '@cname',
+    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+    updated_uname: '@cname',
+  }]});
+
+// 列表
+router.get('/discount', async function list(req, res, next) {
+  res.json(resultOk(discount))
+});
+// 修改
+router.put('/discount/:id?', async function save(req, res, next) {
+  res.json(resultOk(activities[0]))
+});
+// 删除
+router.delete('/discount/:id', async function save(req, res, next) {
+  const n = discount.findIndex(v => req.params.id === String(v.id));
+  discount.splice(n, 1);
+  res.json(resultOk(activities[0]))
+});
+
+
+// 反水活动详情
+const { discountDetail } = mockjs.mock({'discountDetail|20': [{
+    'id|+1': 1,
+    'user_name': '@cname',
+    status: 0,
+    agent_name: '@city',
+    'valid_coupon': 'a,b,c,d',
+    created: moment().format('YYYY-MM-DD hh:mm:ss'),
+    created_uname: '@cname',
+    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+    updated_uname: '@cname',
+  }]});
+
+// 列表
+router.get('/discountDetail', async function list(req, res, next) {
+  res.json(resultOk(discountDetail))
+});
+
+router.post('/discountDetail/status/:id', async function list(req, res, next) {
+  res.json(resultOk(discountDetail))
+});
+router.put('/discountManage/:id', async function list(req, res, next) {
+  res.json(resultOk(discountDetail))
 });

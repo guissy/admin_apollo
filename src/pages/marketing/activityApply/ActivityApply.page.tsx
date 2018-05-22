@@ -63,7 +63,6 @@ export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
       <>
         <SearchUI
           fieldConfig={searchFields}
-          pageSize={20}
           onSubmit={(values: { apply_time: string[]; pathBuilder: (o: object) => string }) => {
             let [apply_time_from, apply_time_to] = values.apply_time;
             delete values.apply_time;
@@ -129,7 +128,7 @@ export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
                 loading={loading}
                 dataSource={apply.data}
                 columns={tableFields}
-                pagination={graphPagination(apply.attributes, fetchMore)}
+                pagination={graphPagination(apply.attributes, fetchMore, this.state.searchValues)}
               />
             );
           }}

@@ -231,12 +231,8 @@ export default class ActivityContentField<T> extends TableFormField<T> {
           <Mutation
             mutation={gql`
               mutation removeMutation($id: RemoveInput!) {
-                status($id: $id)
-                  @rest(
-                    path: "/active/apply/:id"
-                    method: "Delete"
-                    type: "RemoveResult"
-                  ) {
+                remove(id: $id)
+                  @rest(path: "/active/manual/:id", method: "DELETE", type: "RemoveResult") {
                   state
                   message
                 }

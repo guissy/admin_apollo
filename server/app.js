@@ -9,6 +9,7 @@ const token = require('./routes/token');
 const rest_login = require('./routes/rest_login');
 const rest_message = require('./routes/rest_message');
 const rest_active = require('./routes/rest_active');
+const rest_user = require('./routes/rest_user');
 const rest_stat = require('./routes/rest_stat');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use('/graphql', token);
 app.use('/admin', rest_login.router);
 app.use('/message', rest_message.router);
 app.use('', rest_active.router);
+app.use('', rest_user.router);
 app.use('', rest_stat.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
