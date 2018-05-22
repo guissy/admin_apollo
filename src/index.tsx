@@ -67,7 +67,6 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 风控
 //    IP黑名单
-import IpBlackListModel from './pages/risk/ipBlackList2/IpBlackList.model';
 //    重复账号
 
 // 用户
@@ -183,7 +182,6 @@ app.model(throttleEffect(BackgroundModel));
 app.model(throttleEffect(MemberLogModel));
 app.model(throttleEffect(AdListModel));
 app.model(throttleEffect(AdHomeModel));
-app.model(throttleEffect(IpBlackListModel));
 app.model(throttleEffect(MemberManageModel));
 app.model(throttleEffect(MemberInformationModel));
 app.model(throttleEffect(MemberAccountBalanceModel));
