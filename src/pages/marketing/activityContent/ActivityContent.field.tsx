@@ -257,12 +257,12 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                   }
                 `}
               >
-                {pass => (
+                {status => (
                   <TableActionComponent>
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        pass({
+                        status({
                           variables: {
                             body: {
                               id: record.id,

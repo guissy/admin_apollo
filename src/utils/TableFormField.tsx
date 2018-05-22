@@ -25,10 +25,16 @@ export default class TableFormField<T> {
     return Object.entries(this)
       .filter(([dataIndex, opt]) => !!opt[field] && notStateProps(dataIndex))
       .map(([dataIndex, opt]) => {
+        let formItemRender;
+        if (typeof opt[field] === 'string') {
+          formItemRender = opt[opt[field]];
+        } else {
+          formItemRender = opt[field];
+        }
         return {
           ...opt,
           dataIndex,
-          formItemRender: opt[field]
+          formItemRender
         };
       });
   }

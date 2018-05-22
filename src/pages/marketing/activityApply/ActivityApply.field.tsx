@@ -264,14 +264,14 @@ export default class ActivityApplyField<T> extends TableFormField<T>
               }
             `}
           >
-            {(pass, { data }) => (
+            {(status, { data }) => (
               <TableActionComponent>
                 {record.status === 'pending' && (
                   <>
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        pass({ variables: { body: { id: record.id, status: 'pass' } } })
+                        status({ variables: { body: { id: record.id, status: 'pass' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
                             writeFragment(this.props.client, 'ActivityApply', {
@@ -287,7 +287,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                     <LinkComponent
                       confirm={true}
                       onClick={() =>
-                        pass({ variables: { body: { id: record.id, status: 'rejected' } } })
+                        status({ variables: { body: { id: record.id, status: 'rejected' } } })
                           .then(messageResult('status'))
                           .then((v: GqlResult<'status'>) => {
                             writeFragment(this.props.client, 'ActivityApply', {

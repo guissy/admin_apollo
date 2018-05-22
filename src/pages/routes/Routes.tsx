@@ -72,7 +72,6 @@ import ActivityApplyPage from '../marketing/activityApply/ActivityApply.page';
 
 // 风控
 //    IP黑名单
-import IpBlacklist from '../risk/ipBlackList/IpBlackList';
 //    重复账号
 // import DuplicateAccount from ''
 
@@ -179,6 +178,7 @@ import ActivityContentPage from '../marketing/activityContent/ActivityContent.pa
 import ActivityTypePage from '../marketing/activityType/ActivityType.page';
 import DiscountSettingPage from '../marketing/discountSetting/DiscountSetting.page';
 import DiscountManagePage from '../marketing/discountManage/DiscountManage.page';
+import IpBlackListPage from '../risk/ipBlackList/IpBlackList.page';
 
 export default () => {
   return (
@@ -216,7 +216,7 @@ export default () => {
       {/* <Route path="/discountQuery" component={DiscountQuery} /> */}
       <Route path="/discountSetting" component={DiscountSettingPage} />
       {/* <Route path="/lotterPeriodManagement" component={LotterPeriodManagement} /> */}
-      <Route path="/ipBlacklist" component={IpBlacklist} />
+      <Route path="/ipBlacklist" component={IpBlackListPage} />
       {/* <Route path="/duplicateAccount" component={DuplicateAccount} /> */}
       <Route path="/memberManage" component={MemberManage} />
       <Route path="/memberHierarchy" component={MemberHierarchy} />

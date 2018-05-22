@@ -67,7 +67,7 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 风控
 //    IP黑名单
-import IpBlackListModel from './pages/risk/ipBlackList/IpBlackList.model';
+import IpBlackListModel from './pages/risk/ipBlackList2/IpBlackList.model';
 //    重复账号
 
 // 用户
@@ -243,6 +243,7 @@ const client = new ApolloClient({
         ...addTypePatcher('DiscountManageResult', 'DiscountManage'),
         ...addTypePatcher('DiscountDetailResult', 'DiscountDetail'),
         ...addTypePatcher('UserLevelResult', 'UserLevel'),
+        ...addTypePatcher('IpBlackListResult', 'IpBlackList'),
         ...addTypePatcher(
           'ActivityApplyResult',
           'ActivityApply',
