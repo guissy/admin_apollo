@@ -125,7 +125,6 @@ import TransferRecordModel from './pages/cash/transferRecord/TransferRecord.mode
 import SubAgentRebateModel from './pages/brokerage/subAgentRebate/SubAgentRebate.model';
 //    代理统计
 //    代理推广链接
-import AgentLinkModel from './pages/brokerage/agentLink/AgentLink.model';
 //    代理提款
 
 // 报表
@@ -206,7 +205,6 @@ app.model(throttleEffect(GameAccountModel));
 app.model(throttleEffect(FloatAdModel));
 app.model(throttleEffect(ResourceManageModel));
 app.model(throttleEffect(SubAgentRebateModel));
-app.model(throttleEffect(AgentLinkModel));
 app.model(throttleEffect(PromotionResourceModel));
 app.model(throttleEffect(NoticeManageModel));
 app.model(throttleEffect(AnnouncementManageModel));
@@ -232,6 +230,7 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('AgentLinkResult', 'AgentLink'),
         ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
         ...addTypePatcher('ActivityContentResult', 'ActivityContent'),

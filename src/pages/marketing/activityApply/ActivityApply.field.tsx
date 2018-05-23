@@ -264,7 +264,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
               }
             `}
           >
-            {(status, { data }) => (
+            {status => (
               <TableActionComponent>
                 {record.status === 'pending' && (
                   <>

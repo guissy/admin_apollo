@@ -11,6 +11,7 @@ const rest_message = require('./routes/rest_message');
 const rest_active = require('./routes/rest_active');
 const rest_user = require('./routes/rest_user');
 const rest_stat = require('./routes/rest_stat');
+const rest_brokerage = require('./routes/rest_brokerage');
 
 const app = express();
 app.use(logger('dev'));
@@ -24,6 +25,7 @@ app.use('/message', rest_message.router);
 app.use('', rest_active.router);
 app.use('', rest_user.router);
 app.use('', rest_stat.router);
+app.use('', rest_brokerage.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler

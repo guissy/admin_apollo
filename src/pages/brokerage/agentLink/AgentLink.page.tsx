@@ -1,8 +1,3 @@
----
-to: src/pages/<%= h.folder(name) %>.page.tsx
-unless_exists: true
----
-<% Page = h.Page(name); page = h.page(name) -%>
 import * as React from 'react';
 import styled from 'styled-components';
 import ApolloClient from 'apollo-client/ApolloClient';
@@ -14,38 +9,37 @@ import { SearchUI } from '../../components/form/SearchUI';
 import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
-import <%= Page %>Field from './<%= Page %>.field';
-import { <%= Page %>Fragment, <%= Page %> } from './<%= Page %>.model';
-import <%= Page %>Edit from './<%= Page %>.edit';
+import AgentLinkField from './AgentLink.field';
+import { AgentLinkFragment, AgentLink } from './AgentLink.model';
+import AgentLinkEdit from './AgentLink.edit';
 
 interface Hoc {
   client: ApolloClient<object>;
   site: (p: string) => React.ReactNode;
 }
 
-interface Props extends Partial<Hoc> {
-}
+interface Props extends Partial<Hoc> {}
 
-/** <%= Page %>Page */
+/** AgentLinkPage */
 @withLocale
 @compose(withApollo)
 @autobind
-export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
+export default class AgentLinkPage extends React.PureComponent<Props, {}> {
   state = {
     create: {
       visible: false,
-      record: {} as <%= Page %>
+      record: {} as AgentLink
     },
     edit: {
       visible: false,
-      record: {} as <%= Page %>
-    },
+      record: {} as AgentLink
+    }
   };
   refetch: Function;
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
-    const fields = new <%= Page %>Field(this as React.PureComponent<Hoc>);
+    const fields = new AgentLinkField(this as React.PureComponent<Hoc>);
     const tableFields = fields.table(this);
     const editFields = fields.filterBy('form');
     return (
@@ -59,46 +53,43 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
           }}
         />
         <Query
-          query={
-            gql`
-              query <%= page %>Query(
-                $page: Int
-                $page_size: Int
-                $pathBuilder: any
-              ) {
-                <%= page %>(
-                  page: $page
-                  page_size: $page_size
-                ) @rest(type: "<%= Page %>Result", pathBuilder: $pathBuilder) {
-                  state
-                  message
-                  data {
-                    ...<%= Page %>Fragment
-                  }
+          query={gql`
+            query agentLinkQuery($page: Int, $page_size: Int, $pathBuilder: any) {
+              agentLink(page: $page, page_size: $page_size)
+                @rest(type: "AgentLinkResult", pathBuilder: $pathBuilder) {
+                state
+                message
+                data {
+                  ...AgentLinkFragment
                 }
               }
-              ${<%= Page %>Fragment}
-            `
-          }
+            }
+            ${AgentLinkFragment}
+          `}
           variables={{
             page: 1,
             page_size: 20,
-            pathBuilder: pathBuilder('/<%= page %>')
+            pathBuilder: pathBuilder('/agentLink')
           }}
         >
-          {({ data: { <%= page %> = { data: [], attributes: {} } } = {}, loading, refetch, fetchMore }) => {
+          {({
+            data: { agentLink = { data: [], attributes: {} } } = {},
+            loading,
+            refetch,
+            fetchMore
+          }) => {
             this.refetch = refetch;
             return (
               <TableComponent
                 loading={loading}
-                dataSource={<%= page %>.data}
+                dataSource={agentLink.data}
                 columns={tableFields}
-                pagination={graphPagination(<%= page %>.attributes, fetchMore)}
+                pagination={graphPagination(agentLink.attributes, fetchMore)}
               />
             );
           }}
         </Query>
-        <<%= Page %>Edit
+        <AgentLinkEdit
           edit={this.state.create}
           editFields={editFields}
           onDone={() => {
@@ -108,7 +99,7 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
           modalOk="创建成功"
           view={this}
         />
-        <<%= Page %>Edit
+        <AgentLinkEdit
           edit={this.state.edit}
           editFields={editFields}
           onDone={() => {

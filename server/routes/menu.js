@@ -409,61 +409,61 @@ module.exports = [
     action: ['delete', 'update', 'fetch', 'insert'],
     path: '/index',
     children: [
-      {
-        id: 140,
-        name: '退佣手续费',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/commissionFeeset'
-      },
-      {
-        id: 141,
-        name: '代理退佣比例',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/CommissionSet'
-      },
-      {
-        id: 142,
-        name: '退佣设定',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/agentSettlementSet'
-      },
-      {
-        id: 143,
-        name: '退佣期数',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/RefundCommissionPeriod'
-      },
-      {
-        id: 144,
-        name: '退佣查询',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/CommissionIncomeQuery'
-      },
+      // {
+      //   id: 140,
+      //   name: '退佣手续费',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/commissionFeeset'
+      // },
+      // {
+      //   id: 141,
+      //   name: '代理退佣比例',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/CommissionSet'
+      // },
+      // {
+      //   id: 142,
+      //   name: '退佣设定',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/agentSettlementSet'
+      // },
+      // {
+      //   id: 143,
+      //   name: '退佣期数',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/RefundCommissionPeriod'
+      // },
+      // {
+      //   id: 144,
+      //   name: '退佣查询',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/CommissionIncomeQuery'
+      // },
       {
         id: 145,
         name: '下级佣金统计',
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/subAgentRebate'
       },
-      {
-        id: 146,
-        name: '代理统计',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/agencyStatistics',
-        hidden: true
-      },
+      // {
+      //   id: 146,
+      //   name: '代理统计',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/agencyStatistics',
+      //   hidden: true
+      // },
       {
         id: 147,
         name: '代理推广链接',
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/agentLink'
       },
-      {
-        id: 148,
-        name: '代理提款',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/agentDrawing'
-      }
+      // {
+      //   id: 148,
+      //   name: '代理提款',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/agentDrawing'
+      // }
     ]
   },
   {

@@ -8,17 +8,11 @@ import gql from 'graphql-tag';
 /** 实体类型 */
 export interface <%= Page %> {
   id: number;
-<% h.fields().forEach(function(field){ -%>
-  <%= field.dataIndex %>: string;
-<% }) -%>
 }
 
 /** 缓存数据：实体类型 */
 export const <%= Page %>Fragment = gql`
   fragment <%= Page %>Fragment on <%= Page %> {
     id
-<% h.fields().forEach(function(field){ -%>
-    <%= field.dataIndex %>
-<% }) -%>
   }
-`;
+`

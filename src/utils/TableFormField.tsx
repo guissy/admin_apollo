@@ -23,7 +23,7 @@ export default class TableFormField<T> {
   }
   filterBy(field: string) {
     return Object.entries(this)
-      .filter(([dataIndex, opt]) => !!opt[field] && notStateProps(dataIndex))
+      .filter(([dataIndex, opt]) => notStateProps(dataIndex) && !!opt[field])
       .map(([dataIndex, opt]) => {
         let formItemRender;
         if (typeof opt[field] === 'string') {
@@ -42,7 +42,7 @@ export default class TableFormField<T> {
     return (
       record &&
       Object.entries(this)
-        .filter(([dataIndex, opt]) => !!opt.detail && notStateProps(dataIndex))
+        .filter(([dataIndex, opt]) => notStateProps(dataIndex) && !!opt.detail)
         .map(([dataIndex, opt]) => {
           const cloneElement = React.cloneElement(opt.detail, { value: record[dataIndex] }, '');
           return (
@@ -58,7 +58,7 @@ export default class TableFormField<T> {
   }
   table(view: React.PureComponent<{}>) {
     return Object.entries(this)
-      .filter(([dataIndex, opt]) => opt.table !== notInTable && notStateProps(dataIndex))
+      .filter(([dataIndex, opt]) => notStateProps(dataIndex) && opt.table !== notInTable)
       .map(([dataIndex, opt]) => {
         const fn = (text: string, record: object) => {
           return opt.table({ text, record, view });

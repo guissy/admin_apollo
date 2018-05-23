@@ -141,7 +141,6 @@ import SubAgentRebate from '../brokerage/subAgentRebate/SubAgentRebate';
 //    代理统计
 // import AgencyStatistics from ''
 //    代理推广链接
-import AgentLink from '../brokerage/agentLink/AgentLink';
 //    代理提款
 // import AgentDrawing from ''
 
@@ -179,6 +178,7 @@ import ActivityTypePage from '../marketing/activityType/ActivityType.page';
 import DiscountSettingPage from '../marketing/discountSetting/DiscountSetting.page';
 import DiscountManagePage from '../marketing/discountManage/DiscountManage.page';
 import IpBlackListPage from '../risk/ipBlackList/IpBlackList.page';
+import AgentLinkPage from '../brokerage/agentLink/AgentLink.page';
 
 export default () => {
   return (
@@ -251,7 +251,7 @@ export default () => {
       {/* <Route path="/CommissionIncomeQuery" component={CommissionIncomeQuery} /> */}
       <Route path="/subAgentRebate" component={SubAgentRebate} />
       {/* <Route path="/agencyStatistics" component={AgencyStatistics} /> */}
-      <Route path="/agentLink" component={AgentLink} />
+      <Route path="/agentLink" component={AgentLinkPage} />
       {/* <Route path="/agentDrawing" component={AgentDrawing} /> */}
       {/* <Route path="/sumStatement" component={SumStatement} /> */}
       {/* <Route path="/gameStatement" component={GameStatement} /> */}

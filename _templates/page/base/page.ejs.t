@@ -10,13 +10,10 @@ import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import TableComponent, { graphPagination } from '../../components/table/TableComponent';
 import { autobind } from 'core-decorators';
-import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import <%= Page %>Field from './<%= Page %>.field';
 import { <%= Page %>Fragment, <%= Page %> } from './<%= Page %>.model';
-import <%= Page %>Edit from './<%= Page %>.edit';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -31,33 +28,14 @@ interface Props extends Partial<Hoc> {
 @compose(withApollo)
 @autobind
 export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
-  state = {
-    create: {
-      visible: false,
-      record: {} as <%= Page %>
-    },
-    edit: {
-      visible: false,
-      record: {} as <%= Page %>
-    },
-  };
   refetch: Function;
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
     const fields = new <%= Page %>Field(this as React.PureComponent<Hoc>);
     const tableFields = fields.table(this);
-    const editFields = fields.filterBy('form');
     return (
       <>
-        {/* 新增按钮 */}
-        <ButtonBarComponent
-          onCreate={() => {
-            this.setState({
-              create: { visible: true, record: {} }
-            });
-          }}
-        />
         <Query
           query={
             gql`
@@ -98,26 +76,6 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
             );
           }}
         </Query>
-        <<%= Page %>Edit
-          edit={this.state.create}
-          editFields={editFields}
-          onDone={() => {
-            this.setState({ create: { visible: false, record: {} } });
-          }}
-          modalTitle="创建"
-          modalOk="创建成功"
-          view={this}
-        />
-        <<%= Page %>Edit
-          edit={this.state.edit}
-          editFields={editFields}
-          onDone={() => {
-            this.setState({ edit: { visible: false, record: {} } });
-          }}
-          modalTitle="编辑"
-          modalOk="编辑成功"
-          view={this}
-        />
       </>
     );
   }
