@@ -111,7 +111,6 @@ import AgentAuditModel from './pages/user/agentAudit/AgentAudit.model';
 //    会员提现
 //    人工存提
 //    现金流水
-import FundDetailModel from './pages/cash/fundDetail2/FundDetail.model';
 //    转帐记录
 import TransferRecordModel from './pages/cash/transferRecord/TransferRecord.model';
 
@@ -210,7 +209,6 @@ app.model(throttleEffect(AnnouncementManageModel));
 app.model(throttleEffect(AgentAccountModel));
 app.model(throttleEffect(AgentInformationModel));
 app.model(throttleEffect(promotionInfoModel));
-app.model(throttleEffect(FundDetailModel));
 app.model(throttleEffect(TransferRecordModel));
 
 const authLink = setContext((_, { headers }) => {
