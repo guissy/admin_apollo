@@ -1,6 +1,6 @@
 const site = (v) => v;
 this.props = { site };
-const title = '现金流水';
+const title = '转帐记录';
 const config = [
   {
     title: '用户名',
@@ -8,25 +8,30 @@ const config = [
     notInTable: true,
   },
   {
-    title: '体系',
+    title: '交易订单号',
     dataIndex: 'no',
     notInTable: true,
   },
   {
-    title: '交易类别',
-    dataIndex: 'deal_category',
+    title: '状态',
+    dataIndex: 'status',
     notInTable: true,
     form: 'select'
   },
   {
-    title: site('交易类型'),
-    dataIndex: 'deal_type',
+    title: site('转账时间'),
+    dataIndex: 'start_time,end_time',
+    form: 'date'
+  },
+  {
+    title: site('转出'),
+    dataIndex: 'out_id',
     form: 'select'
   },
   {
-    title: site('交易时间'),
-    dataIndex: 'start_time,end_time',
-    form: 'date'
+    title: site('转入'),
+    dataIndex: 'in_id',
+    form: 'select'
   }
 ];
 

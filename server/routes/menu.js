@@ -346,48 +346,48 @@ module.exports = [
     action: ['delete', 'update', 'fetch', 'insert'],
     path: '/index',
     children: [
-      {
-        id: 121,
-        name: '银行管理',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/bankManagement'
-      },
-      {
-        id: 122,
-        name: '第三方支付平台',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/otherPayment'
-      },
-      {
-        id: 123,
-        name: '收款帐户',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/receivableBank'
-      },
-      {
-        id: 124,
-        name: '线上充值',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/onLineReceipt'
-      },
-      {
-        id: 125,
-        name: '公司入款',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/offlineReceipt'
-      },
-      {
-        id: 126,
-        name: '会员提现',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/memberGetOut'
-      },
-      {
-        id: 127,
-        name: '人工存提',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/manual'
-      },
+      // {
+      //   id: 121,
+      //   name: '银行管理',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/bankManagement'
+      // },
+      // {
+      //   id: 122,
+      //   name: '第三方支付平台',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/otherPayment'
+      // },
+      // {
+      //   id: 123,
+      //   name: '收款帐户',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/receivableBank'
+      // },
+      // {
+      //   id: 124,
+      //   name: '线上充值',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/onLineReceipt'
+      // },
+      // {
+      //   id: 125,
+      //   name: '公司入款',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/offlineReceipt'
+      // },
+      // {
+      //   id: 126,
+      //   name: '会员提现',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/memberGetOut'
+      // },
+      // {
+      //   id: 127,
+      //   name: '人工存提',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/manual'
+      // },
       {
         id: 128,
         name: '现金流水',

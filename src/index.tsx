@@ -112,7 +112,6 @@ import AgentAuditModel from './pages/user/agentAudit/AgentAudit.model';
 //    人工存提
 //    现金流水
 //    转帐记录
-import TransferRecordModel from './pages/cash/transferRecord/TransferRecord.model';
 
 // 佣金
 //    退佣手续费
@@ -209,7 +208,6 @@ app.model(throttleEffect(AnnouncementManageModel));
 app.model(throttleEffect(AgentAccountModel));
 app.model(throttleEffect(AgentInformationModel));
 app.model(throttleEffect(promotionInfoModel));
-app.model(throttleEffect(TransferRecordModel));
 
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(environment.tokenName);
@@ -227,6 +225,7 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('TransferRecordResult', 'TransferRecord'),
         ...addTypePatcher('DealTypeResult', 'DealType'),
         ...addTypePatcher('DealCategoryResult', 'DealCategory'),
         ...addTypePatcher('FundDetailResult', 'FundDetail'),

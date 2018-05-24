@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  console.log('☞☞☞ 9527 app 29', req);
+  // console.log('☞☞☞ 9527 app 29', req);
   next(createError(404));
 });
 
