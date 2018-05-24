@@ -6,7 +6,7 @@ sh: prettier --print-width 100 --single-quote --trailing-commas all --parser typ
 <% Page = h.Page(name); page = h.page(name) -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, Tag, Select, Switch } from 'antd';
+import { Input, Tag, Select, Switch, DatePicker } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
@@ -16,12 +16,13 @@ import TableFormField, { FieldProps, notInTable } from '../../../utils/TableForm
 import TableActionComponent from '../../components/table/TableActionComponent';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
+import { Result } from '../../../utils/result';
 import <%= Page %>Page from './<%= Page %>.page';
-import { <%= Page %>, <%= Page %>Fragment } from './<%= Page %>.model';
+import { <%= Page %>, <%= Page %>Fragment <%= h.form('select').map(v => ',' + h.Page(v.dataIndex)).join('') %>} from './<%= Page %>.model';
 
 const site = withLocale.site;
 
-/** <%= Page %>字段 */
+/** <%= h.title() %>字段 */
 export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> extends TableFormField<T> {
   id = {
     form: <input type="hidden" />,
@@ -29,13 +30,48 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
   };
 
 <% h.fields().forEach(function(field){ -%>
-  <%= field.dataIndex %> = {
+  <%- h.key(field.dataIndex) %> = {
     title: site('<%= field.title %>'),
     form: <% if (field.dataIndex === 'status') { -%> (
       <Switch
         checkedChildren={site('启用')}
         unCheckedChildren={site('停用')}
       />),
+<% } else if (field.form === 'date') { -%>
+<DatePicker.RangePicker />,
+<% } else if (field.form === 'select') { -%>
+<% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex);types = h.page(field.dataIndex) + 's'; -%>
+({
+      text,
+      record,
+      view,
+      value,
+      onChange
+    }: FieldProps<string, <%= Type %>, <%= Page %>Page>) => (
+      <Query
+        query={gql`
+          query {
+            <%= types %> @rest(type: "<%= Type %>Result", path: "/<%= type %>") {
+              data {
+                id
+                name
+              }
+            }
+          }
+        `}
+      >
+        {({ data: { <%= types %> = { data: [] as <%= Type %>[] } } = {} }:
+  ChildProps<{}, { <%= types %>: Result<<%= Type %>[]> }, {}>) => (
+          <Select defaultValue={value} onChange={onChange}>
+            {<%= types %>.data.map((type: <%= Type %>, i: number) => (
+              <Select.Option key={i} value={String(type.id)}>
+                {type.name}
+              </Select.Option>
+            ))}
+          </Select>
+        )}
+      </Query>
+    ),  
 <% } else { -%>
 <Input />,
 <% } -%>
@@ -94,6 +130,7 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
           >
             {remove => (
               <TableActionComponent>
+<% if (h.fields().map(v => v.dataIndex).includes('status') ) { -%>
                 <LinkComponent
                   confirm={true}
                   onClick={() =>
@@ -117,6 +154,7 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
                 >
                   {record.status === 'enabled' ? site('停用') : site('启用')}
                 </LinkComponent>
+<% } -%>
                 <LinkComponent
                   confirm={true}
                   onClick={() =>

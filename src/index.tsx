@@ -111,7 +111,7 @@ import AgentAuditModel from './pages/user/agentAudit/AgentAudit.model';
 //    会员提现
 //    人工存提
 //    现金流水
-import FundDetailModel from './pages/cash/fundDetail/FundDetail.model';
+import FundDetailModel from './pages/cash/fundDetail2/FundDetail.model';
 //    转帐记录
 import TransferRecordModel from './pages/cash/transferRecord/TransferRecord.model';
 
@@ -229,7 +229,9 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
-        ...addTypePatcher('AgentLinkResult', 'AgentLink'),
+        ...addTypePatcher('DealTypeResult', 'DealType'),
+        ...addTypePatcher('DealCategoryResult', 'DealCategory'),
+        ...addTypePatcher('FundDetailResult', 'FundDetail'),
         ...addTypePatcher('SubAgentRebateDetailResult', 'SubAgentRebateDetail'),
         ...addTypePatcher('SubAgentRebateResult', 'SubAgentRebate'),
         ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),

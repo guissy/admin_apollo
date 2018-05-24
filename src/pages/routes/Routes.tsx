@@ -121,7 +121,7 @@ import AgentAudit from '../user/agentAudit/AgentAudit';
 //    人工存提
 // import Manual from ''
 //    现金流水
-import FundDetail from '../../pages/cash/fundDetail/FundDetail';
+import FundDetail from '../cash/fundDetail2/FundDetail';
 //    转帐记录
 import TransferRecord from '../../pages/cash/transferRecord/TransferRecord';
 
@@ -178,6 +178,7 @@ import DiscountManagePage from '../marketing/discountManage/DiscountManage.page'
 import IpBlackListPage from '../risk/ipBlackList/IpBlackList.page';
 import AgentLinkPage from '../brokerage/agentLink/AgentLink.page';
 import SubAgentRebatePage from '../brokerage/subAgentRebate/SubAgentRebate.page';
+import FundDetailPage from '../cash/fundDetail/FundDetail.page';
 
 export default () => {
   return (
@@ -241,7 +242,7 @@ export default () => {
       {/* <Route path="/offlineReceipt" component={OfflineReceipt} /> */}
       {/* <Route path="/memberGetOut" component={MemberGetOut} /> */}
       {/* <Route path="/manual" component={Manual} /> */}
-      <Route path="/FundDetails" component={FundDetail} />
+      <Route path="/FundDetails" component={FundDetailPage} />
       <Route path="/transferRecord" component={TransferRecord} />
       {/* <Route path="/commissionFeeset" component={CommissionFeeset} /> */}
       {/* <Route path="/CommissionSet" component={CommissionSet} /> */}

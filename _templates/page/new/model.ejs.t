@@ -5,7 +5,7 @@ unless_exists: true
 <% Page = h.Page(name); page = h.page(name) -%>
 import gql from 'graphql-tag';
 
-/** 实体类型 */
+/** <%= h.title() %> */
 export interface <%= Page %> {
   id: number;
 <% h.fields().forEach(function(field){ -%>
@@ -13,7 +13,7 @@ export interface <%= Page %> {
 <% }) -%>
 }
 
-/** 缓存数据：实体类型 */
+/** 缓存数据：<%= h.title() %> */
 export const <%= Page %>Fragment = gql`
   fragment <%= Page %>Fragment on <%= Page %> {
     id
@@ -22,3 +22,12 @@ export const <%= Page %>Fragment = gql`
 <% }) -%>
   }
 `;
+
+<% h.form('select').forEach(function(field) { -%>
+<% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex); -%>
+/** <%- field.title %> */
+export interface <%= Type %> {
+  id: number;
+  name: string;
+}
+<% }) -%>

@@ -1,27 +1,32 @@
-
-this.props = {
-  site: (v) => v,
-}
+const site = (v) => v;
+this.props = { site };
+const title = '现金流水';
 const config = [
   {
-    title: this.props.site('期数名称'),
-    dataIndex: 'period_name'
+    title: '用户名',
+    dataIndex: 'username',
+    notInTable: true,
   },
   {
-    title: this.props.site('代理用户名'),
-    dataIndex: 'uname'
+    title: '体系',
+    dataIndex: 'no',
+    notInTable: true,
   },
   {
-    title: this.props.site('下级佣金'),
-    dataIndex: 'settings',
+    title: '交易类别',
+    dataIndex: 'deal_category',
+    notInTable: true,
+    form: 'select'
   },
   {
-    title: this.props.site('总计'),
-    dataIndex: 'total'
+    title: site('交易类型'),
+    dataIndex: 'deal_type',
+    form: 'select'
   },
   {
-    title: this.props.site('状态'),
-    dataIndex: 'status'
+    title: site('交易时间'),
+    dataIndex: 'start_time,end_time',
+    form: 'date'
   }
 ];
 
@@ -45,6 +50,7 @@ module.exports = {
   helpers: {
     Page: upper,
     page: lower,
+    title: () => title || locals.Name,
     fields: () => {
       return config;
     },
@@ -60,5 +66,7 @@ module.exports = {
         return `${lower(s)}/${upper(s)}`
       }
     },
+    key: s => s.includes(',') ? `'${s}'` : s,
+    form: (s) => config.filter(v => v.form === s),
   }
 }

@@ -26,7 +26,7 @@ interface Hoc {
 interface Props extends Partial<Hoc> {
 }
 
-/** <%= Page %>Page */
+/** <%= h.title() %> */
 @withLocale
 @compose(withApollo)
 @autobind

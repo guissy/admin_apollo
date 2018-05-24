@@ -26,7 +26,7 @@ interface Props extends Partial<Hoc> {
   view: React.PureComponent<{}>;
 }
 
-/** <%= Page %>Edit */
+/** <%= h.title() %>表单 */
 @withLocale
 @compose(withApollo)
 export default class <%= Page %>Edit extends React.PureComponent<Props, {}> {
