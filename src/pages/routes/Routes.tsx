@@ -137,7 +137,6 @@ import TransferRecord from '../../pages/cash/transferRecord/TransferRecord';
 //    退佣查询
 // import CommissionIncomeQuery from ''
 //    下级佣金统计
-import SubAgentRebate from '../brokerage/subAgentRebate/SubAgentRebate';
 //    代理统计
 // import AgencyStatistics from ''
 //    代理推广链接
@@ -168,7 +167,6 @@ import EmailList from '../system/emailList/EmailList';
 //    货币设定
 import CurrencySetting from '../system/currencySetting/CurrencySetting';
 //    邮件服务器
-import EmailSetting from '../system/emailSetting/EmailSetting';
 //    前台域名设置
 import DomainSetting from '../system/domainSetting/DomainSetting';
 //    游戏后台帐号
@@ -179,6 +177,7 @@ import DiscountSettingPage from '../marketing/discountSetting/DiscountSetting.pa
 import DiscountManagePage from '../marketing/discountManage/DiscountManage.page';
 import IpBlackListPage from '../risk/ipBlackList/IpBlackList.page';
 import AgentLinkPage from '../brokerage/agentLink/AgentLink.page';
+import SubAgentRebatePage from '../brokerage/subAgentRebate/SubAgentRebate.page';
 
 export default () => {
   return (
@@ -249,7 +248,7 @@ export default () => {
       {/* <Route path="/agentSettlementSet" component={AgentSettlementSet} /> */}
       {/* <Route path="/RefundCommissionPeriod" component={RefundCommissionPeriod} /> */}
       {/* <Route path="/CommissionIncomeQuery" component={CommissionIncomeQuery} /> */}
-      <Route path="/subAgentRebate" component={SubAgentRebate} />
+      <Route path="/subAgentRebate" component={SubAgentRebatePage} />
       {/* <Route path="/agencyStatistics" component={AgencyStatistics} /> */}
       <Route path="/agentLink" component={AgentLinkPage} />
       {/* <Route path="/agentDrawing" component={AgentDrawing} /> */}

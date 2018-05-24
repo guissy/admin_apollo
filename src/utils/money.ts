@@ -1,7 +1,7 @@
 import update, { Query } from 'immutability-helper';
 import { Attributes, Result } from './result';
-import { queryTableData } from '../pages/brokerage/subAgentRebate/SubAgentRebate.service';
-import { TableRow } from '../pages/brokerage/subAgentRebate/SubAgentRebate.model';
+import { queryTableData } from '../pages/brokerage/subAgentRebate2/SubAgentRebate.service';
+import { TableRow } from '../pages/brokerage/subAgentRebate2/SubAgentRebate.model';
 
 update.extend('$for', function(value: object, array: object | object[]) {
   if (array == null) {

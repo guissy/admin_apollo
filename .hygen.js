@@ -1,18 +1,27 @@
+
 this.props = {
   site: (v) => v,
 }
 const config = [
   {
-    title: this.props.site('地址'),
-    dataIndex: 'domain'
+    title: this.props.site('期数名称'),
+    dataIndex: 'period_name'
   },
   {
-    title: this.props.site('备注'),
-    dataIndex: 'comment'
+    title: this.props.site('代理用户名'),
+    dataIndex: 'uname'
+  },
+  {
+    title: this.props.site('下级佣金'),
+    dataIndex: 'settings',
+  },
+  {
+    title: this.props.site('总计'),
+    dataIndex: 'total'
   },
   {
     title: this.props.site('状态'),
-    dataIndex: 'status',
+    dataIndex: 'status'
   }
 ];
 

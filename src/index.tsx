@@ -122,7 +122,6 @@ import TransferRecordModel from './pages/cash/transferRecord/TransferRecord.mode
 //    退佣期数
 //    退佣查询
 //    下级佣金统计
-import SubAgentRebateModel from './pages/brokerage/subAgentRebate/SubAgentRebate.model';
 //    代理统计
 //    代理推广链接
 //    代理提款
@@ -162,6 +161,7 @@ import environment from './utils/environment';
 import { addTypePatcher } from './utils/graphTypename';
 import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply.page';
 import { DiscountManage } from './pages/marketing/discountManage/DiscountManage.model';
+import { SubAgentRebateDetail } from './pages/brokerage/subAgentRebate/SubAgentRebate.model';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -204,7 +204,6 @@ app.model(throttleEffect(DomainSettingModel));
 app.model(throttleEffect(GameAccountModel));
 app.model(throttleEffect(FloatAdModel));
 app.model(throttleEffect(ResourceManageModel));
-app.model(throttleEffect(SubAgentRebateModel));
 app.model(throttleEffect(PromotionResourceModel));
 app.model(throttleEffect(NoticeManageModel));
 app.model(throttleEffect(AnnouncementManageModel));
@@ -231,6 +230,8 @@ const client = new ApolloClient({
       credentials: 'omit',
       typePatcher: {
         ...addTypePatcher('AgentLinkResult', 'AgentLink'),
+        ...addTypePatcher('SubAgentRebateDetailResult', 'SubAgentRebateDetail'),
+        ...addTypePatcher('SubAgentRebateResult', 'SubAgentRebate'),
         ...addTypePatcher('LoginResult', 'LoginOneItem', undefined, true),
         ...addTypePatcher('ActivityResult', 'ActiveItem'),
         ...addTypePatcher('ActivityContentResult', 'ActivityContent'),
