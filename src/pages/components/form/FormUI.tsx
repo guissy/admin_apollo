@@ -129,12 +129,13 @@ export class FormUI extends React.Component<FormUIProps, {}> {
   }
 
   // tslint:disable-next-line
-  isFirst(render: React.ReactElement<any> | React.PureComponent<any>): boolean {
+  isFirst(render: React.ReactElement<any> | React.PureComponent<any>, dataIndex: string): boolean {
     if (
       !(typeof render === 'function') &&
       render.props &&
       (render.props.hidden !== true || render.props.type !== 'hidden') &&
-      !this.foundFirst
+      !this.foundFirst &&
+      dataIndex !== 'id'
     ) {
       this.foundFirst = true;
       return true;
@@ -173,7 +174,7 @@ export class FormUI extends React.Component<FormUIProps, {}> {
                 formRules={v.formRules}
                 record={this.props.record}
                 view={this.props.view}
-                isFirst={this.isFirst(v.formItemRender)}
+                isFirst={this.isFirst(v.formItemRender, v.dataIndex)}
               />
             ))}
             <Form.Item className="submitItem" style={hasResetBtn ? { marginBottom: '10px' } : {}}>

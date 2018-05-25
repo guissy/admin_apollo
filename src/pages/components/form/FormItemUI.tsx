@@ -28,7 +28,12 @@ interface Props extends Partial<Hoc> {
   isFirst: boolean; // 用于autoFocus
 }
 
-type DefaultProps = { autoFocus?: boolean; placeholder?: string; ref?: Function };
+type DefaultProps = {
+  autoFocus?: boolean;
+  placeholder?: string;
+  ref?: Function;
+  onChange?: Function;
+};
 
 /** FormItemUi */
 @withLocale
@@ -39,8 +44,11 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
     hidden: false,
     element: <div />,
     itemProps: {},
-    rules: []
+    rules: [],
+    initialValue: '',
+    isDirty: false
   };
+  component: HTMLInputElement;
 
   componentDidMount() {
     const {
@@ -48,6 +56,7 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
       formItemRender,
       site = () => '',
       title,
+      dataIndex,
       formRules,
       initialValue = '', // 排除formInitialValue缺省时值为undefined，而提交时缺少字段，(有时后台必须的字段值可以为空)
       setting,
@@ -72,7 +81,6 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
     let defaultElementProps = {} as DefaultProps;
     let defaultItemStyle: object = { marginBottom: '10px' };
     let elementOk = element as React.ReactElement<any> | null; // tslint:disable-line
-
     // 字段提示信息
     if (elementOk) {
       let txt = '';
@@ -113,7 +121,7 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
   }
 
   hide(visible: boolean) {
-    this.setState({ hidden: visible });
+    this.setState({ hidden: visible, isDirty: false });
   }
 
   autoFocus(isFirst?: boolean) {
@@ -121,13 +129,17 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
       ? {
           autoFocus: true,
           ref: (ref: React.ReactInstance) => {
-            const component = ReactDOM.findDOMNode(ref) as HTMLInputElement;
-            if (component) {
-              requestAnimationFrame(() => component.focus());
+            this.component = ReactDOM.findDOMNode(ref) as HTMLInputElement;
+            if (this.component && !this.state.isDirty) {
+              requestAnimationFrame(() => this.component.focus());
             }
           }
         }
-      : {};
+      : {
+          onChange: () => {
+            this.setState({ isDirty: true });
+          }
+        };
   }
 
   render(): React.ReactNode {

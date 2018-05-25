@@ -5,8 +5,8 @@ append: true
 skip_if: /<%= h.page(name) %>/:id
 sh: pm2 restart all
 ---
-<% Page = h.Page(name); page = h.page(name) -%>
 
+<% Page = h.Page(name); page = h.page(name) -%>
 const { <%= page %> } = mockjs.mock({'<%= page %>|5': [{
   'id|+1': 1,
 <% h.fields().forEach(function(field){ -%>
@@ -29,3 +29,16 @@ router.delete('/<%= page %>/:id?', async (req, res, next) => {
   <%= page %>.splice(n, 1);
   res.json(resultOk({}));
 });
+
+<% h.form('select').forEach(function(field) { -%>
+<% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex); -%>
+const {<%= type %>} = mockjs.mock({
+  '<%= type %>|3': [{
+    'id|+1': 1,
+    'name|+1': ['<%= field.title %>1', '<%= field.title %>2', '<%= field.title %>3'],
+  }]
+});
+router.get('/<%= type %>', async (req, res, next) => {
+  res.json(resultOk(<%= type %>));
+});
+<% }) -%>

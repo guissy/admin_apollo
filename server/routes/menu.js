@@ -297,18 +297,18 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/agentAudit'
       },
-      {
-        id: 94,
-        name: '管理员列表',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/childAccount'
-      },
-      {
-        id: 95,
-        name: '管理员角色',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/childRoleAccount'
-      },
+      // {
+      //   id: 94,
+      //   name: '管理员列表',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/childAccount'
+      // },
+      // {
+      //   id: 95,
+      //   name: '管理员角色',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/childRoleAccount'
+      // },
       {
         id: 96,
         name: '有效投注查询',

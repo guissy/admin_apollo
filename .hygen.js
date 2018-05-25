@@ -1,42 +1,31 @@
 const site = (v) => v;
-this.props = { site };
-const title = '转帐记录';
-const config = [
+this.props = {site};
+const title = '会员层级';
+const config = [ {
+  title: site('用户名'),
+  dataIndex: 'name',
+},
   {
-    title: '用户名',
-    dataIndex: 'username',
+    title: site('上级代理'),
+    dataIndex: 'agent',
+  },
+  {
+    title: site('总余额'),
+    dataIndex: 'total',
+  },
+  {
+    title: site('最后登录时间'),
+    dataIndex: 'last_login',
+  },
+  {
+    title: site('总额小于'),
+    dataIndex: 'balance',
     notInTable: true,
   },
-  {
-    title: '交易订单号',
-    dataIndex: 'no',
-    notInTable: true,
-  },
-  {
-    title: '状态',
-    dataIndex: 'status',
-    notInTable: true,
-    form: 'select'
-  },
-  {
-    title: site('转账时间'),
-    dataIndex: 'start_time,end_time',
-    form: 'date'
-  },
-  {
-    title: site('转出'),
-    dataIndex: 'out_id',
-    form: 'select'
-  },
-  {
-    title: site('转入'),
-    dataIndex: 'in_id',
-    form: 'select'
-  }
-];
+  ];
 
 
-const { compose, get, camelCase, upperFirst } = require('lodash/fp');
+const {compose, get, camelCase, upperFirst} = require('lodash/fp');
 const parsePath = s => {
   const arr = s.split('/');
   if (arr.length > 1) {
@@ -60,11 +49,11 @@ module.exports = {
       return config;
     },
     dirname: s => {
-      const { folder } = parsePath(s);
+      const {folder} = parsePath(s);
       return folder;
     },
     folder: s => {
-      const { folder } = parsePath(s);
+      const {folder} = parsePath(s);
       if (folder) {
         return `${folder}/${lower(s)}/${upper(s)}`
       } else {

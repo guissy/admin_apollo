@@ -39,3 +39,89 @@ router.get('/ipBlacklist', async (req, res, next) => {
 router.put('/ipBlacklist/:id?', async (req, res, next) => {
   res.json(resultOk(ipBlacklist));
 });
+
+
+const { otherMember } = mockjs.mock({'otherMember|5': [{
+    'id|+1': 1,
+    uname: '@cname',
+    name: '@cname',
+    game_username: '@cname',
+    created: moment().format('YYYY-MM-DD hh:mm:ss'),
+    created_uname: '@cname',
+    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+    updated_uname: '@cname',
+  }]});
+
+router.get('/otherMember', async (req, res, next) => {
+  res.json(resultOk(otherMember));
+});
+router.put('/otherMember/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/otherMember/:id?', async (req, res, next) => {
+  const n = otherMember.findIndex(v => req.params.id === String(v.id));
+  otherMember.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {thirdGame} = mockjs.mock({
+  'thirdGame|3': [{
+    'id|+1': 1,
+    'name|+1': ['第三方游戏1', '第三方游戏2', '第三方游戏3'],
+  }]
+});
+router.get('/thirdGame', async (req, res, next) => {
+  res.json(resultOk(thirdGame));
+});
+
+const { memberLabel } = mockjs.mock({'memberLabel|5': [{
+  'id|+1': 1,
+  title: '@cname',
+  'content|+1': Array(5).fill(0).map((v,i) => `vip${i + 1}`),
+  admin_name: '@cname',
+  inserted: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberLabel', async (req, res, next) => {
+  res.json(resultOk(memberLabel));
+});
+router.put('/memberLabel/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberLabel/:id?', async (req, res, next) => {
+  const n = memberLabel.findIndex(v => req.params.id === String(v.id));
+  memberLabel.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+
+const { idleAccount } = mockjs.mock({'idleAccount|5': [{
+  'id|+1': 1,
+  name: '@cname',
+  agent: '@cname',
+  'total|1-100': 1,
+  last_login: moment().format('YYYY-MM-DD hh:mm:ss'),
+  'balance|1-100.1-2': 1,
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/idleAccount', async (req, res, next) => {
+  res.json(resultOk(idleAccount));
+});
+router.put('/idleAccount/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/idleAccount/:id?', async (req, res, next) => {
+  const n = idleAccount.findIndex(v => req.params.id === String(v.id));
+  idleAccount.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+
