@@ -26,6 +26,8 @@ interface Props extends Partial<Hoc> {
   record?: { isTotalRow?: boolean };
   view?: React.PureComponent;
   isFirst: boolean; // 用于autoFocus
+  isDirty: boolean;
+  onChange: () => void;
 }
 
 type DefaultProps = {
@@ -45,12 +47,12 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
     element: <div />,
     itemProps: {},
     rules: [],
-    initialValue: '',
-    isDirty: false
+    initialValue: ''
   };
   component: HTMLInputElement;
 
   componentDidMount() {
+    console.log('☞☞☞ 9527 FormItemUI 54', 'hehe');
     const {
       formItemProps = {},
       formItemRender,
@@ -121,7 +123,7 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
   }
 
   hide(visible: boolean) {
-    this.setState({ hidden: visible, isDirty: false });
+    this.setState({ hidden: visible });
   }
 
   autoFocus(isFirst?: boolean) {
@@ -130,15 +132,13 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
           autoFocus: true,
           ref: (ref: React.ReactInstance) => {
             this.component = ReactDOM.findDOMNode(ref) as HTMLInputElement;
-            if (this.component && !this.state.isDirty) {
+            if (this.component && !this.props.isDirty) {
               requestAnimationFrame(() => this.component.focus());
             }
           }
         }
       : {
-          onChange: () => {
-            this.setState({ isDirty: true });
-          }
+          onChange: this.props.onChange
         };
   }
 

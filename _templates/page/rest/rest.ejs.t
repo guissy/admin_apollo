@@ -30,7 +30,7 @@ router.delete('/<%= page %>/:id?', async (req, res, next) => {
   res.json(resultOk({}));
 });
 
-<% h.form('select').forEach(function(field) { -%>
+<% h.form('select', name).forEach(function(field) { -%>
 <% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex); -%>
 const {<%= type %>} = mockjs.mock({
   '<%= type %>|3': [{

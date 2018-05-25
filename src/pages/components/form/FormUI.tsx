@@ -28,7 +28,8 @@ const Section = styled.section`
 export class FormUI extends React.Component<FormUIProps, {}> {
   state = {
     loading: false,
-    visibleModal: false
+    visibleModal: false,
+    isDirty: false
   };
   hasSubmit: boolean;
   foundFirst: boolean;
@@ -175,6 +176,8 @@ export class FormUI extends React.Component<FormUIProps, {}> {
                 record={this.props.record}
                 view={this.props.view}
                 isFirst={this.isFirst(v.formItemRender, v.dataIndex)}
+                isDirty={this.state.isDirty}
+                onChange={() => this.setState({ isDirty: true })}
               />
             ))}
             <Form.Item className="submitItem" style={hasResetBtn ? { marginBottom: '10px' } : {}}>

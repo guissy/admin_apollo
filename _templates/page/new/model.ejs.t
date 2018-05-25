@@ -23,7 +23,7 @@ export const <%= Page %>Fragment = gql`
   }
 `;
 
-<% h.form('select').forEach(function(field) { -%>
+<% h.form('select', name).forEach(function(field) { -%>
 <% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex); -%>
 /** <%- field.title %> */
 export interface <%= Type %> {

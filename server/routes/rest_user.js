@@ -125,3 +125,42 @@ router.delete('/idleAccount/:id?', async (req, res, next) => {
 });
 
 
+
+const { agentAudit } = mockjs.mock({'agentAudit|5': [{
+  'id|+1': 1,
+  name: '@cname',
+  mobile: '@zip@zip',
+  email: '@email',
+  truename: '@cname',
+  'channel|1-4': 1,
+  ip: '@ip',
+  admin_user: '@cname',
+  'status|1': ['enabled','disabled'],
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/agentAudit', async (req, res, next) => {
+  res.json(resultOk(agentAudit));
+});
+router.put('/agentAudit/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/agentAudit/:id?', async (req, res, next) => {
+  const n = agentAudit.findIndex(v => req.params.id === String(v.id));
+  agentAudit.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {agentAuditStatus} = mockjs.mock({
+  'agentAuditStatus|3': [{
+    'id|+1': 1,
+    'name|+1': ['审核状态1', '审核状态2', '审核状态3'],
+  }]
+});
+router.get('/agentAuditStatus', async (req, res, next) => {
+  res.json(resultOk(agentAuditStatus));
+});
+

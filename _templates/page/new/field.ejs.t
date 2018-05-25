@@ -18,7 +18,7 @@ import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
 import <%= Page %>Page from './<%= Page %>.page';
-import { <%= Page %>, <%= Page %>Fragment <%= h.form('select').map(v => ',' + h.Page(v.dataIndex)).join('') %>} from './<%= Page %>.model';
+import { <%= Page %>, <%= Page %>Fragment <%= h.form('select', name).map(v => ',' + h.Page(v.dataIndex)).join('') %>} from './<%= Page %>.model';
 
 const site = withLocale.site;
 

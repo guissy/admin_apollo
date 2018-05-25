@@ -82,7 +82,6 @@ import MemberHierarchyModel from './pages/user/memberHierarchy/hierarchy/Hierarc
 import MemberQueryModel from './pages/user/memberHierarchy/memberQuery/MemberQuery.model';
 //    会员标签
 //    闲置帐号
-import IdleAccountModel from './pages/user/idleAccount2/IdleAccount.model';
 //    登录查询
 //    代理管理
 import AgentAccountModel from './pages/user/agentAccount/AgentAccount.model';
@@ -91,7 +90,6 @@ import promotionInfoModel from './pages/user/agentAccount/promotionInfo/Promotio
 //    有效用户
 //    第三方会员查询
 //    代理审核
-import AgentAuditModel from './pages/user/agentAudit/AgentAudit.model';
 //    管理员列表
 //    管理员角色
 //    有效投注查询
@@ -185,8 +183,6 @@ app.model(throttleEffect(MemberSettingModel));
 app.model(throttleEffect(MemberWidthRawModel));
 app.model(throttleEffect(MemberQueryModel));
 app.model(throttleEffect(MemberHierarchyModel));
-app.model(throttleEffect(IdleAccountModel));
-app.model(throttleEffect(AgentAuditModel));
 app.model(throttleEffect(ProxyCopyModel));
 app.model(throttleEffect(SettingModel));
 app.model(throttleEffect(HeaderModel));
@@ -221,6 +217,9 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('AgentAuditResult', 'AgentAudit'),
+        ...addTypePatcher('AgentAuditStatusResult', 'AgentAuditStatus'),
+
         ...addTypePatcher('IdleAccountResult', 'IdleAccount'),
         ...addTypePatcher('MemberLabelResult', 'MemberLabel'),
         ...addTypePatcher('ThirdGameResult', 'ThirdGame'),

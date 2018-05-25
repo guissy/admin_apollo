@@ -81,9 +81,7 @@ import MemberManage from '../user/memberManage/MemberManage';
 //    会员层级
 import MemberHierarchy from '../user/memberHierarchy/MemberHierarchy';
 //    会员标签
-import MemberLabel from '../user/memberLabel2/MemberLabel';
 //    闲置帐号
-import IdleAccount from '../user/idleAccount2/IdleAccount';
 //    登录查询
 // import LoginAccount from ''
 //    代理管理
@@ -91,9 +89,8 @@ import AgentAccount from '../user/agentAccount/AgentAccount';
 //    有效用户
 // import ValidUser from ''
 //    第三方会员查询
-import OtherMember from '../user/otherMember2/OtherMember';
 //    代理审核
-import AgentAudit from '../user/agentAudit/AgentAudit';
+import AgentAudit from '../user/agentAudit2/AgentAudit';
 //    管理员列表
 // import ChildAccount from ''
 //    管理员角色
@@ -121,9 +118,7 @@ import AgentAudit from '../user/agentAudit/AgentAudit';
 //    人工存提
 // import Manual from ''
 //    现金流水
-import FundDetail from '../cash/fundDetail2/FundDetail';
 //    转帐记录
-import TransferRecord from '../../pages/cash/transferRecord/TransferRecord';
 
 // 佣金
 //    退佣手续费
@@ -183,6 +178,7 @@ import TransferRecordPage from '../cash/transferRecord/TransferRecord.page';
 import OtherMemberPage from '../user/otherMember/OtherMember.page';
 import MemberLabelPage from '../user/memberLabel/MemberLabel.page';
 import IdleAccountPage from '../user/idleAccount/IdleAccount.page';
+import AgentAuditPage from '../user/agentAudit/AgentAudit.page';
 
 export default () => {
   return (
@@ -230,7 +226,7 @@ export default () => {
       <Route path="/agentAccount" component={AgentAccount} />
       {/* <Route path="/validUser" component={ValidUser} /> */}
       <Route path="/otherMembers" component={OtherMemberPage} />
-      <Route path="/agentAudit" component={AgentAudit} />
+      <Route path="/agentAudit" component={AgentAuditPage} />
       {/* <Route path="/childAccount" component={ChildAccount} /> */}
       {/* <Route path="/childRoleAccount" component={ChildRoleAccount} /> */}
       {/* <Route path="/effectiveBettingQuery" component={EffectiveBettingQuery} /> */}

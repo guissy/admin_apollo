@@ -1,6 +1,6 @@
 ---
 to: src/pages/<%= h.folder(name) %>.field.tsx
 inject: true
-after: <%- `<Input` %>
+skip-if: \\'form\\'
+before: <% file=`src/pages/${h.folder(name)}.field.tsx`; h.searchProps(file) -%>
 ---
-    search: <Input />,
