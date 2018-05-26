@@ -10,7 +10,7 @@ sh: pm2 restart all
 const { <%= page %> } = mockjs.mock({'<%= page %>|5': [{
   'id|+1': 1,
 <% h.fields().forEach(function(field){ -%>
-  <%= field.dataIndex %>: '@cname',
+  <%- h.key(field.dataIndex) %>: '<%- h.mockValue(field) %>',
 <% }) -%>
   created: moment().format('YYYY-MM-DD hh:mm:ss'),
   created_uname: '@cname',

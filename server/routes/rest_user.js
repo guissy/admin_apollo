@@ -164,3 +164,88 @@ router.get('/agentAuditStatus', async (req, res, next) => {
   res.json(resultOk(agentAuditStatus));
 });
 
+const { memberHierarchy } = mockjs.mock({'memberHierarchy|5': [{
+  'id|+1': 1,
+  name: '@city',
+  memo: '描述-@cword(2, 5)',
+  'register_stime': '@datetime',
+  'register_etime': '@datetime',
+  'deposit_stime': '@datetime',
+  'deposit_etime': '@datetime',
+  deposit_min: '@float(100, 999, 1, 2)',
+  deposit_max: '@float(100, 999, 1, 2)',
+  deposit_times: '@integer(1, 100)',
+  deposit_money: '@float(100, 999, 1, 2)',
+  max_deposit_money: '@float(100, 999, 1, 2)',
+  withdraw_times: '@integer(1, 100)',
+  withdraw_count: '@integer(1, 100)',
+  num: '@integer(1, 100)',
+  comment: '备注-@cword(2, 5)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberHierarchy', async (req, res, next) => {
+  res.json(resultOk(memberHierarchy));
+});
+router.put('/memberHierarchy/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberHierarchy/:id?', async (req, res, next) => {
+  const n = memberHierarchy.findIndex(v => req.params.id === String(v.id));
+  memberHierarchy.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const { memberQuery } = mockjs.mock({'memberQuery|5': [{
+  'id|+1': 1,
+  name: '@cname',
+  agnet: '@city',
+  created: '@datetime',
+  last_login: '@datetime',
+  deposit_total: '@integer(1, 100)',
+  deposit_money: '@float(100, 999, 1, 2)',
+  deposit_max: '@float(100, 999, 1, 2)',
+  withdraw_total: '@integer(1, 100)',
+  withdraw_money: '@integer(1, 100)',
+  layered: '@integer(1, 3)',
+  lock: '@integer(1, 3)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberQuery', async (req, res, next) => {
+  res.json(resultOk(memberQuery));
+});
+router.put('/memberQuery/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberQuery/:id?', async (req, res, next) => {
+  const n = memberQuery.findIndex(v => req.params.id === String(v.id));
+  memberQuery.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {memberQueryLayered} = mockjs.mock({
+  'memberQueryLayered|3': [{
+    'id|+1': 1,
+    'name|+1': ['分层1', '分层2', '分层3'],
+  }]
+});
+router.get('/memberQueryLayered', async (req, res, next) => {
+  res.json(resultOk(memberQueryLayered));
+});
+const {memberQueryLock} = mockjs.mock({
+  'memberQueryLock|3': [{
+    'id|+1': 1,
+    'name|+1': ['锁定1', '锁定2', '锁定3'],
+  }]
+});
+router.get('/memberQueryLock', async (req, res, next) => {
+  res.json(resultOk(memberQueryLock));
+});
+

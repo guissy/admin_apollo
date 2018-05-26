@@ -1,51 +1,45 @@
----
-to: src/pages/<%= h.folder(name) %>.page.tsx
-unless_exists: true
----
-<% Page = h.Page(name); page = h.page(name); dd = h.dd(name) -%>
 import * as React from 'react';
 import styled from 'styled-components';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import TableComponent, { graphPagination } from '<%= dd %>components/table/TableComponent';
+import TableComponent, { graphPagination } from '../../../components/table/TableComponent';
 import { autobind } from 'core-decorators';
-import { SearchUI } from '<%= dd %>components/form/SearchUI';
-import ButtonBarComponent from '<%= dd %>components/buttonBar/ButtonBarComponent';
-import withLocale from '<%= dd %>../utils/withLocale';
-import { GqlResult, pathBuilder, writeFragment } from '<%= dd %>../utils/apollo';
-import <%= Page %>Field from './<%= Page %>.field';
-import { <%= Page %>Fragment, <%= Page %> } from './<%= Page %>.model';
-import <%= Page %>Edit from './<%= Page %>.edit';
+import { SearchUI } from '../../../components/form/SearchUI';
+import ButtonBarComponent from '../../../components/buttonBar/ButtonBarComponent';
+import withLocale from '../../../../utils/withLocale';
+import { GqlResult, pathBuilder, writeFragment } from '../../../../utils/apollo';
+import MemberHierarchyField from './MemberHierarchy.field';
+import { MemberHierarchyFragment, MemberHierarchy } from './MemberHierarchy.model';
+import MemberHierarchyEdit from './MemberHierarchy.edit';
 
 interface Hoc {
   client: ApolloClient<object>;
   site: (p: string) => React.ReactNode;
 }
 
-interface Props extends Partial<Hoc> {
-}
+interface Props extends Partial<Hoc> {}
 
-/** <%= h.title() %> */
+/** 会员层级 */
 @withLocale
 @compose(withApollo)
 @autobind
-export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
+export default class MemberHierarchyPage extends React.PureComponent<Props, {}> {
   state = {
     create: {
       visible: false,
-      record: {} as <%= Page %>
+      record: {} as MemberHierarchy
     },
     edit: {
       visible: false,
-      record: {} as <%= Page %>
-    },
+      record: {} as MemberHierarchy
+    }
   };
   refetch: Function;
 
   render(): React.ReactElement<HTMLElement> {
     const { site = () => '', client } = this.props as Hoc;
-    const fields = new <%= Page %>Field(this as React.PureComponent<Hoc>);
+    const fields = new MemberHierarchyField(this as React.PureComponent<Hoc>);
     const tableFields = fields.table(this);
     const editFields = fields.filterBy('form');
     return (
@@ -59,46 +53,43 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
           }}
         />
         <Query
-          query={
-            gql`
-              query <%= page %>Query(
-                $page: Int
-                $page_size: Int
-                $pathBuilder: any
-              ) {
-                <%= page %>(
-                  page: $page
-                  page_size: $page_size
-                ) @rest(type: "<%= Page %>Result", pathBuilder: $pathBuilder) {
-                  state
-                  message
-                  data {
-                    ...<%= Page %>Fragment
-                  }
+          query={gql`
+            query memberHierarchyQuery($page: Int, $page_size: Int, $pathBuilder: any) {
+              memberHierarchy(page: $page, page_size: $page_size)
+                @rest(type: "MemberHierarchyResult", pathBuilder: $pathBuilder) {
+                state
+                message
+                data {
+                  ...MemberHierarchyFragment
                 }
               }
-              ${<%= Page %>Fragment}
-            `
-          }
+            }
+            ${MemberHierarchyFragment}
+          `}
           variables={{
             page: 1,
             page_size: 20,
-            pathBuilder: pathBuilder('/<%= page %>')
+            pathBuilder: pathBuilder('/memberHierarchy')
           }}
         >
-          {({ data: { <%= page %> = { data: [], attributes: {} } } = {}, loading, refetch, fetchMore }) => {
+          {({
+            data: { memberHierarchy = { data: [], attributes: {} } } = {},
+            loading,
+            refetch,
+            fetchMore
+          }) => {
             this.refetch = refetch;
             return (
               <TableComponent
                 loading={loading}
-                dataSource={<%= page %>.data}
+                dataSource={memberHierarchy.data}
                 columns={tableFields}
-                pagination={graphPagination(<%= page %>.attributes, fetchMore)}
+                pagination={graphPagination(memberHierarchy.attributes, fetchMore)}
               />
             );
           }}
         </Query>
-        <<%= Page %>Edit
+        <MemberHierarchyEdit
           edit={this.state.create}
           editFields={editFields}
           onDone={() => {
@@ -108,7 +99,7 @@ export default class <%= Page %>Page extends React.PureComponent<Props, {}> {
           modalOk="创建成功"
           view={this}
         />
-        <<%= Page %>Edit
+        <MemberHierarchyEdit
           edit={this.state.edit}
           editFields={editFields}
           onDone={() => {

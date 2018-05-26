@@ -24,10 +24,21 @@ export const <%= Page %>Fragment = gql`
 `;
 
 <% h.form('select', name).forEach(function(field) { -%>
-<% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex); -%>
+<% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex); types = h.selectType(field, name) + 'List' -%>
 /** <%- field.title %> */
 export interface <%= Type %> {
   id: number;
   name: string;
 }
+/** <%- field.title %> GraphQL */
+export const <%= type %>Query = gql`
+  query {
+    <%= types %> @rest(type: "<%= Type %>Result", path: "/<%= type %>") {
+      data {
+        id
+        name
+      }
+    }
+  }
+`;
 <% }) -%>

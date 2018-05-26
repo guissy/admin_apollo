@@ -309,12 +309,12 @@ module.exports = [
       //   action: ['delete', 'update', 'fetch', 'insert'],
       //   path: '/childRoleAccount'
       // },
-      {
-        id: 96,
-        name: '有效投注查询',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/effectiveBettingQuery'
-      }
+      // {
+      //   id: 96,
+      //   name: '有效投注查询',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/effectiveBettingQuery'
+      // }
     ]
   },
   {

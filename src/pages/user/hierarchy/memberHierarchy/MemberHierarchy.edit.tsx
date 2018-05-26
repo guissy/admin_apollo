@@ -1,16 +1,11 @@
----
-to: src/pages/<%= h.folder(name) %>.edit.tsx
-unless_exists: true
----
-<% Page = h.Page(name); page = h.page(name); dd = h.dd(name) -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import withLocale from '<%= dd %>../utils/withLocale';
-import { GqlResult, writeFragment } from '<%= dd %>../utils/apollo';
-import { EditFormUI, EditFormConfig } from '<%= dd %>components/form/EditFormUI';
-import { <%= Page %> } from './<%= Page %>.model';
+import withLocale from '../../../../utils/withLocale';
+import { GqlResult, writeFragment } from '../../../../utils/apollo';
+import { EditFormUI, EditFormConfig } from '../../../components/form/EditFormUI';
+import { MemberHierarchy } from './MemberHierarchy.model';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -18,7 +13,7 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  edit: { visible: boolean; record: <%= Page %> };
+  edit: { visible: boolean; record: MemberHierarchy };
   editFields: EditFormConfig[];
   onDone: () => void;
   modalTitle: string;
@@ -26,10 +21,10 @@ interface Props extends Partial<Hoc> {
   view: React.PureComponent<{}>;
 }
 
-/** <%= h.title() %>表单 */
+/** 会员层级表单 */
 @withLocale
 @compose(withApollo)
-export default class <%= Page %>Edit extends React.PureComponent<Props, {}> {
+export default class MemberHierarchyEdit extends React.PureComponent<Props, {}> {
   state = {};
 
   render(): React.ReactNode {
@@ -37,13 +32,13 @@ export default class <%= Page %>Edit extends React.PureComponent<Props, {}> {
     return (
       <Mutation
         mutation={gql`
-          mutation editMutation($body: <%= Page %>EditInput!, $id: Int!) {
+          mutation editMutation($body: MemberHierarchyEditInput!, $id: Int!) {
             edit(body: $body, id: $id)
               @rest(
                 bodyKey: "body"
-                path: "/<%= page %>/:id"
+                path: "/memberHierarchy/:id"
                 method: "put"
-                type: "<%= Page %>EditResult"
+                type: "MemberHierarchyEditResult"
               ) {
               state
               message
@@ -60,10 +55,10 @@ export default class <%= Page %>Edit extends React.PureComponent<Props, {}> {
             onCancel={() => {
               this.props.onDone();
             }}
-            onSubmit={(values: <%= Page %>) => {
+            onSubmit={(values: MemberHierarchy) => {
               return edit({ variables: { body: values, id: values.id } }).then(
                 (v: GqlResult<'edit'>) => {
-                  writeFragment(client, '<%= Page %>', values);
+                  writeFragment(client, 'MemberHierarchy', values);
                   this.props.onDone();
                   return v.data && v.data.edit;
                 }

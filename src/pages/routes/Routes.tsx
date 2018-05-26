@@ -79,7 +79,6 @@ import ActivityApplyPage from '../marketing/activityApply/ActivityApply.page';
 //    会员管理
 import MemberManage from '../user/memberManage/MemberManage';
 //    会员层级
-import MemberHierarchy from '../user/memberHierarchy/MemberHierarchy';
 //    会员标签
 //    闲置帐号
 //    登录查询
@@ -90,7 +89,6 @@ import AgentAccount from '../user/agentAccount/AgentAccount';
 // import ValidUser from ''
 //    第三方会员查询
 //    代理审核
-import AgentAudit from '../user/agentAudit2/AgentAudit';
 //    管理员列表
 // import ChildAccount from ''
 //    管理员角色
@@ -179,6 +177,7 @@ import OtherMemberPage from '../user/otherMember/OtherMember.page';
 import MemberLabelPage from '../user/memberLabel/MemberLabel.page';
 import IdleAccountPage from '../user/idleAccount/IdleAccount.page';
 import AgentAuditPage from '../user/agentAudit/AgentAudit.page';
+import Hierarchy from '../user/hierarchy/Hierarchy';
 
 export default () => {
   return (
@@ -219,7 +218,7 @@ export default () => {
       <Route path="/ipBlacklist" component={IpBlackListPage} />
       {/* <Route path="/duplicateAccount" component={DuplicateAccount} /> */}
       <Route path="/memberManage" component={MemberManage} />
-      <Route path="/memberHierarchy" component={MemberHierarchy} />
+      <Route path="/memberHierarchy" component={Hierarchy} />
       <Route path="/memberLabel" component={MemberLabelPage} />
       <Route path="/idleAccount" component={IdleAccountPage} />
       {/* <Route path="/LoginAccount" component={LoginAccount} /> */}

@@ -3,22 +3,22 @@ to: src/pages/<%= h.folder(name) %>.field.tsx
 unless_exists: true
 sh: prettier --print-width 100 --single-quote --trailing-commas all --parser typescript --write src/pages/<%= h.folder(name) %>.field.tsx
 ---
-<% Page = h.Page(name); page = h.page(name) -%>
+<% Page = h.Page(name); page = h.page(name); dd = h.dd(name) -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, Tag, Select, Switch, DatePicker } from 'antd';
+import { Input, InputNumber, Tag, Select, Switch, DatePicker } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
-import withLocale from '../../../utils/withLocale';
-import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
-import { messageResult } from '../../../utils/showMessage';
-import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { Result } from '../../../utils/result';
+import { moneyPattern } from '<%= dd %>../utils/formRule';
+import LinkComponent from '<%= dd %>components/link/LinkComponent';
+import withLocale from '<%= dd %>../utils/withLocale';
+import TableFormField, { FieldProps, notInTable } from '<%= dd %>../utils/TableFormField';
+import TableActionComponent from '<%= dd %>components/table/TableActionComponent';
+import { messageResult } from '<%= dd %>../utils/showMessage';
+import { GqlResult, writeFragment } from '<%= dd %>../utils/apollo';
+import { Result } from '<%= dd %>../utils/result';
 import <%= Page %>Page from './<%= Page %>.page';
-import { <%= Page %>, <%= Page %>Fragment <%= h.form('select', name).map(v => ',' + h.Page(v.dataIndex)).join('') %>} from './<%= Page %>.model';
+import { <%= Page %>, <%= Page %>Fragment<%= h.form('select', name).map(v => ', ' + h.Page(v.dataIndex) + ', ' + h.page(v.dataIndex) + 'Query').join('') %>} from './<%= Page %>.model';
 
 const site = withLocale.site;
 
@@ -39,8 +39,12 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
       />),
 <% } else if (field.form === 'date') { -%>
 <DatePicker.RangePicker />,
+<% } else if (field.form === 'number') { -%>
+<InputNumber />,
+<% } else if (field.form === 'textarea') { -%>
+<Input.TextArea />,
 <% } else if (field.form === 'select') { -%>
-<% Type = h.Page(field.dataIndex);type = h.page(field.dataIndex);types = h.page(field.dataIndex) + 's'; -%>
+<% Type = h.selectType(field, name, true);type = h.selectType(field, name); types = h.selectType(field, name) + 'List'; -%>
 ({
       text,
       record,
@@ -48,18 +52,7 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
       value,
       onChange
     }: FieldProps<string, <%= Type %>, <%= Page %>Page>) => (
-      <Query
-        query={gql`
-          query {
-            <%= types %> @rest(type: "<%= Type %>Result", path: "/<%= type %>") {
-              data {
-                id
-                name
-              }
-            }
-          }
-        `}
-      >
+      <Query query={<%= type%>Query}>
         {({ data: { <%= types %> = { data: [] as <%= Type %>[] } } = {} }:
   ChildProps<{}, { <%= types %>: Result<<%= Type %>[]> }, {}>) => (
           <Select defaultValue={value} onChange={onChange}>
@@ -72,6 +65,17 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
         )}
       </Query>
     ),  
+    table: ({ text, record, view }: FieldProps<string, <%= Type %>, <%= Page %>Page>) => (
+      <Query query={<%= type %>Query}>
+        {({
+          data: { <%= types %> = { data: [] as <%= Type %>[] } } = {}
+        }: ChildProps<{}, { <%= types %>: Result<<%= Type %>[]> }, {}>) =>
+          <%= types %>.data
+            .filter(<%= type %> => <%= type %>.id === Number(text))
+            .map(<%= type %> => <%= type %>.name)
+        }
+      </Query>
+    ),
 <% } else { -%>
 <Input />,
 <% } -%>
@@ -83,6 +87,13 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
         ) : (
         <Tag className="account-close">{site('停用')}</Tag>
         )}
+      </>),
+<% } -%>
+<% if (field.dataIndex.includes(',')) { -%>
+    table: ({ text, record, view }: FieldProps<string, <%= Page %>, <%= Page %>Page>) => (
+      <>
+        {record.<%- field.dataIndex.split(',')[0] %>} <br/>
+        {record.<%- field.dataIndex.split(',')[1] %>}
       </>),
 <% } -%>
   };

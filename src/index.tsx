@@ -78,8 +78,6 @@ import MemberBankDetail from './pages/user/memberManage/bankDetail/BankDetail.mo
 import MemberSettingModel from './pages/user/memberManage/memberSetting/MemberSetting.model';
 import MemberWidthRawModel from './pages/user/memberManage/audit/Audit.model';
 //    会员层级
-import MemberHierarchyModel from './pages/user/memberHierarchy/hierarchy/Hierarchy.model';
-import MemberQueryModel from './pages/user/memberHierarchy/memberQuery/MemberQuery.model';
 //    会员标签
 //    闲置帐号
 //    登录查询
@@ -181,8 +179,6 @@ app.model(throttleEffect(MemberAccountBalanceModel));
 app.model(throttleEffect(MemberBankDetail));
 app.model(throttleEffect(MemberSettingModel));
 app.model(throttleEffect(MemberWidthRawModel));
-app.model(throttleEffect(MemberQueryModel));
-app.model(throttleEffect(MemberHierarchyModel));
 app.model(throttleEffect(ProxyCopyModel));
 app.model(throttleEffect(SettingModel));
 app.model(throttleEffect(HeaderModel));
@@ -217,9 +213,13 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('MemberQueryResult', 'MemberQuery'),
+        ...addTypePatcher('MemberQueryLayeredResult', 'MemberQueryLayered'),
+        ...addTypePatcher('MemberQueryLockResult', 'MemberQueryLock'),
+        ...addTypePatcher('MemberHierarchyResult', 'MemberHierarchy'),
+        ...addTypePatcher('HierarchyResult', 'Hierarchy'),
         ...addTypePatcher('AgentAuditResult', 'AgentAudit'),
         ...addTypePatcher('AgentAuditStatusResult', 'AgentAuditStatus'),
-
         ...addTypePatcher('IdleAccountResult', 'IdleAccount'),
         ...addTypePatcher('MemberLabelResult', 'MemberLabel'),
         ...addTypePatcher('ThirdGameResult', 'ThirdGame'),
