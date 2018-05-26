@@ -1,54 +1,75 @@
 const site = (v) => v;
 this.props = {site};
 let locals = {};
-const title = '会员查询';
+const title = '代理管理';
 const config = [
   {
-    title: site('会员账号'),
-    dataIndex: 'name'
+    title: site('模糊查询用户名'),
+    dataIndex: 'similar',
+    form: 'checkbox',
   },
   {
-    title: site('所属代理'),
-    dataIndex: 'agnet'
+    title: site('代理账号'),
+    dataIndex: 'name',
   },
   {
-    title: site('会员加入时间'),
-    dataIndex: 'created'
+    title: site('真实姓名'),
+    dataIndex: 'truename',
   },
   {
-    title: site('最后登录时间'),
-    dataIndex: 'last_login'
-  },
-  {
-    title: site('存款次数'),
-    dataIndex: 'deposit_total'
-  },
-  {
-    title: site('存款总额'),
-    dataIndex: 'deposit_money'
-  },
-  {
-    title: site('最大存款总额'),
-    dataIndex: 'deposit_max'
-  },
-  {
-    title: site('提现次数'),
-    dataIndex: 'withdraw_total'
-  },
-  {
-    title: site('提现总数'),
-    dataIndex: 'withdraw_money'
-  },
-  {
-    title: site('分层'),
-    dataIndex: 'layered',
+    title: site('代理类型'),
+    dataIndex: 'type',
     form: 'select',
   },
   {
-    title: site('锁定'),
-    dataIndex: 'lock',
+    title: site('上级代理'),
+    dataIndex: 'pname',
+  },
+  {
+    title: site('代理层级'),
+    dataIndex: 'level',
+  },
+  {
+    title: site('下级代理数'),
+    dataIndex: 'inferisors_num',
+  },
+  {
+    title: site('会员数'),
+    dataIndex: 'play_num',
+  },
+  {
+    title: site('账户余额'),
+    dataIndex: 'balance',
+  },
+  {
+    title: site('推广码'),
+    dataIndex: 'code',
+  },
+  {
+    title: site('注册时间'),
+    dataIndex: 'register_from,register_to',
+    form: 'date'
+  },
+  {
+    title: site('注册时间'),
+    dataIndex: 'created',
+    form: 'date'
+  },
+  {
+    title: site('注册来源'),
+    dataIndex: 'channel',
     form: 'select',
-  }
+  },
+  {
+    title: site('在线状态'),
+    dataIndex: 'online',
+    form: 'select'
+  },
+  {
+    title: site('账号状态'),
+    dataIndex: 'status',
+    form: 'select'
+  },
   ];
 
 
@@ -141,8 +162,10 @@ module.exports = {
       const mobileCn = ['手机', '电话'];
       const time = ['time', 'date'];
       const timeCn = ['日期', '时间'];
-      const name = ['user'];
-      const nameCn = ['账号', '用户名', '用户', '者'];
+      const name = ['user', 'nickname', 'truename'];
+      const nameCn = ['姓名', '妮称', '用户', '者'];
+      const account = ['account', 'username'];
+      const accountCn = ['账号', '用户名'];
       const status = ['status'];
       const statusCn = ['状态'];
       const has = (keywords, keywordsCn) => words(field.dataIndex).some(v => keywords.includes(v))
@@ -163,6 +186,8 @@ module.exports = {
         return '@url';
       } else if (has(mobile, mobileCn)) {
         return '13567@zip';
+      } else if (has(account, accountCn) || field.title.endsWith('人')) {
+        return '@first';
       } else if (has(name, nameCn) || field.title.endsWith('人')) {
         return '@cname';
       } else if (has(status, statusCn)) {

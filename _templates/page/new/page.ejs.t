@@ -2,7 +2,7 @@
 to: src/pages/<%= h.folder(name) %>.page.tsx
 unless_exists: true
 ---
-<% Page = h.Page(name); page = h.page(name); dd = h.dd(name) -%>
+<% Page = h.Page(name); page = h.page(name); dd = h.dd(name); -%>
 import * as React from 'react';
 import styled from 'styled-components';
 import ApolloClient from 'apollo-client/ApolloClient';

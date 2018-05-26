@@ -1,5 +1,5 @@
 ---
-to: src/pages/<%= h.folder(name) %>.model.tsx
+to: src/pages/<%= h.folder(name) %>.model.ts
 unless_exists: true
 ---
 <% Page = h.Page(name); page = h.page(name) -%>

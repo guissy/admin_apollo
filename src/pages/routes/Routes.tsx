@@ -84,7 +84,7 @@ import MemberManage from '../user/memberManage/MemberManage';
 //    登录查询
 // import LoginAccount from ''
 //    代理管理
-import AgentAccount from '../user/agentAccount/AgentAccount';
+import AgentAccount from '../user/agentAccount2/AgentAccount';
 //    有效用户
 // import ValidUser from ''
 //    第三方会员查询
@@ -178,6 +178,7 @@ import MemberLabelPage from '../user/memberLabel/MemberLabel.page';
 import IdleAccountPage from '../user/idleAccount/IdleAccount.page';
 import AgentAuditPage from '../user/agentAudit/AgentAudit.page';
 import Hierarchy from '../user/hierarchy/Hierarchy';
+import AgentAccountPage from '../user/agentAccount/AgentAccount.page';
 
 export default () => {
   return (
@@ -222,7 +223,7 @@ export default () => {
       <Route path="/memberLabel" component={MemberLabelPage} />
       <Route path="/idleAccount" component={IdleAccountPage} />
       {/* <Route path="/LoginAccount" component={LoginAccount} /> */}
-      <Route path="/agentAccount" component={AgentAccount} />
+      <Route path="/agentAccount" component={AgentAccountPage} />
       {/* <Route path="/validUser" component={ValidUser} /> */}
       <Route path="/otherMembers" component={OtherMemberPage} />
       <Route path="/agentAudit" component={AgentAuditPage} />

@@ -1,12 +1,12 @@
 ---
 to: src/pages/<%= h.folder(name) %>.field.tsx
 unless_exists: true
-sh: prettier --print-width 100 --single-quote --trailing-commas all --parser typescript --write src/pages/<%= h.folder(name) %>.field.tsx
+#sh: prettier --print-width 100 --single-quote --trailing-commas all --parser typescript --write src/pages/<%= h.folder(name) %>.field.tsx
 ---
-<% Page = h.Page(name); page = h.page(name); dd = h.dd(name) -%>
+<% Page = h.Page(name); page = h.page(name); dd = h.dd(name); -%>
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, InputNumber, Tag, Select, Switch, DatePicker } from 'antd';
+import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '<%= dd %>../utils/formRule';
@@ -31,7 +31,7 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
 
 <% h.fields().forEach(function(field){ -%>
   <%- h.key(field.dataIndex) %> = {
-    title: site('<%= field.title %>'),
+    title: <%- field.form === 'checkbox' ? "''" : "site('"+field.title+"')" %>,
     form: <% if (field.dataIndex === 'status') { -%> (
       <Switch
         checkedChildren={site('启用')}
@@ -43,6 +43,8 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
 <InputNumber />,
 <% } else if (field.form === 'textarea') { -%>
 <Input.TextArea />,
+<% } else if (field.form === 'checkbox') { -%>
+<Checkbox><%- field.title %></Checkbox>,
 <% } else if (field.form === 'select') { -%>
 <% Type = h.selectType(field, name, true);type = h.selectType(field, name); types = h.selectType(field, name) + 'List'; -%>
 ({
