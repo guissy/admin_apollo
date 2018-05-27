@@ -25,12 +25,14 @@ import {
   agentAccountStatusQuery
 } from './AgentAccount.model';
 import { Radio } from 'antd';
+import { Link, match as Match } from 'react-router-dom';
+import TagButtonComponent from '../../components/tagButton/TagButtonComponent';
 
 const site = withLocale.site;
 
 /** 代理管理字段 */
 export default class AgentAccountField<
-  T extends { client: ApolloClient<{}> }
+  T extends { client: ApolloClient<{}>; match: Match<{}> }
 > extends TableFormField<T> {
   id = {
     form: <input type="hidden" />,
@@ -88,7 +90,8 @@ export default class AgentAccountField<
             .map(agentAccountType => agentAccountType.name)
         }
       </Query>
-    )
+    ),
+    search: 'form'
   };
 
   pname = {
@@ -105,19 +108,22 @@ export default class AgentAccountField<
 
   inferisors_num = {
     title: site('下级代理数'),
-    form: <Input />,
-    search: 'form'
+    search: <InputNumber min={0} />
   };
 
   play_num = {
     title: site('会员数'),
-    form: <Input />,
-    search: 'form'
+    search: <InputNumber min={0} />,
+    table: ({ text, record, view }: FieldProps<string, AgentAccountChannel, AgentAccountPage>) => (
+      <TagButtonComponent>
+        <Link to={{ pathname: '/memberManage', search: `?agent=${record.name}` }}>{text}</Link>
+      </TagButtonComponent>
+    )
   };
 
   balance = {
     title: site('账户余额'),
-    form: <Input />,
+    form: <InputNumber />,
     search: 'form'
   };
 
@@ -282,6 +288,7 @@ export default class AgentAccountField<
               >
                 {remove => (
                   <TableActionComponent>
+                    <Link to={this.props.match.path + '/' + String(record.id)}>{site('详情')}</Link>
                     <LinkComponent
                       hidden={record.status === 0 || record.status === 2}
                       confirm={true}
@@ -325,7 +332,7 @@ export default class AgentAccountField<
                         });
                       }}
                     >
-                      编辑
+                      {site('编辑')}
                     </LinkComponent>
                   </TableActionComponent>
                 )}

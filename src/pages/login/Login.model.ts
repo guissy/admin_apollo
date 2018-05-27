@@ -1,7 +1,8 @@
 import { Action, EffectsCommandMap, SubscriptionAPI } from 'dva';
 import environment from '../../utils/environment';
 import { routerRedux } from 'dva/router';
-import { Location, Action as LocationAction } from 'history';
+import * as H from 'history';
+import { uniqBy, pick } from 'lodash/fp';
 import { MenuItem } from '../home/sider/Menu.data';
 import Immutable from 'immutable';
 import { parse } from 'querystring';
@@ -14,7 +15,8 @@ export default {
     loading: false,
     needLogin: false,
     list: {},
-    route: []
+    route: [],
+    visited: []
   },
   subscriptions: {
     setup({ dispatch, history }: SubscriptionAPI) {
@@ -47,9 +49,9 @@ export default {
           dispatch(routerRedux.push('/'));
         }
       }
-      history.listen((location: Location, action: LocationAction) => {
+      history.listen((location: H.Location, action: H.Action) => {
         if (location.pathname !== '/login') {
-          dispatch({ type: 'access', payload: location.pathname });
+          dispatch({ type: 'access', payload: location });
         }
       });
     }
@@ -96,7 +98,7 @@ export default {
       const route = store.login.route as MenuItem[];
       let [isDelete, isUpdate, isInsert, isFetch] = [false, false, false, false];
       route.forEach(item => {
-        const subOk = item.children.find(sub => sub.path === payload);
+        const subOk = item.children.find(sub => sub.path === payload.pathname);
         if (subOk) {
           isDelete = subOk.action.includes('delete');
           isUpdate = subOk.action.includes('update');
@@ -113,7 +115,9 @@ export default {
           isInsert
         }
       });
-      window.localStorage.setItem(environment.lastUrl, payload);
+      window.localStorage.setItem(environment.lastUrl, payload.pathname);
+      const visited = [...store.login.visited, pick(['pathname', 'search'])(location)];
+      yield put({ type: 'update', payload: { visited } });
     }
   },
   reducers: {
@@ -133,6 +137,7 @@ export interface LoginState extends User {
   isInsert: boolean;
   isFetch: boolean;
   needLogin: boolean; // 是否需要重新登录
+  visited: H.Location[];
 }
 
 // 返回结果

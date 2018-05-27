@@ -11,7 +11,7 @@ import { EditFormUI } from '../../components/form/EditFormUI';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { SearchUI } from '../../components/form/SearchUI';
 import moment from 'moment';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
 import AddAnnouncement from './AddAnnouncement';
 import { WrappedFormUtils } from 'antd/lib/form/Form';

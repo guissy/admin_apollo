@@ -145,7 +145,8 @@ export class EditFormUI extends React.PureComponent<Props, State> {
       onDone,
       values,
       size,
-      view
+      view,
+      isPage
     } = this.props;
     let width = 0;
     let formItemProps = {};
@@ -163,8 +164,9 @@ export class EditFormUI extends React.PureComponent<Props, State> {
         formItemProps = { labelCol: { span: 6 }, wrapperCol: { span: 13 } };
         break;
     }
+    const Wrap = isPage ? styled.div`` : ModalWrap;
     return (
-      <ModalWrap
+      <Wrap
         title={modalTitle}
         // onOk={}
         onCancel={onCancel}
@@ -187,7 +189,7 @@ export class EditFormUI extends React.PureComponent<Props, State> {
           record={values}
           view={view}
         />
-      </ModalWrap>
+      </Wrap>
     );
   }
 }
@@ -207,6 +209,7 @@ interface Props {
   onCancel?: Function; // 关闭事件
   onDone?: (result: Result<object> | void) => void; // onSubmit后的回调
   view?: React.PureComponent;
+  isPage?: boolean;
   modalOk?: React.ReactNode;
 }
 

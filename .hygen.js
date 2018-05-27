@@ -1,76 +1,27 @@
 const site = (v) => v;
 this.props = {site};
 let locals = {};
-const title = '代理管理';
+const title = '推广信息';
 const config = [
+
   {
-    title: site('模糊查询用户名'),
-    dataIndex: 'similar',
-    form: 'checkbox',
-  },
-  {
-    title: site('代理账号'),
-    dataIndex: 'name',
-  },
-  {
-    title: site('真实姓名'),
-    dataIndex: 'truename',
-  },
-  {
-    title: site('代理类型'),
-    dataIndex: 'type',
-    form: 'select',
-  },
-  {
-    title: site('上级代理'),
-    dataIndex: 'pname',
-  },
-  {
-    title: site('代理层级'),
-    dataIndex: 'level',
-  },
-  {
-    title: site('下级代理数'),
-    dataIndex: 'inferisors_num',
-  },
-  {
-    title: site('会员数'),
-    dataIndex: 'play_num',
-  },
-  {
-    title: site('账户余额'),
-    dataIndex: 'balance',
-  },
-  {
-    title: site('推广码'),
     dataIndex: 'code',
+    title: site('推广码'),
   },
+
   {
-    title: site('注册时间'),
-    dataIndex: 'register_from,register_to',
-    form: 'date'
+    dataIndex: 'site',
+    title: site('个人网站'),
   },
+
   {
-    title: site('注册时间'),
-    dataIndex: 'created',
-    form: 'date'
+    dataIndex: 'link',
+    title: site('会员推广链接'),
   },
-  {
-    title: site('注册来源'),
-    dataIndex: 'channel',
-    form: 'select',
-  },
-  {
-    title: site('在线状态'),
-    dataIndex: 'online',
-    form: 'select'
-  },
-  {
-    title: site('账号状态'),
-    dataIndex: 'status',
-    form: 'select'
-  },
-  ];
+
+
+
+];
 
 
 const {compose, get, camelCase, upperFirst, words} = require('lodash/fp');
@@ -146,7 +97,7 @@ module.exports = {
     },
     /** 根据不同字段，mock数字或文字 */
     mockValue: (field) => {
-      const ints = ['num', 'nums', 'total', 'count', 'times'];
+      const ints = ['num', 'nums', 'total', 'count', 'times', 'code'];
       const intsCn = ['总数', '人数', '次数'];
       const floats = ['money', 'deposit'];
       const floatsCn = ['钱', '款', '额'];
@@ -156,8 +107,8 @@ module.exports = {
       const emailCn = ['邮箱'];
       const ip = ['ip'];
       const ipCn = ['ip'];
-      const url = ['domain', 'host', 'url'];
-      const urlCn = ['域名', '网址'];
+      const url = ['domain', 'host', 'url', 'link'];
+      const urlCn = ['域名', '网址', '链接'];
       const mobile = ['mobile', 'phone'];
       const mobileCn = ['手机', '电话'];
       const time = ['time', 'date'];

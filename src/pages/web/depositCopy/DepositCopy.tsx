@@ -14,7 +14,7 @@ import ApplyComponent from './ApplyComponent';
 import DetailModal from '../../components/modal/DetailModal';
 import { showMessageForResult } from '../../../utils/showMessage';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 interface Depositprops {
   form?: WrappedFormUtils;

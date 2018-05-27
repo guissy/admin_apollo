@@ -2,7 +2,6 @@ import * as React from 'react';
 import { select } from '../../../utils/model';
 import { connect, Dispatch } from 'dva';
 import { LoginState } from '../../login/Login.model';
-import { IntlKeys } from '../../../locale/zh_CN';
 import { Popconfirm } from 'antd';
 import withLocale from '../../../utils/withLocale';
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -10,7 +9,7 @@ interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   hidden?: boolean;
   onCallback?: Function;
   login?: LoginState;
-  site?: (p: IntlKeys) => React.ReactNode;
+  site?: (p: string) => React.ReactNode;
   dispatch?: Dispatch;
   // 当boolean类型时, title{`确定`${''}吗},  为ReactNode时, title={confirm} confirm 为一段文字
   confirm?: boolean | React.ReactNode;

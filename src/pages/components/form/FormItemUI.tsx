@@ -52,7 +52,6 @@ export default class FormItemUI extends React.PureComponent<Props, {}> {
   component: HTMLInputElement;
 
   componentDidMount() {
-    console.log('☞☞☞ 9527 FormItemUI 54', 'hehe');
     const {
       formItemProps = {},
       formItemRender,

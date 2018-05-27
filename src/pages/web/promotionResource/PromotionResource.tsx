@@ -16,7 +16,7 @@ import environment from '../../../utils/environment';
 import UploadComponent from '../../components/upload/UploadComponent';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 
 interface PromotionResourceProps {
   dispatch: Dispatch;

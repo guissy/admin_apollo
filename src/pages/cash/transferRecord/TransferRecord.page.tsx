@@ -5,7 +5,7 @@ import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import TableComponent, { graphPagination } from '../../components/table/TableComponent';
 import { autobind } from 'core-decorators';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import TransferRecordField from './TransferRecord.field';

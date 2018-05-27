@@ -15,7 +15,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
 import Editor from '../../components/richTextEditor/Editor';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 
 interface AdProps {
   dispatch: Dispatch;

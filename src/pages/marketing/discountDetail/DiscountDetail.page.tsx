@@ -10,8 +10,8 @@ import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder } from '../../../utils/apollo';
 import DiscountDetailField from './DiscountDetail.field';
 import { DiscountDetail, DiscountDetailFragment } from './DiscountDetail.model';
-import { Link } from 'react-router-dom';
 import { messageResult } from '../../../utils/showMessage';
+import Back from '../../components/button/Back';
 
 const Div = styled.div`
   strong {
@@ -48,10 +48,9 @@ export default class DiscountDetailPage extends React.PureComponent<Props, {}> {
     const { site = () => '', client } = this.props as Hoc;
     const fields = new DiscountDetailField(this as React.PureComponent<Hoc>);
     const tableFields = fields.table(this);
-    const editFields = fields.filterBy('form');
     return (
       <Div>
-        <Link to="/discount">{site('返回')}</Link>
+        <Back />
         <span>
           <strong>{this.props.detail.name}</strong>
           {site('返水详情')}

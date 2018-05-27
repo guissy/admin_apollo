@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import TableComponent, { graphPagination } from '../../components/table/TableComponent';
 import { autobind } from 'core-decorators';
 import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import AgentAuditField from './AgentAudit.field';

@@ -15,7 +15,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import LinkComponent from '../../components/link/LinkComponent';
 import TableComponent, { getPagination } from '../../components/table/TableComponent';
 import { showMessageForResult } from '../../../utils/showMessage';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 
 interface Props {
   dispatch: Dispatch;

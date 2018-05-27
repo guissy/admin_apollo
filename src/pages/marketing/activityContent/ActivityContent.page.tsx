@@ -3,7 +3,7 @@ import { compose, Query, withApollo } from 'react-apollo';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { pathBuilder } from '../../../utils/apollo';

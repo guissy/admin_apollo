@@ -5,18 +5,19 @@ import gql from 'graphql-tag';
 import TableComponent, { graphPagination } from '../../components/table/TableComponent';
 import { autobind } from 'core-decorators';
 import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '../../components/button/ButtonBarComponent';
 import withLocale from '../../../utils/withLocale';
 import { pathBuilder } from '../../../utils/apollo';
 import DiscountManageField from './DiscountManage.field';
 import { DiscountManage, DiscountManageFragment } from './DiscountManage.model';
 import DiscountManageEdit from './DiscountManage.edit';
-import { Route, Switch } from 'react-router';
+import { match as Match, Route, Switch } from 'react-router';
 import DiscountDetailPage from '../discountDetail/DiscountDetail.page';
 
 interface Hoc {
   client: ApolloClient<object>;
   site: (p: string) => React.ReactNode;
+  match: Match<{}>;
 }
 
 interface Props extends Partial<Hoc> {}
@@ -44,7 +45,7 @@ export default class DiscountManagePage extends React.PureComponent<Props, {}> {
   refetch: Function;
 
   render(): React.ReactElement<HTMLElement> {
-    const { site = () => '', client } = this.props as Hoc;
+    const { site = () => '', client, match } = this.props as Hoc;
     const fields = new DiscountManageField(this as React.PureComponent<Hoc>);
     const tableFields = fields.table(this);
     const editFields = fields.filterBy('form');
@@ -52,7 +53,7 @@ export default class DiscountManagePage extends React.PureComponent<Props, {}> {
     return (
       <Switch>
         <Route
-          path="/discount"
+          path={match.path}
           exact={true}
           render={() => (
             <>
@@ -137,8 +138,7 @@ export default class DiscountManagePage extends React.PureComponent<Props, {}> {
           )}
         />
         <Route
-          path="/discount/:id"
-          exact={true}
+          path={match.path + '/:id'}
           render={() => <DiscountDetailPage detail={this.state.detail} />}
         />
       </Switch>

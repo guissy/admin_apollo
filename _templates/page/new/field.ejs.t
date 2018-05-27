@@ -187,7 +187,7 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
                     });
                   }}
                 >
-                  编辑
+                  {site('编辑')}
                 </LinkComponent>
               </TableActionComponent>
             )}

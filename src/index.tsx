@@ -82,9 +82,6 @@ import MemberWidthRawModel from './pages/user/memberManage/audit/Audit.model';
 //    闲置帐号
 //    登录查询
 //    代理管理
-import AgentAccountModel from './pages/user/agentAccount2/AgentAccount.model';
-import AgentInformationModel from './pages/user/agentAccount2/agentInformation/AgentInformation.model';
-import promotionInfoModel from './pages/user/agentAccount2/promotionInfo/PromotionInfo.model';
 //    有效用户
 //    第三方会员查询
 //    代理审核
@@ -193,9 +190,6 @@ app.model(throttleEffect(ResourceManageModel));
 app.model(throttleEffect(PromotionResourceModel));
 app.model(throttleEffect(NoticeManageModel));
 app.model(throttleEffect(AnnouncementManageModel));
-app.model(throttleEffect(AgentAccountModel));
-app.model(throttleEffect(AgentInformationModel));
-app.model(throttleEffect(promotionInfoModel));
 
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(environment.tokenName);
@@ -213,6 +207,8 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('PromotionResult', 'Promotion', undefined, true),
+        ...addTypePatcher('AgentInfoResult', 'AgentInfo', undefined, true),
         ...addTypePatcher('AgentAccountResult', 'AgentAccount'),
         ...addTypePatcher('AgentAccountTypeResult', 'AgentAccountType'),
         ...addTypePatcher('AgentAccountChannelResult', 'AgentAccountChannel'),

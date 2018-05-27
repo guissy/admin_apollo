@@ -249,3 +249,147 @@ router.get('/memberQueryLock', async (req, res, next) => {
   res.json(resultOk(memberQueryLock));
 });
 
+
+const { agentAccount } = mockjs.mock({'agentAccount|5': [{
+  'id|+1': 1,
+  name: '@first',
+  truename: '@cname',
+  type: '@integer(1, 3)',
+  pname: '@city',
+  level: '@city',
+  inferisors_num: '@integer(1, 100)',
+  play_num: '@integer(1, 100)',
+  balance: '@float(100, 999, 1, 2)',
+  code: '@city',
+  channel: '@integer(1, 2)',
+  'online': '@integer(1, 3)',
+  status: '@integer(0, 2)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/agentAccount', async (req, res, next) => {
+  res.json(resultOk(agentAccount));
+});
+router.put('/agentAccount/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/agentAccount/:id?', async (req, res, next) => {
+  const n = agentAccount.findIndex(v => req.params.id === String(v.id));
+  agentAccount.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {agentAccountType} = mockjs.mock({
+  'agentAccountType|3': [{
+    'id|+1': 1,
+    'name|+1': ['层级代理', '直属代理'],
+  }]
+});
+router.get('/agentAccountType', async (req, res, next) => {
+  res.json(resultOk(agentAccountType));
+});
+const {agentAccountChannel} = mockjs.mock({
+  'agentAccountChannel|3': [{
+    'id|+1': 1,
+    'name|+1': ['H5注册', 'PC注册', '厅主后台创建', '代理后台创建'],
+  }]
+});
+router.get('/agentAccountChannel', async (req, res, next) => {
+  res.json(resultOk(agentAccountChannel));
+});
+const {agentAccountOnline} = mockjs.mock({
+  'agentAccountOnline|3': [{
+    'id|+1': 1,
+    'name|+1': ['在线', '离线'],
+  }]
+});
+router.get('/agentAccountOnline', async (req, res, next) => {
+  res.json(resultOk(agentAccountOnline));
+});
+const {agentAccountStatus} = mockjs.mock({
+  'agentAccountStatus|3': [{
+    'id|+1': 1,
+    'name|+1': ['账号状态1', '账号状态2', '账号状态3'],
+  }]
+});
+router.get('/agentAccountStatus', async (req, res, next) => {
+  res.json(resultOk(agentAccountStatus));
+});
+
+
+const { agentInfo } = mockjs.mock({'agentInfo|5': [{
+  'id|+1': 1,
+  name: '@first',
+  id: '@city',
+  play_num: '@integer(1, 100)',
+  truename: '@cname',
+  inferisors_num: '@integer(1, 100)',
+  up_agent_name: '@city',
+  pwd1_login: '@city',
+  pwd_money: '@float(100, 999, 1, 2)',
+  type: '@cname',
+  level: '@city',
+  created: '@datetime',
+  last_login: '@datetime',
+  register_ip: '@ip',
+  login_ip: '@ip',
+  channel: '@city',
+  mobile: '13567@zip',
+  email: '@email',
+  qq: '@city',
+  skype: '@city',
+  weixin: '@city',
+  gender: '@city',
+  brith: '@city',
+  country: '@city',
+  language_name: '@city',
+  province: '@city',
+  ctype: '@city',
+  memo: '备注-@cword(2, 5)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/agentInfo', async (req, res, next) => {
+  res.json(resultOk(agentInfo[0]));
+});
+router.put('/agentInfo/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/agentInfo/:id?', async (req, res, next) => {
+  const n = agentInfo.findIndex(v => req.params.id === String(v.id));
+  agentInfo.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+
+
+const { promotion } = mockjs.mock({'promotion|5': [{
+  'id|+1': 1,
+  code: '@zip',
+  site: '@domain',
+  link: '@url',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/promotion', async (req, res, next) => {
+  res.json(resultOk(promotion[0]));
+});
+router.put('/promotion/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/promotion/:id?', async (req, res, next) => {
+  const n = promotion.findIndex(v => req.params.id === String(v.id));
+  promotion.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+

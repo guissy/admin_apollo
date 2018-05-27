@@ -11,7 +11,7 @@ import gql from 'graphql-tag';
 import TableComponent, { graphPagination } from '<%= dd %>components/table/TableComponent';
 import { autobind } from 'core-decorators';
 import { SearchUI } from '<%= dd %>components/form/SearchUI';
-import ButtonBarComponent from '<%= dd %>components/buttonBar/ButtonBarComponent';
+import ButtonBarComponent from '<%= dd %>components/button/ButtonBarComponent';
 import withLocale from '<%= dd %>../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '<%= dd %>../utils/apollo';
 import <%= Page %>Field from './<%= Page %>.field';
