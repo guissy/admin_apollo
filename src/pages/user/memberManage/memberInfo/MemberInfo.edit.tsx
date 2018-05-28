@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import withLocale from '../../../../utils/withLocale';
 import { GqlResult, writeFragment } from '../../../../utils/apollo';
 import { EditFormUI, EditFormConfig } from '../../../components/form/EditFormUI';
-import { Promotion } from './Promotion.model';
+import { MemberInfo } from './MemberInfo.model';
 
 interface Hoc {
   client: ApolloClient<object>;
@@ -13,18 +13,17 @@ interface Hoc {
 }
 
 interface Props extends Partial<Hoc> {
-  edit: { visible: boolean; record: Promotion };
+  edit: { visible: boolean; record: MemberInfo };
   editFields: EditFormConfig[];
-  onDone?: () => void;
   modalTitle: string;
   modalOk: string;
   view: React.PureComponent<{}>;
 }
 
-/** 推广信息表单 */
+/** 个人资料表单 */
 @withLocale
 @compose(withApollo)
-export default class PromotionEdit extends React.PureComponent<Props, {}> {
+export default class MemberInfoEdit extends React.PureComponent<Props, {}> {
   state = {};
 
   render(): React.ReactNode {
@@ -32,13 +31,13 @@ export default class PromotionEdit extends React.PureComponent<Props, {}> {
     return (
       <Mutation
         mutation={gql`
-          mutation editMutation($body: PromotionEditInput!, $id: Int!) {
+          mutation editMutation($body: MemberInfoEditInput!, $id: Int!) {
             edit(body: $body, id: $id)
               @rest(
                 bodyKey: "body"
-                path: "/promotion/:id"
+                path: "/memberInfo/:id"
                 method: "put"
-                type: "PromotionEditResult"
+                type: "MemberInfoEditResult"
               ) {
               state
               message
@@ -53,14 +52,10 @@ export default class PromotionEdit extends React.PureComponent<Props, {}> {
             modalTitle={this.props.modalTitle}
             modalOk={this.props.modalOk}
             modalVisible={this.props.edit.visible}
-            onCancel={this.props.onDone}
-            onSubmit={(values: Promotion) => {
+            onSubmit={(values: MemberInfo) => {
               return edit({ variables: { body: values, id: values.id } }).then(
                 (v: GqlResult<'edit'>) => {
-                  writeFragment(client, 'Promotion', values);
-                  if (this.props.onDone) {
-                    this.props.onDone();
-                  }
+                  writeFragment(client, 'MemberInfo', values);
                   return v.data && v.data.edit;
                 }
               );

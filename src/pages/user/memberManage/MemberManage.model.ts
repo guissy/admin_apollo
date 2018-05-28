@@ -1,70 +1,98 @@
-import { Action, EffectsCommandMap, Model } from 'dva';
-import {
-  queryTableData,
-  doSetUserStatus,
-  queryTagList,
-  doSetUserTags
-} from './MemberManage.service';
-import { Result, Attributes } from '../../../utils/result';
+import gql from 'graphql-tag';
 
-export interface MemberManageState {
-  tagList: Array<object>;
-  data: Array<object>;
-  attributes: Attributes;
+/** 会员管理 */
+export interface MemberManage {
+  id: number;
+  username: string;
+  truename: string;
+  agent: string;
+  amount: string;
+  created: string;
+  ip: string;
+  channel: string;
+  tags: string;
+  online: string;
+  state: string;
 }
 
-const MemberManageModel: Model = {
-  namespace: 'memberManage',
-  state: {
-    tagList: [],
-    data: [],
-    attributes: {}
-  },
-  effects: {
-    *queryTableData({ payload }: Action, { select, call, put }: EffectsCommandMap) {
-      const result: Result<object> = yield call(queryTableData, payload);
-      if (result.state === 0) {
-        yield put({
-          type: 'loadDataSuccess',
-          payload: {
-            data: result.data,
-            attributes: result.attributes
-          }
-        });
+/** 缓存数据：会员管理 */
+export const MemberManageFragment = gql`
+  fragment MemberManageFragment on MemberManage {
+    id
+    username
+    truename
+    agent
+    amount
+    created
+    ip
+    channel
+    tags
+    online
+    state
+  }
+`;
+
+/** 注册来源 */
+export interface MemberManageChannel {
+  id: number;
+  name: string;
+}
+/** 注册来源 GraphQL */
+export const memberManageChannelQuery = gql`
+  query {
+    memberManageChannelList @rest(type: "MemberManageChannelResult", path: "/memberManageChannel") {
+      data {
+        id
+        name
       }
-      return result;
-    },
-    // 设置账号状态
-    *doSetUserStatus({ payload }: Action, { select, call, put }: EffectsCommandMap) {
-      const result: Result<object> = yield call(doSetUserStatus, payload);
-      return result;
-    },
-    // 标签列表
-    *loadTagList({ payload }: Action, { select, call, put }: EffectsCommandMap) {
-      const result: Result<object> = yield call(queryTagList, payload);
-      if (result.state === 0) {
-        yield put({
-          type: 'loadDataSuccess',
-          payload: {
-            tagList: result.data
-          }
-        });
-      }
-      return result;
-    },
-    // 打标签,取消标签
-    *doSetUserTags({ payload }: Action, { select, call, put }: EffectsCommandMap) {
-      const result: Result<object> = yield call(doSetUserTags, payload);
-      return result;
-    }
-  },
-  reducers: {
-    loadDataSuccess(state: MemberManageState, { payload }: Action) {
-      return {
-        ...state,
-        ...payload
-      };
     }
   }
-};
-export default MemberManageModel;
+`;
+/** 标签 */
+export interface MemberManageTags {
+  id: number;
+  name: string;
+}
+/** 标签 GraphQL */
+export const memberManageTagsQuery = gql`
+  query {
+    memberManageTagsList @rest(type: "MemberManageTagsResult", path: "/memberManageTags") {
+      data {
+        id
+        name
+      }
+    }
+  }
+`;
+/** 在线状态 */
+export interface MemberManageOnline {
+  id: number;
+  name: string;
+}
+/** 在线状态 GraphQL */
+export const memberManageOnlineQuery = gql`
+  query {
+    memberManageOnlineList @rest(type: "MemberManageOnlineResult", path: "/memberManageOnline") {
+      data {
+        id
+        name
+      }
+    }
+  }
+`;
+/** 账号状态 */
+export interface MemberManageState {
+  id: number;
+  name: string;
+}
+/** 账号状态 GraphQL */
+export const memberManageStateQuery = gql`
+  query {
+    memberManageStateList @rest(type: "MemberManageStateResult", path: "/memberManageState") {
+      data {
+        id
+        name
+      }
+    }
+  }
+`;

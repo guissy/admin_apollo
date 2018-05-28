@@ -45,8 +45,6 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
 <Input.TextArea />,
 <% } else if (field.form === 'checkbox') { -%>
 <Checkbox><%- field.title %></Checkbox>,
-<% } else if (field.form === 'switch') { -%>
-<Switch checkedChildren={site('<%- field.title %>')} unCheckedChildren={site('不<%- field.title %>')} />,
 <% } else if (field.form === 'select') { -%>
 <% Type = h.selectType(field, name, true);type = h.selectType(field, name); types = h.selectType(field, name) + 'List'; -%>
 ({
@@ -103,106 +101,6 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
   };
 
 <% }) -%>
-  oparation = {
-    title: site('操作'),
-    table: ({ record, view }: FieldProps<string, <%= Page %>, <%= Page %>Page>) => {
-      return (
-        !record.isTotalRow && (
-<% if (h.fields().map(v => v.dataIndex).includes('status') ) { -%>
-          <Mutation
-            mutation={gql`
-              mutation statusMutation($body: StatusInput!) {
-                status(body: $body)
-                  @rest(
-                    bodyKey: "body"
-                    path: "/<%= page %>/status"
-                    method: "PUT"
-                    type: "StatusResult"
-                  ) {
-                  state
-                  message
-                }
-              }
-            `}
-          >
-            {status => (
-<% } -%>
-          <Mutation
-            mutation={gql`
-              mutation removeMutation($id: RemoveInput!) {
-                remove(id: $id)
-                  @rest(
-                    path: "/<%= page %>/:id"
-                    method: "DELETE"
-                    type: "RemoveResult"
-                  ) {
-                  state
-                  message
-                }
-              }
-            `}
-            refetchQueries={['<%= page %>Query']}
-          >
-            {remove => (
-              <TableActionComponent>
-<% if (h.fields().map(v => v.dataIndex).includes('status') ) { -%>
-                <LinkComponent
-                  confirm={true}
-                  onClick={() =>
-                    status({
-                      variables: {
-                        body: {
-                          id: record.id,
-                          status: record.status === 'enabled' ? 'disabled' : 'enabled'
-                        }
-                      }
-                    })
-                      .then(messageResult('status'))
-                      .then((v: GqlResult<'status'>) => {
-                        writeFragment(this.props.client, '<%= Page %>', {
-                          id: record.id,
-                          status: record.status === 'enabled' ? 'disabled' : 'enabled'
-                        });
-                        return v.data && v.data.status;
-                      })
-                  }
-                >
-                  {record.status === 'enabled' ? site('停用') : site('启用')}
-                </LinkComponent>
-<% } -%>
-                <LinkComponent
-                  confirm={true}
-                  onClick={() =>
-                    remove({ variables: { id: record.id } })
-                      .then(messageResult('remove'))
-                      .then((v: GqlResult<'remove'>) => {
-                        return v.data && v.data.remove;
-                      })
-                  }
-                >
-                  {site('删除')}
-                </LinkComponent>
-                <LinkComponent
-                  onClick={() => {
-                    this.setState({
-                      edit: { visible: true, record }
-                    });
-                  }}
-                >
-                  {site('编辑')}
-                </LinkComponent>
-              </TableActionComponent>
-            )}
-          </Mutation>
-<% if (h.fields().map(v => v.dataIndex).includes('status') ) { -%>
-            )}
-          </Mutation>
-<% } -%>
-        )
-      );
-    }
-  };
-
   constructor(view: React.PureComponent<T>) {
     super(view);
   }

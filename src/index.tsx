@@ -71,12 +71,6 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 用户
 //    会员管理
-import MemberManageModel from './pages/user/memberManage/MemberManage.model';
-import MemberInformationModel from './pages/user/memberManage/information/Information.model';
-import MemberAccountBalanceModel from './pages/user/memberManage/balance/Balance.model';
-import MemberBankDetail from './pages/user/memberManage/bankDetail/BankDetail.model';
-import MemberSettingModel from './pages/user/memberManage/memberSetting/MemberSetting.model';
-import MemberWidthRawModel from './pages/user/memberManage/audit/Audit.model';
 //    会员层级
 //    会员标签
 //    闲置帐号
@@ -170,12 +164,6 @@ app.model(throttleEffect(BackgroundModel));
 app.model(throttleEffect(MemberLogModel));
 app.model(throttleEffect(AdListModel));
 app.model(throttleEffect(AdHomeModel));
-app.model(throttleEffect(MemberManageModel));
-app.model(throttleEffect(MemberInformationModel));
-app.model(throttleEffect(MemberAccountBalanceModel));
-app.model(throttleEffect(MemberBankDetail));
-app.model(throttleEffect(MemberSettingModel));
-app.model(throttleEffect(MemberWidthRawModel));
 app.model(throttleEffect(ProxyCopyModel));
 app.model(throttleEffect(SettingModel));
 app.model(throttleEffect(HeaderModel));
@@ -207,6 +195,25 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('MemberSettingResult', 'MemberSetting', undefined, true),
+        ...addTypePatcher('BankNameResult', 'BankName'),
+        ...addTypePatcher('MemberSettingStateResult', 'MemberSettingState'),
+        ...addTypePatcher('BankCardResult', 'BankCard', undefined, true),
+        ...addTypePatcher('BankNameResult', 'BankName'),
+        ...addTypePatcher('BankCardStateResult', 'BankCardState'),
+        ...addTypePatcher('MemberInfoResult', 'MemberInfo', undefined, true),
+        ...addTypePatcher('QuestionIdResult', 'QuestionId'),
+        ...addTypePatcher('AccountBalanceResult', 'AccountBalance', undefined, true),
+        ...addTypePatcher('MemberAuditResult', 'MemberAudit'),
+        ...addTypePatcher('MemberAuditChannelResult', 'MemberAuditChannel'),
+        ...addTypePatcher('MemberAuditTagsResult', 'MemberAuditTags'),
+        ...addTypePatcher('MemberAuditOnlineResult', 'MemberAuditOnline'),
+        ...addTypePatcher('MemberAuditStateResult', 'MemberAuditState'),
+        ...addTypePatcher('MemberManageResult', 'MemberManage'),
+        ...addTypePatcher('MemberManageChannelResult', 'MemberManageChannel'),
+        ...addTypePatcher('MemberManageTagsResult', 'MemberManageTags'),
+        ...addTypePatcher('MemberManageOnlineResult', 'MemberManageOnline'),
+        ...addTypePatcher('MemberManageStateResult', 'MemberManageState'),
         ...addTypePatcher('PromotionResult', 'Promotion', undefined, true),
         ...addTypePatcher('AgentInfoResult', 'AgentInfo', undefined, true),
         ...addTypePatcher('AgentAccountResult', 'AgentAccount'),

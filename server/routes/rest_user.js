@@ -320,7 +320,7 @@ router.get('/agentAccountStatus', async (req, res, next) => {
 });
 
 
-const { agentInfo } = mockjs.mock({'agentInfo|5': [{
+const { agentInfo } = mockjs.mock({'agentInfo|2': [{
   'id|+1': 1,
   name: '@first',
   id: '@city',
@@ -355,7 +355,7 @@ const { agentInfo } = mockjs.mock({'agentInfo|5': [{
   updated_uname: '@cname',
 }]});
 
-router.get('/agentInfo', async (req, res, next) => {
+router.get('/agentInfo/:id', async (req, res, next) => {
   res.json(resultOk(agentInfo[0]));
 });
 router.put('/agentInfo/:id?', async (req, res, next) => {
@@ -369,7 +369,7 @@ router.delete('/agentInfo/:id?', async (req, res, next) => {
 
 
 
-const { promotion } = mockjs.mock({'promotion|5': [{
+const { promotion } = mockjs.mock({'promotion|2': [{
   'id|+1': 1,
   code: '@zip',
   site: '@domain',
@@ -380,7 +380,7 @@ const { promotion } = mockjs.mock({'promotion|5': [{
   updated_uname: '@cname',
 }]});
 
-router.get('/promotion', async (req, res, next) => {
+router.get('/promotion/:id', async (req, res, next) => {
   res.json(resultOk(promotion[0]));
 });
 router.put('/promotion/:id?', async (req, res, next) => {
@@ -389,6 +389,265 @@ router.put('/promotion/:id?', async (req, res, next) => {
 router.delete('/promotion/:id?', async (req, res, next) => {
   const n = promotion.findIndex(v => req.params.id === String(v.id));
   promotion.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+
+
+const { memberManage } = mockjs.mock({'memberManage|20': [{
+  'id|+1': 1,
+  username: '@first',
+  truename: '@cname',
+  agent: '@city',
+  amount: '@float(100, 999, 1, 2)',
+  ip: '@ip',
+  channel: '@integer(1, 3)',
+  tags: '@integer(1, 3)',
+  online: '@integer(1, 2)',
+  state: '@first',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberManage', async (req, res, next) => {
+  res.json(resultOk(memberManage));
+});
+router.put('/memberManage/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberManage/:id?', async (req, res, next) => {
+  const n = memberManage.findIndex(v => req.params.id === String(v.id));
+  memberManage.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {memberManageChannel} = mockjs.mock({
+  'memberManageChannel|3': [{
+    'id|+1': 1,
+    'name|+1': ['注册来源1', '注册来源2', '注册来源3'],
+  }]
+});
+router.get('/memberManageChannel', async (req, res, next) => {
+  res.json(resultOk(memberManageChannel));
+});
+const {memberManageTags} = mockjs.mock({
+  'memberManageTags|3': [{
+    'id|+1': 1,
+    'name|+1': ['标签1', '标签2', '标签3'],
+  }]
+});
+router.get('/memberManageTags', async (req, res, next) => {
+  res.json(resultOk(memberManageTags));
+});
+const {memberManageOnline} = mockjs.mock({
+  'memberManageOnline|3': [{
+    'id|+1': 1,
+    'name|+1': ['在线', '离线'],
+  }]
+});
+router.get('/memberManageOnline', async (req, res, next) => {
+  res.json(resultOk(memberManageOnline));
+});
+const {memberManageState} = mockjs.mock({
+  'memberManageState|3': [{
+    'id|+1': 1,
+    'name|+1': ['账号状态1', '账号状态2', '账号状态3'],
+  }]
+});
+router.get('/memberManageState', async (req, res, next) => {
+  res.json(resultOk(memberManageState));
+});
+
+
+
+const { memberAudit } = mockjs.mock({'memberAudit|5': [{
+  'id|+1': 1,
+  money: '@float(100, 999, 1, 2)',
+  coupon_money: '@float(100, 999, 1, 2)',
+  valid_bet: '@float(100, 999, 1, 2)',
+  withdraw_bet_principal: '@city',
+  withdraw_bet_coupon: '@city',
+  is_pass: '@float(100, 999, 1, 2)',
+  deduct_coupon: '@city',
+  deduct_admin_fee: '@float(100, 999, 1, 2)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberAudit', async (req, res, next) => {
+  res.json(resultOk(memberAudit));
+});
+router.put('/memberAudit/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberAudit/:id?', async (req, res, next) => {
+  const n = memberAudit.findIndex(v => req.params.id === String(v.id));
+  memberAudit.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+
+
+const { accountBalance } = mockjs.mock({'accountBalance|5': [{
+  'id|+1': 1,
+  currency_name: '美金',
+  balance: '@float(100, 999, 1, 2)',
+  freeze_withdraw: '@float(100, 999, 1, 2)',
+  amount: '@float(100, 999, 1, 2)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/accountBalance/:id?', async (req, res, next) => {
+  res.json(resultOk(accountBalance[0]));
+});
+router.put('/accountBalance/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/accountBalance/:id?', async (req, res, next) => {
+  const n = accountBalance.findIndex(v => req.params.id === String(v.id));
+  accountBalance.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+
+
+const { memberInfo } = mockjs.mock({'memberInfo|2': [{
+  'id|+1': 1,
+  tags: 'vip',
+  truename: '@cname',
+  pwd_login: '@word(6)',
+  pwd_money: '@word(6)',
+  user_type: '@integer(1,5)',
+  level: '@integer(1,3)',
+  last_login: '@datetime',
+  ip: '@ip',
+  last_ip: '@ip',
+  channel: '@city',
+  country: '@country',
+  province: '@province',
+  city: '@city',
+  nationality: '@country',
+  ctype: '美金',
+  language: '中文',
+  birth: '@datetime',
+  gender: '男',
+  idcard: '@zip@zip@zip',
+  mobile: '13567@zip',
+  qq: '@zip@zip',
+  weixin: '@word(3)@zip',
+  email: '@email',
+  skype: '@email',
+  address: '@city',
+  postcode: '@zip',
+  question_id: '@integer(1, 3)',
+  answer: '@cword(3)',
+  memo: '备注-@cword(2, 5)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberInfo/:id?', async (req, res, next) => {
+  res.json(resultOk(memberInfo[0]));
+});
+router.put('/memberInfo/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberInfo/:id?', async (req, res, next) => {
+  const n = memberInfo.findIndex(v => req.params.id === String(v.id));
+  memberInfo.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {questionId} = mockjs.mock({
+  'questionId|3': [{
+    'id|+1': 1,
+    'name|+1': ['安全问题1', '安全问题2', '安全问题3'],
+  }]
+});
+router.get('/questionId', async (req, res, next) => {
+  res.json(resultOk(questionId));
+});
+
+
+const { bankCard } = mockjs.mock({'bankCard|5': [{
+  'id|+1': 1,
+  card: '@first',
+  bank_name: '@integer(1, 3)',
+  address: '@city',
+  accountname: '@city',
+  state: '@shuffle(["enabled","disabled"])',
+  created_time: '@datetime',
+  updated_time: '@datetime',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/bankCard/:id?', async (req, res, next) => {
+  res.json(resultOk(bankCard[0]));
+});
+router.put('/bankCard/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/bankCard/:id?', async (req, res, next) => {
+  const n = bankCard.findIndex(v => req.params.id === String(v.id));
+  bankCard.splice(n, 1);
+  res.json(resultOk({}));
+});
+
+const {bankName} = mockjs.mock({
+  'bankName|3': [{
+    'id|+1': 1,
+    'name|+1': ['银行名称1', '银行名称2', '银行名称3'],
+  }]
+});
+router.get('/bankName', async (req, res, next) => {
+  res.json(resultOk(bankName));
+});
+const {bankCardState} = mockjs.mock({
+  'bankCardState|3': [{
+    'id|+1': 1,
+    'name|+1': ['状态1', '状态2', '状态3'],
+  }]
+});
+router.get('/bankCardState', async (req, res, next) => {
+  res.json(resultOk(bankCardState));
+});
+
+
+const { memberSetting } = mockjs.mock({'memberSetting|5': [{
+  'id|+1': 1,
+  mtoken: '@zip',
+  online: '@integer(1, 2)',
+  refuse_withdraw: '@integer(1, 2)',
+  refuse_sale: '@integer(1, 2)',
+  refuse_rebate: '@integer(1, 2)',
+  refuse_exchange: '@integer(1, 2)',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/memberSetting/:id?', async (req, res, next) => {
+  res.json(resultOk(memberSetting[0]));
+});
+router.put('/memberSetting/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/memberSetting/:id?', async (req, res, next) => {
+  const n = memberSetting.findIndex(v => req.params.id === String(v.id));
+  memberSetting.splice(n, 1);
   res.json(resultOk({}));
 });
 

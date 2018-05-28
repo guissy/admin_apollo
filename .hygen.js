@@ -1,26 +1,36 @@
 const site = (v) => v;
 this.props = {site};
 let locals = {};
-const title = '推广信息';
+const title = '会员设置';
 const config = [
-
   {
-    dataIndex: 'code',
-    title: site('推广码'),
+    title: site('M令牌状态'),
+    dataIndex: 'mtoken'
   },
-
   {
-    dataIndex: 'site',
-    title: site('个人网站'),
+    title: site('在线状态'),
+    dataIndex: 'online',
+    form: 'switch'
   },
-
   {
-    dataIndex: 'link',
-    title: site('会员推广链接'),
+    title: site('禁止提款'),
+    dataIndex: 'refuse_withdraw',
+    form: 'checkbox'
   },
-
-
-
+  {
+    title: site('禁止优惠'),
+    dataIndex: 'refuse_sale',
+    form: 'checkbox'
+  },
+  {
+    title: site('禁止返水'),
+    dataIndex: 'refuse_rebate',
+    form: 'checkbox'
+  },
+  {
+    title: site('禁止额度转换'),
+    dataIndex: 'refuse_exchange'
+  },
 ];
 
 
@@ -77,8 +87,8 @@ module.exports = {
     },
     selectType: (field, name, isUpper) => {
       const typeName = words(field.dataIndex).length === 1
-        ? lower(name) + upperFirst(field.dataIndex)
-        : field.dataIndex;
+        ? lower(name) + upper(field.dataIndex)
+        : lower(field.dataIndex);
       return isUpper ? upperFirst(typeName) : typeName;
     },
     /** 添加 search: 'form' */
@@ -100,7 +110,7 @@ module.exports = {
       const ints = ['num', 'nums', 'total', 'count', 'times', 'code'];
       const intsCn = ['总数', '人数', '次数'];
       const floats = ['money', 'deposit'];
-      const floatsCn = ['钱', '款', '额'];
+      const floatsCn = ['钱', '款', '额', '费'];
       const desc = ['memo', 'description', 'comment', 'about', 'note'];
       const descCn = ['简介','描述','备注'];
       const email = ['email'];
@@ -111,8 +121,8 @@ module.exports = {
       const urlCn = ['域名', '网址', '链接'];
       const mobile = ['mobile', 'phone'];
       const mobileCn = ['手机', '电话'];
-      const time = ['time', 'date'];
-      const timeCn = ['日期', '时间'];
+      const time = ['time', 'date', 'birth', 'day'];
+      const timeCn = ['日期', '时间', '生日', '出生'];
       const name = ['user', 'nickname', 'truename'];
       const nameCn = ['姓名', '妮称', '用户', '者'];
       const account = ['account', 'username'];

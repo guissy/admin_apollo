@@ -77,7 +77,7 @@ import ActivityApplyPage from '../marketing/activityApply/ActivityApply.page';
 
 // 用户
 //    会员管理
-import MemberManage from '../user/memberManage/MemberManage';
+import MemberManage from '../user/memberManage2/MemberManage';
 //    会员层级
 //    会员标签
 //    闲置帐号
@@ -179,6 +179,7 @@ import IdleAccountPage from '../user/idleAccount/IdleAccount.page';
 import AgentAuditPage from '../user/agentAudit/AgentAudit.page';
 import Hierarchy from '../user/hierarchy/Hierarchy';
 import AgentAccountPage from '../user/agentAccount/AgentAccount.page';
+import MemberManagePage from '../user/memberManage/MemberManage.page';
 
 export default () => {
   return (
@@ -218,7 +219,7 @@ export default () => {
       {/* <Route path="/lotterPeriodManagement" component={LotterPeriodManagement} /> */}
       <Route path="/ipBlacklist" component={IpBlackListPage} />
       {/* <Route path="/duplicateAccount" component={DuplicateAccount} /> */}
-      <Route path="/memberManage" component={MemberManage} />
+      <Route path="/memberManage" component={MemberManagePage} />
       <Route path="/memberHierarchy" component={Hierarchy} />
       <Route path="/memberLabel" component={MemberLabelPage} />
       <Route path="/idleAccount" component={IdleAccountPage} />
