@@ -13,7 +13,7 @@ export interface <%= Page %> {
 <% }) -%>
 }
 
-/** 缓存数据：<%= h.title() %> */
+/** <%= h.title() %>: GraphQL */
 export const <%= Page %>Fragment = gql`
   fragment <%= Page %>Fragment on <%= Page %> {
     id

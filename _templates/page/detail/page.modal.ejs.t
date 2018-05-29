@@ -1,7 +1,7 @@
 ---
 to: src/pages/<%= h.folder(name) %>.page.tsx
 inject: true
-before: <%- `<AgentAccountEdit` %>
+before: <%- `<${h.Page(name)}Edit` %>
 skip_if: <%- `详情` %>
 ---
 <% Page = h.Page(name); page = h.page(name); dd = h.dd(name); -%>

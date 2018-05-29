@@ -1,40 +1,45 @@
 const site = (v) => v;
 this.props = {site};
 let locals = {};
-const title = '会员设置';
+const title = '存款文案';
 const config = [
   {
-    title: site('M令牌状态'),
-    dataIndex: 'mtoken'
+    title: site('文案名称'),
+    dataIndex: 'name',
   },
   {
-    title: site('在线状态'),
-    dataIndex: 'online',
-    form: 'switch'
+    title: site('语言'),
+    dataIndex: 'language',
   },
   {
-    title: site('禁止提款'),
-    dataIndex: 'refuse_withdraw',
-    form: 'checkbox'
+    title: site('审核状态'),
+    dataIndex: 'approve_status',
+    form: 'select'
   },
   {
-    title: site('禁止优惠'),
-    dataIndex: 'refuse_sale',
-    form: 'checkbox'
+    title: site('使用状态'),
+    dataIndex: 'status',
   },
   {
-    title: site('禁止返水'),
-    dataIndex: 'refuse_rebate',
-    form: 'checkbox'
+    title: site('活动内容'),
+    dataIndex: 'content',
+    notInTable: true,
+    form: 'editor',
   },
   {
-    title: site('禁止额度转换'),
-    dataIndex: 'refuse_exchange'
+    title: site('使用于'),
+    dataIndex: 'apply_to',
+    form: 'select'
+  },
+  {
+    title: site('生成时间'),
+    dataIndex: 'created',
   },
 ];
 
 
 const {compose, get, camelCase, upperFirst, words} = require('lodash/fp');
+const mockjs = require('mockjs');
 const parsePath = s => {
   const arr = s.split('/');
   if (arr.length > 1) {
@@ -96,7 +101,8 @@ module.exports = {
       project.addExistingSourceFiles(file);
       const fieldClass = project.getSourceFileOrThrow(file);
       fieldClass.getExportedDeclarations()[0].getProperties()
-        .filter(v => v.getText().includes('form') && !v.getText().includes('id'))
+        .filter(v => v.getText().includes('form') && !v.getText().includes('id')
+          && !v.getText().includes('img') && !v.getText().includes('sort'))
         .forEach(v => {
           v.getChildren()[2].addPropertyAssignment({
             name: 'search',
@@ -105,10 +111,24 @@ module.exports = {
         });
       project.save();
     },
+    /** 添加 search: 'detail' */
+    detailProps: (file) => {
+      project.addExistingSourceFiles(file);
+      const fieldClass = project.getSourceFileOrThrow(file);
+      fieldClass.getExportedDeclarations()[0].getProperties()
+        .filter(v => !v.getText().includes('id'))
+        .forEach(v => {
+          v.getChildren()[2].addPropertyAssignment({
+            name: 'detail',
+            initializer: `<Label />`,
+          });
+        });
+      project.save();
+    },
     /** 根据不同字段，mock数字或文字 */
     mockValue: (field) => {
-      const ints = ['num', 'nums', 'total', 'count', 'times', 'code'];
-      const intsCn = ['总数', '人数', '次数'];
+      const ints = ['num', 'nums', 'total', 'count', 'times', 'code', 'sort'];
+      const intsCn = ['总数', '人数', '次数', '排序'];
       const floats = ['money', 'deposit'];
       const floatsCn = ['钱', '款', '额', '费'];
       const desc = ['memo', 'description', 'comment', 'about', 'note'];
@@ -152,9 +172,11 @@ module.exports = {
       } else if (has(name, nameCn) || field.title.endsWith('人')) {
         return '@cname';
       } else if (has(status, statusCn)) {
-        return '@shuffle(["enabled","disabled"])';
+        return ["enabled","disabled"];
       } else if (field.form==='select') {
         return '@integer(1, 3)';
+      } else if (field.form==='img') {
+        return Array(20).fill(0).map(v => mockjs.Random.image("100x40", mockjs.Random.color(), mockjs.Random.word(5)));
       } else {
         return '@city';
       }

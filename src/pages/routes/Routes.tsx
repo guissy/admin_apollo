@@ -9,7 +9,6 @@ import Dashboard from '../dashboard/Dashboard';
 //    轮播广告
 import AdList from '../web/adList/AdList';
 //    文案管理
-import AdHome from '../web/adHome/AdHome';
 //    代理文案
 import ProxyCopy from '../web/proxyCopy/ProxyCopy';
 //    存款文案
@@ -77,14 +76,12 @@ import ActivityApplyPage from '../marketing/activityApply/ActivityApply.page';
 
 // 用户
 //    会员管理
-import MemberManage from '../user/memberManage2/MemberManage';
 //    会员层级
 //    会员标签
 //    闲置帐号
 //    登录查询
 // import LoginAccount from ''
 //    代理管理
-import AgentAccount from '../user/agentAccount2/AgentAccount';
 //    有效用户
 // import ValidUser from ''
 //    第三方会员查询
@@ -180,21 +177,26 @@ import AgentAuditPage from '../user/agentAudit/AgentAudit.page';
 import Hierarchy from '../user/hierarchy/Hierarchy';
 import AgentAccountPage from '../user/agentAccount/AgentAccount.page';
 import MemberManagePage from '../user/memberManage/MemberManage.page';
+import AdHomePage from '../site/adHome/AdHome.page';
+import AdListPage from '../site/adList/AdList.page';
+import AnnounceManagePage from '../site/announceManage/AnnounceManage.page';
+import DepositNotePage from '../site/depositNote/DepositNote.page';
+import FloatAdPage from '../site/floatAd/FloatAd.page';
 
 export default () => {
   return (
     <Switch>
       <Route exact={true} path="/" component={Dashboard} />
-      <Route path="/adList" component={AdList} />
-      <Route path="/adHome" component={AdHome} />
+      <Route path="/adList" component={AdListPage} />
+      <Route path="/adHome" component={AdHomePage} />
       <Route path="/proxyCopy" component={ProxyCopy} />
-      <Route path="/depositCopy" component={DepositCopy} />
-      <Route path="/floatAd" component={FloatAd} />
+      <Route path="/depositCopy" component={DepositNotePage} />
+      <Route path="/floatAd" component={FloatAdPage} />
       <Route path="/promotionResource" component={PromotionResource} />
       {/* <Route path="/registerSet" component={RegisterSet} /> */}
       {/* <Route path="/webSet" component={WebSet} /> */}
       {/* <Route path="/sysMessage" component={SysMessage} /> */}
-      <Route path="/notice" component={Notice} />
+      <Route path="/notice" component={AnnounceManagePage} />
       <Route path="/noticeManage" component={NoticeManage} />
       <Route path="/resourceManage" component={ResourceManage} />
       <Route path="/apply" component={ActivityApplyPage} />

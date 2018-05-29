@@ -9,8 +9,15 @@ sh: pm2 restart all
 <% Page = h.Page(name); page = h.page(name) -%>
 const { <%= page %> } = mockjs.mock({'<%= page %>|5': [{
   'id|+1': 1,
-<% h.fields().forEach(function(field){ -%>
-  <%- h.key(field.dataIndex) %>: '<%- h.mockValue(field) %>',
+<% h.fields().forEach(function(field){
+  const value = h.mockValue(field);
+  const key = h.key(field.dataIndex);
+  let key_value = `${key}: '${value}',`;
+  if (Array.isArray(value)) {
+    key_value = `'${key}|1': ${JSON.stringify(value)},`; // enabled/disabled
+  }
+-%>
+  <%- key_value %>
 <% }) -%>
   created: moment().format('YYYY-MM-DD hh:mm:ss'),
   created_uname: '@cname',

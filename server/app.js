@@ -13,6 +13,7 @@ const rest_user = require('./routes/rest_user');
 const rest_stat = require('./routes/rest_stat');
 const rest_brokerage = require('./routes/rest_brokerage');
 const rest_cash = require('./routes/rest_cash');
+const rest_site = require('./routes/rest_site');
 
 const app = express();
 app.use(logger('dev'));
@@ -28,6 +29,7 @@ app.use('', rest_user.router);
 app.use('', rest_stat.router);
 app.use('', rest_brokerage.router);
 app.use('', rest_cash.router);
+app.use('', rest_site.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler

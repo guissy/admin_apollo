@@ -145,6 +145,7 @@ import { addTypePatcher } from './utils/graphTypename';
 import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply.page';
 import { DiscountManage } from './pages/marketing/discountManage/DiscountManage.model';
 import { SubAgentRebateDetail } from './pages/brokerage/subAgentRebate/SubAgentRebate.model';
+import { AnnounceManageType } from './pages/site/announceManage/AnnounceManage.model';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -195,6 +196,23 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('FloatAdResult', 'FloatAd'),
+        ...addTypePatcher('FloatAdPositionResult', 'FloatAdPosition'),
+        ...addTypePatcher('FloatAdPfResult', 'FloatAdPf'),
+        ...addTypePatcher('FloatAdApproveResult', 'FloatAdApprove'),
+        ...addTypePatcher('DepositNoteResult', 'DepositNote'),
+        ...addTypePatcher('ApproveStatusResult', 'ApproveStatus'),
+        ...addTypePatcher('ApplyToResult', 'ApplyTo'),
+        ...addTypePatcher('AnnounceManageResult', 'AnnounceManage'),
+        ...addTypePatcher('AnnounceManagePfResult', 'AnnounceManagePf'),
+        ...addTypePatcher('AnnounceManageApproveResult', 'AnnounceManageApprove'),
+        ...addTypePatcher('SendTypeResult', 'SendType'),
+        ...addTypePatcher('AnnounceManageTypeResult', 'AnnounceManageType'),
+        ...addTypePatcher('PopupTypeResult', 'PopupType'),
+        ...addTypePatcher('AdListResult', 'AdList'),
+        ...addTypePatcher('AdListPfResult', 'AdListPf'),
+        ...addTypePatcher('AdListApproveResult', 'AdListApprove'),
+        ...addTypePatcher('AdHomeResult', 'AdHome'),
         ...addTypePatcher('MemberSettingResult', 'MemberSetting', undefined, true),
         ...addTypePatcher('BankNameResult', 'BankName'),
         ...addTypePatcher('MemberSettingStateResult', 'MemberSettingState'),

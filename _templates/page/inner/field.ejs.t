@@ -39,12 +39,20 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
       />),
 <% } else if (field.form === 'date') { -%>
 <DatePicker.RangePicker />,
+<% } else if (field.form === 'editor') { -%>
+<Editor id="<%- h.page(name) + '_' + field.dataIndex %>" />,
+<% } else if (field.form === 'img') { -%>
+<UploadComponent />,
+<% } else if (field.form === 'lang') { -%>
+<LanguageComponent />,
 <% } else if (field.form === 'number') { -%>
 <InputNumber />,
 <% } else if (field.form === 'textarea') { -%>
 <Input.TextArea />,
 <% } else if (field.form === 'checkbox') { -%>
 <Checkbox><%- field.title %></Checkbox>,
+<% } else if (field.form === 'switch') { -%>
+<Switch checkedChildren={site('<%- field.title %>')} unCheckedChildren={site('不<%- field.title %>')} />,
 <% } else if (field.form === 'select') { -%>
 <% Type = h.selectType(field, name, true);type = h.selectType(field, name); types = h.selectType(field, name) + 'List'; -%>
 ({
@@ -90,6 +98,10 @@ export default class <%= Page %>Field<T extends { client: ApolloClient<{}> }> ex
         <Tag className="account-close">{site('停用')}</Tag>
         )}
       </>),
+<% } -%>
+<% if (field.form === 'img') { -%>
+    table: ({ text, record, view }: FieldProps<string, <%= Page %>, <%= Page %>Page>) => (
+      <img src={text} alt="<%- field.dataIndex %>" />),
 <% } -%>
 <% if (field.dataIndex.includes(',')) { -%>
     table: ({ text, record, view }: FieldProps<string, <%= Page %>, <%= Page %>Page>) => (

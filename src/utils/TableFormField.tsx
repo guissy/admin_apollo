@@ -47,7 +47,7 @@ export default class TableFormField<T> {
           const cloneElement = React.cloneElement(opt.detail, { value: record[dataIndex] }, '');
           return (
             <div key={dataIndex}>
-              <small style={{ display: 'inline-block', width: 70, textAlign: 'right' }}>
+              <small style={{ display: 'inline-block', width: 75, textAlign: 'right' }}>
                 {opt.title}
               </small>：
               {cloneElement}
