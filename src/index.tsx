@@ -130,6 +130,9 @@ import ActivityApplyPage from './pages/marketing/activityApply/ActivityApply.pag
 import { DiscountManage } from './pages/marketing/discountManage/DiscountManage.model';
 import { SubAgentRebateDetail } from './pages/brokerage/subAgentRebate/SubAgentRebate.model';
 import { AnnounceManageType } from './pages/site/announceManage/AnnounceManage.model';
+import { ResourceFile } from './pages/site/resourceManage/ResourceManage.model';
+import { constant } from 'lodash/fp';
+import update from 'immutability-helper';
 
 const app = dva({
   history: createBrowserHistory(),
@@ -164,6 +167,24 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ResourceFileResult(result: ResourceFile) {
+          return update(result, {
+            data: {
+              __typename: constant('ResourceFile'),
+              file: {
+                $for: {
+                  __typename: constant('ResourceDirItem')
+                }
+              },
+              dir: {
+                $for: {
+                  __typename: constant('ResourceFileItem')
+                }
+              }
+            }
+          });
+        },
+        // ...addTypePatcher('ResourceFileResult', 'ResourceFile'),
         ...addTypePatcher('DomainSettingResult', 'DomainSetting', undefined, true),
         ...addTypePatcher('EmailManageResult', 'EmailManage'),
         ...addTypePatcher('SendTypeResult', 'SendType'),

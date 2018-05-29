@@ -12,10 +12,9 @@ export interface FileItem {
   url: string;
 }
 
-export interface ResourceManageState {
+export interface ResourceFile {
   countdir: number;
   countfile: number;
   dir: Array<DirItem>;
   file: Array<FileItem>;
-  isLoading: boolean;
 }

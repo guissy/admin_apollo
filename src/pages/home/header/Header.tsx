@@ -241,22 +241,22 @@ export default class Header extends React.PureComponent<HeaderProps, HeaderState
           )}
           <EasternTime />
           <Utils mode="horizontal" selectable={false}>
-            <Menu.Item key="depost">
-              <Link to="/offlineReceipts">
-                <Tooltip placement="bottom" title={<span>{site('公司入款')}</span>}>
-                  <BadgeWrap count={offline_deposit}>{site('入款')}</BadgeWrap>
-                </Tooltip>
-              </Link>
-              <AudioComponent name={'gsrk'} onRef={audio => (this.depositAudio = audio)} />
-            </Menu.Item>
-            <Menu.Item key="withdraw">
-              <Link to="/memberGetOut">
-                <Tooltip placement="bottom" title={<span>{site('会员提现')}</span>}>
-                  <BadgeWrap count={withdraw}>{site('出款')}</BadgeWrap>
-                </Tooltip>
-              </Link>
-              <AudioComponent name={'hytx'} onRef={audio => (this.withdrawAudio = audio)} />
-            </Menu.Item>
+            {/*<Menu.Item key="depost">*/}
+            {/*<Link to="/offlineReceipts">*/}
+            {/*<Tooltip placement="bottom" title={<span>{site('公司入款')}</span>}>*/}
+            {/*<BadgeWrap count={offline_deposit}>{site('入款')}</BadgeWrap>*/}
+            {/*</Tooltip>*/}
+            {/*</Link>*/}
+            {/*<AudioComponent name={'gsrk'} onRef={audio => (this.depositAudio = audio)} />*/}
+            {/*</Menu.Item>*/}
+            {/*<Menu.Item key="withdraw">*/}
+            {/*<Link to="/memberGetOut">*/}
+            {/*<Tooltip placement="bottom" title={<span>{site('会员提现')}</span>}>*/}
+            {/*<BadgeWrap count={withdraw}>{site('出款')}</BadgeWrap>*/}
+            {/*</Tooltip>*/}
+            {/*</Link>*/}
+            {/*<AudioComponent name={'hytx'} onRef={audio => (this.withdrawAudio = audio)} />*/}
+            {/*</Menu.Item>*/}
             <Menu.Item key="news">
               <Link to="/sysMessage">
                 <Tooltip placement="bottom" title={<span>{site('消息总数')}</span>}>
