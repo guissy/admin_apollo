@@ -1,44 +1,27 @@
-import { Attributes } from './../../../utils/result';
-import { message } from 'antd';
-import { queryTableData } from './MemberLog.service';
-import { Action, EffectsCommandMap, Model } from 'dva';
-import { messageError } from '../../../utils/showMessage';
+import gql from 'graphql-tag';
 
-export interface MemberLogState {
-  tableData: Array<object>;
-  attributes: Attributes;
+/** 会员操作日志 */
+export interface MemberLog {
+  id: number;
+  name: string;
+  domain: string;
+  log_type: string;
+  status: string;
+  created: string;
+  log_ip: string;
+  log_value: string;
 }
 
-const memberLogModel: Model = {
-  namespace: 'memberLog',
-  state: {
-    tableData: []
-  },
-  effects: {
-    *loadData({ payload }: Action, { select, call, put }: EffectsCommandMap) {
-      const result = yield call(queryTableData, payload);
-      if (result.state === 0) {
-        yield put({
-          type: 'loadDataSuccess',
-          payload: {
-            tableData: result.data,
-            attributes: result.attributes
-          }
-        });
-      } else {
-        messageError(result.message);
-      }
-    }
-  },
-  reducers: {
-    loadDataSuccess(state: MemberLogState, { payload }: Action) {
-      return {
-        ...state,
-        ...payload,
-        isLoading: false
-      };
-    }
+/** 会员操作日志: GraphQL */
+export const MemberLogFragment = gql`
+  fragment MemberLogFragment on MemberLog {
+    id
+    name
+    domain
+    log_type
+    status
+    created
+    log_ip
+    log_value
   }
-};
-
-export default memberLogModel;
+`;

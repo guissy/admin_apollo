@@ -18,12 +18,12 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/adHome'
       },
-      {
-        id: 3,
-        name: '代理文案',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/proxyCopy'
-      },
+      // {
+      //   id: 3,
+      //   name: '代理文案',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/proxyCopy'
+      // },
       {
         id: 4,
         name: '存款文案',
@@ -42,36 +42,36 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/promotionResource'
       },
-      {
-        id: 7,
-        name: '注册设置',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/registerSet'
-      },
-      {
-        id: 8,
-        name: '站点设置',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/webSet'
-      },
-      {
-        id: 9,
-        name: '消息',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/sysMessage'
-      },
+      // {
+      //   id: 7,
+      //   name: '注册设置',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/registerSet'
+      // },
+      // {
+      //   id: 8,
+      //   name: '站点设置',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/webSet'
+      // },
+      // {
+      //   id: 9,
+      //   name: '消息',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/sysMessage'
+      // },
       {
         id: 10,
         name: '公告管理',
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/notice'
       },
-      {
-        id: 11,
-        name: '消息管理',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/noticeManage'
-      },
+      // {
+      //   id: 11,
+      //   name: '消息管理',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/noticeManage'
+      // },
       {
         id: 12,
         name: '资源站管理',
@@ -466,7 +466,7 @@ module.exports = [
       // }
     ]
   },
-  {
+  /*{
     id: 158,
     name: '报表',
     icon: 'bingtu',
@@ -511,7 +511,7 @@ module.exports = [
         hidden: true
       }
     ]
-  },
+  },*/
   {
     id: 171,
     name: '系统',
@@ -531,12 +531,12 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/memberLog'
       },
-      {
-        id: 174,
-        name: '系统设置',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/systemSetting'
-      },
+      // {
+      //   id: 174,
+      //   name: '系统设置',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/systemSetting'
+      // },
       {
         id: 175,
         name: '邮件管理',
@@ -549,18 +549,18 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/currencySetting'
       },
-      {
-        id: 177,
-        name: '第三方客服',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/otherService'
-      },
-      {
-        id: 178,
-        name: '邮件服务器',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/emailSetting'
-      },
+      // {
+      //   id: 177,
+      //   name: '第三方客服',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/otherService'
+      // },
+      // {
+      //   id: 178,
+      //   name: '邮件服务器',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/emailSetting'
+      // },
       {
         id: 179,
         name: '前台域名设置',

@@ -487,7 +487,7 @@ export default [
       }
     ]
   },
-  {
+  /*{
     id: 158,
     name: '报表',
     icon: 'bingtu',
@@ -532,7 +532,7 @@ export default [
         hidden: true
       }
     ]
-  },
+  },*/
   {
     id: 171,
     name: '系统',

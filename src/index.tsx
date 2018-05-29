@@ -20,26 +20,17 @@ import DashboardModel from './pages/dashboard/Dashboard.model';
 
 // 网站
 //    轮播广告
-import AdListModel from './pages/web/adList/AdList.model';
 //    文案管理
-import AdHomeModel from './pages/web/adHome/AdHome.model';
 //    代理文案
-import ProxyCopyModel from './pages/web/proxyCopy/ProxyCopy.model';
 //    存款文案
-import DepositCopyModel from './pages/web/depositCopy/DepositCopy.model';
 //    浮动图管理
-import FloatAdModel from './pages/web/floatAd/FloatAd.model';
 //    代理推广资源
-import PromotionResourceModel from './pages/web/promotionResource/PromotionResource.model';
 //    注册设置
 //    站点设置
 //    消息
 //    公告管理
-import AnnouncementManageModel from './pages/web/announcementManage/AnnouncementManage.model';
 //    消息管理
-import NoticeManageModel from './pages/web/noticeManage/NoticeManage.model';
 //    资源站管理
-import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model';
 
 // 营销
 //    优惠申请
@@ -119,19 +110,12 @@ import ResourceManageModel from './pages/web/resourceManage/ResourceManage.model
 
 // 系统
 //    后台操作日志
-import BackgroundModel from './pages/system/backgroundLog/BackgroundLog.model';
 //    会员操作日志
-import MemberLogModel from './pages/system/memberLog/MemberLog.model';
 //    邮件管理
-import EmailListModel from './pages/system/emailList/EmailList.model';
 //    货币设定
-import CurrencySettingsModel from './pages/system/currencySetting/CurrencySetting.model';
 //    邮件服务器
-import EmailSettingModel from './pages/system/emailSetting/EmailSetting.model';
 //    前台域名设置
-import DomainSettingModel from './pages/system/domainSetting/DomainSetting.model';
 //    游戏后台帐号
-import GameAccountModel from './pages/system/gameAccount/GameAccount.model';
 
 // 设置
 import SettingModel from './pages/home/header/setting/Setting.model';
@@ -161,24 +145,8 @@ app.model({
 });
 app.model(throttleEffect(LoginModel));
 app.model(throttleEffect(DashboardModel));
-app.model(throttleEffect(BackgroundModel));
-app.model(throttleEffect(MemberLogModel));
-app.model(throttleEffect(AdListModel));
-app.model(throttleEffect(AdHomeModel));
-app.model(throttleEffect(ProxyCopyModel));
 app.model(throttleEffect(SettingModel));
 app.model(throttleEffect(HeaderModel));
-app.model(throttleEffect(DepositCopyModel));
-app.model(throttleEffect(EmailListModel));
-app.model(throttleEffect(CurrencySettingsModel));
-app.model(throttleEffect(EmailSettingModel));
-app.model(throttleEffect(DomainSettingModel));
-app.model(throttleEffect(GameAccountModel));
-app.model(throttleEffect(FloatAdModel));
-app.model(throttleEffect(ResourceManageModel));
-app.model(throttleEffect(PromotionResourceModel));
-app.model(throttleEffect(NoticeManageModel));
-app.model(throttleEffect(AnnouncementManageModel));
 
 const authLink = setContext((_, { headers }) => {
   const token = sessionStorage.getItem(environment.tokenName);
@@ -196,6 +164,19 @@ const client = new ApolloClient({
       uri: environment.apiHost,
       credentials: 'omit',
       typePatcher: {
+        ...addTypePatcher('DomainSettingResult', 'DomainSetting', undefined, true),
+        ...addTypePatcher('EmailManageResult', 'EmailManage'),
+        ...addTypePatcher('SendTypeResult', 'SendType'),
+        ...addTypePatcher('GameAccountResult', 'GameAccount'),
+        ...addTypePatcher('MemberLogResult', 'MemberLog'),
+        ...addTypePatcher('CurrencySettingResult', 'CurrencySetting'),
+        ...addTypePatcher('CmsLogResult', 'CmsLog'),
+        ...addTypePatcher('OpTypeResult', 'OpType'),
+        ...addTypePatcher('CmsLogResultResult', 'CmsLogResult'),
+        ...addTypePatcher('ProxyPromotionResult', 'ProxyPromotion'),
+        ...addTypePatcher('PromotionResourceResult', 'PromotionResource'),
+        ...addTypePatcher('ApproveStatusResult', 'ApproveStatus'),
+        ...addTypePatcher('ApplyToResult', 'ApplyTo'),
         ...addTypePatcher('FloatAdResult', 'FloatAd'),
         ...addTypePatcher('FloatAdPositionResult', 'FloatAdPosition'),
         ...addTypePatcher('FloatAdPfResult', 'FloatAdPf'),

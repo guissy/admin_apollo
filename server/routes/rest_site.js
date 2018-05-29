@@ -126,7 +126,7 @@ router.delete('/announceManage/:id?', async (req, res, next) => {
 const {sendType} = mockjs.mock({
   'sendType|3': [{
     'id|+1': 1,
-    'name|+1': ['发送类型1', '发送类型2', '发送类型3'],
+    'name|+1': ['会员层级', '代理', '自定义'],
   }]
 });
 router.get('/sendType', async (req, res, next) => {
@@ -135,7 +135,7 @@ router.get('/sendType', async (req, res, next) => {
 const {announceManageType} = mockjs.mock({
   'announceManageType|3': [{
     'id|+1': 1,
-    'name|+1': ['消息类型1', '消息类型2', '消息类型3'],
+    'name|+1': ['重要', '一般'],
   }]
 });
 router.get('/announceManageType', async (req, res, next) => {
@@ -144,7 +144,7 @@ router.get('/announceManageType', async (req, res, next) => {
 const {popupType} = mockjs.mock({
   'popupType|3': [{
     'id|+1': 1,
-    'name|+1': ['弹出类型1', '弹出类型2', '弹出类型3'],
+    'name|+1': ['新窗口', '当前模态', '折叠'],
   }]
 });
 router.get('/popupType', async (req, res, next) => {
@@ -160,7 +160,6 @@ const { depositNote } = mockjs.mock({'depositNote|20': [{
   'status|1': ["enabled","disabled"],
   content: '@city',
   apply_to: '@integer(1, 3)',
-  created: '@datetime',
   created: moment().format('YYYY-MM-DD hh:mm:ss'),
   created_uname: '@cname',
   updated: moment().format('YYYY-MM-DD hh:mm:ss'),
@@ -182,7 +181,7 @@ router.delete('/depositNote/:id?', async (req, res, next) => {
 const {approveStatus} = mockjs.mock({
   'approveStatus|3': [{
     'id|+1': 1,
-    'name|+1': ['审核状态1', '审核状态2', '审核状态3'],
+    'name|+1': ['已通过', '待申请', '已拒绝', '申请中'],
   }]
 });
 router.get('/approveStatus', async (req, res, next) => {
@@ -191,7 +190,7 @@ router.get('/approveStatus', async (req, res, next) => {
 const {applyTo} = mockjs.mock({
   'applyTo|3': [{
     'id|+1': 1,
-    'name|+1': ['使用于1', '使用于2', '使用于3'],
+    'name|+1': ['微信存款', '公司存款', '第三方网银', '支付宝'],
   }]
 });
 router.get('/applyTo', async (req, res, next) => {
@@ -230,7 +229,7 @@ router.delete('/floatAd/:id?', async (req, res, next) => {
 const {floatAdPosition} = mockjs.mock({
   'floatAdPosition|3': [{
     'id|+1': 1,
-    'name|+1': ['显示位置1', '显示位置2', '显示位置3'],
+    'name|+1': ['左中', '右中', '左下', '右下'],
   }]
 });
 router.get('/floatAdPosition', async (req, res, next) => {
@@ -239,7 +238,7 @@ router.get('/floatAdPosition', async (req, res, next) => {
 const {floatAdPf} = mockjs.mock({
   'floatAdPf|3': [{
     'id|+1': 1,
-    'name|+1': ['平台1', '平台2', '平台3'],
+    'name|+1': ['h5', 'pc', 'app'],
   }]
 });
 router.get('/floatAdPf', async (req, res, next) => {
@@ -254,4 +253,36 @@ const {floatAdApprove} = mockjs.mock({
 router.get('/floatAdApprove', async (req, res, next) => {
   res.json(resultOk(floatAdApprove));
 });
+
+
+const { proxyPromotion } = mockjs.mock({'proxyPromotion|5': [{
+  'id|+1': 1,
+  name: '@city',
+  width: '@city',
+  length: '@city',
+  wh: '@city',
+  file_type: '@city',
+  'picture|1': ["http://dummyimage.com/100x40/def279&text=netpk","http://dummyimage.com/100x40/e379f2&text=ovvih","http://dummyimage.com/100x40/79f2bf&text=kputt","http://dummyimage.com/100x40/f29c79&text=rkoqd","http://dummyimage.com/100x40/7979f2&text=gssgx","http://dummyimage.com/100x40/9cf279&text=mmytb","http://dummyimage.com/100x40/f279bf&text=ffmjo","http://dummyimage.com/100x40/79e3f2&text=tgcgp","http://dummyimage.com/100x40/f2dd79&text=usfgs","http://dummyimage.com/100x40/ba79f2&text=zsvfk","http://dummyimage.com/100x40/79f297&text=twmfn","http://dummyimage.com/100x40/f2797e&text=ekght","http://dummyimage.com/100x40/79a1f2&text=jelkr","http://dummyimage.com/100x40/c5f279&text=gnuxg","http://dummyimage.com/100x40/f279e8&text=eobbn","http://dummyimage.com/100x40/79f2d8&text=gnxim","http://dummyimage.com/100x40/f2b579&text=ybcyk","http://dummyimage.com/100x40/9279f2&text=wxqlb","http://dummyimage.com/100x40/83f279&text=qsyga","http://dummyimage.com/100x40/f279a6&text=wrrrp"],
+  language_id: '@city',
+  script: '@city',
+  'status|1': ["enabled","disabled"],
+  created: '@datetime',
+  created: moment().format('YYYY-MM-DD hh:mm:ss'),
+  created_uname: '@cname',
+  updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+  updated_uname: '@cname',
+}]});
+
+router.get('/proxyPromotion', async (req, res, next) => {
+  res.json(resultOk(proxyPromotion));
+});
+router.put('/proxyPromotion/:id?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
+router.delete('/proxyPromotion/:id?', async (req, res, next) => {
+  const n = proxyPromotion.findIndex(v => req.params.id === String(v.id));
+  proxyPromotion.splice(n, 1);
+  res.json(resultOk({}));
+});
+
 

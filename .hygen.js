@@ -1,39 +1,35 @@
 const site = (v) => v;
 this.props = {site};
 let locals = {};
-const title = '存款文案';
+const title = '前台域名设置';
 const config = [
   {
-    title: site('文案名称'),
-    dataIndex: 'name',
+    title: this.props.site('站点名称'),
+    dataIndex: 'name'
   },
   {
-    title: site('语言'),
-    dataIndex: 'language',
+    title: this.props.site('站点标题'),
+    dataIndex: 'title'
   },
   {
-    title: site('审核状态'),
-    dataIndex: 'approve_status',
-    form: 'select'
+    title: this.props.site('站点底部信息'),
+    dataIndex: 'bottom',
+    form: 'editor'
   },
   {
-    title: site('使用状态'),
-    dataIndex: 'status',
+    title: this.props.site('SSL加密'),
+    dataIndex: 'is_ssl',
+    form: 'switch'
   },
   {
-    title: site('活动内容'),
+    title: this.props.site('LOGO'),
+    dataIndex: 'logo',
+    form: 'img'
+  },
+  {
+    title: this.props.site('邮件内容'),
     dataIndex: 'content',
-    notInTable: true,
-    form: 'editor',
-  },
-  {
-    title: site('使用于'),
-    dataIndex: 'apply_to',
-    form: 'select'
-  },
-  {
-    title: site('生成时间'),
-    dataIndex: 'created',
+    form: 'editor'
   },
 ];
 

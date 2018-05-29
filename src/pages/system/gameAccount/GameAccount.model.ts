@@ -1,37 +1,21 @@
-import { queryTableData } from './GameAccount.service';
-import { Action, EffectsCommandMap, Model } from 'dva';
+import gql from 'graphql-tag';
 
-export interface GameAccountState {
-  tableData: Array<object>;
-  isLoading: boolean;
+/** 游戏后台帐号 */
+export interface GameAccount {
+  id: number;
+  partner_name: string;
+  admin_url: string;
+  admin_account: string;
+  admin_password: string;
 }
 
-const GameAccountModel: Model = {
-  namespace: 'gameAccount',
-  state: {
-    tableData: []
-  },
-  effects: {
-    *loadData({ payload }: Action, { select, call, put }: EffectsCommandMap) {
-      const data = yield call(queryTableData, payload);
-      if (data.state === 0) {
-        yield put({
-          type: 'loadDataSuccess',
-          payload: {
-            tableData: data.data
-          }
-        });
-      }
-    }
-  },
-  reducers: {
-    loadDataSuccess(state: GameAccountState, { payload }: Action) {
-      return {
-        ...state,
-        ...payload
-      };
-    }
+/** 游戏后台帐号: GraphQL */
+export const GameAccountFragment = gql`
+  fragment GameAccountFragment on GameAccount {
+    id
+    partner_name
+    admin_url
+    admin_account
+    admin_password
   }
-};
-
-export default GameAccountModel;
+`;
