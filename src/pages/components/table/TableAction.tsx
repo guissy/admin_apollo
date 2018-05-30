@@ -3,11 +3,11 @@ import { Divider } from 'antd';
 import { isPlainObject } from 'lodash';
 
 interface Props {
-  children: React.ReactNode[];
+  children: React.ReactNode | React.ReactNode[];
 }
 
 /** 表格操作区的链接之间加分隔竖线 */
-export default function TableActionComponent({ children }: Props) {
+export default function TableAction({ children }: Props) {
   const childrenVisible = React.Children.toArray(children).reduce(
     (acc, item) => {
       let accOk = acc;

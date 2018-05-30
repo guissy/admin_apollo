@@ -53,7 +53,7 @@ const headers = { Authorization: 'Bearer ' + token };
  * />
  */
 @withLocale
-export default class UploadComponent extends React.PureComponent<Props, State> {
+export default class UploadUI extends React.PureComponent<Props, State> {
   static defaultProps: Props = {
     limit: 10,
     folder: ''

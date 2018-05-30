@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Menu, Switch, Radio, Form } from 'antd';
-import { IntlKeys } from '../../../../locale/zh_CN';
+import { Form, Radio, Switch } from 'antd';
 import withLocale from '../../../../utils/withLocale';
 import { select } from '../../../../utils/model';
-import { Dispatch, connect } from 'dva';
+import { Dispatch } from 'dva';
 import { SettingState } from './Setting.model';
 import styled from 'styled-components';
+import { WrappedFormUtils } from 'antd/es/form/Form';
 
 const Item = Form.Item;
 
@@ -77,7 +77,7 @@ const Red = styled.span`
 @withLocale
 @Form.create()
 @select(['setting', 'header'])
-export default class Setting extends React.PureComponent<Props, State> {
+export default class Setting extends React.PureComponent<Props, {}> {
   state = {
     nav: '',
     lang: '',
@@ -86,9 +86,6 @@ export default class Setting extends React.PureComponent<Props, State> {
     sound_deposit: false,
     sound_withdraw: false
   };
-  constructor(props: Props) {
-    super(props);
-  }
 
   componentWillMount() {
     const { nav, lang, theme, sound_message, sound_deposit, sound_withdraw } =
@@ -105,20 +102,21 @@ export default class Setting extends React.PureComponent<Props, State> {
 
   // tslint:disable-next-line:no-any
   onChange = (field: any, e: any) => {
+    const { form } = this.props as Hoc;
     Promise.resolve().then(() => {
       let value = (e.target && e.target.value) || e;
       this.setState({ [field]: value });
       this.props.dispatch!({
         type: 'setting/setting',
-        payload: { ...this.props.form.getFieldsValue() }
+        payload: { ...form.getFieldsValue() }
       });
     });
   }
 
   render() {
-    const { site = () => '' } = this.props;
+    const { site, form } = this.props as Hoc;
     const { nav, lang, theme, sound_message, sound_deposit, sound_withdraw } = this.state;
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = form;
 
     return (
       <FormWrap>
@@ -238,18 +236,11 @@ export default class Setting extends React.PureComponent<Props, State> {
   }
 }
 
-interface Props {
-  form?: any; // tslint:disable-line
-  site?: (words: IntlKeys) => React.ReactNode;
-  dispatch?: Dispatch;
-  setting?: SettingState;
+interface Hoc {
+  form: WrappedFormUtils;
+  site: (words: string) => React.ReactNode;
+  dispatch: Dispatch;
+  setting: SettingState;
 }
 
-interface State {
-  nav: string;
-  lang: string;
-  theme: string;
-  sound_message: boolean;
-  sound_deposit: boolean;
-  sound_withdraw: boolean;
-}
+interface Props extends Partial<Hoc> {}

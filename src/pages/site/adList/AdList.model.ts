@@ -6,7 +6,6 @@ export interface AdList {
   name: string;
   pf: string;
   position: string;
-  picture: string;
   link: string;
   language: string;
   sort: string;

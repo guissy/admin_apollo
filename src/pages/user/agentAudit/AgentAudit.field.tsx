@@ -4,10 +4,10 @@ import { Input, Tag, Select, Switch, DatePicker } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
@@ -134,8 +134,8 @@ export default class AgentAuditField<T extends { client: ApolloClient<{}> }> ext
                 refetchQueries={['agentAuditQuery']}
               >
                 {remove => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -157,8 +157,8 @@ export default class AgentAuditField<T extends { client: ApolloClient<{}> }> ext
                       }
                     >
                       {record.status === 'enabled' ? site('拒绝') : site('通过')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -169,8 +169,8 @@ export default class AgentAuditField<T extends { client: ApolloClient<{}> }> ext
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -178,8 +178,8 @@ export default class AgentAuditField<T extends { client: ApolloClient<{}> }> ext
                       }}
                     >
                       编辑
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

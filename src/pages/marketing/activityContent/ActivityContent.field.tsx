@@ -3,20 +3,20 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { DatePicker, Input, InputNumber, Radio, Select, Tag } from 'antd';
 import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult, messageSuccess } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { ActivityContent, ActivityType } from './ActivityContent.model';
-import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
+import CheckboxUI from '../../components/checkbox/CheckboxUI';
 import ActivityApplyPage from '../activityApply/ActivityApply.page';
 import ActivityContentPage from './ActivityContent.page';
 import { ActivityApply } from '../activityApply/ActivityApply.model';
-import LanguageComponent from '../../components/language/LanguageComponent';
-import UploadComponent from '../../components/upload/UploadComponent';
-import Editor from '../../components/richTextEditor/Editor';
+import LanguageComponent from '../../components/language/LanguageUI';
+import UploadUI from '../../components/upload/UploadUI';
+import Editor from '../../components/editor/Editor';
 
 const site = withLocale.site;
 
@@ -59,7 +59,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
         {({
           data: { activityTypes = { data: [] } } = {}
         }: GqlResult<'activityTypes', ActivityType[]>) => (
-          <CheckboxComponent
+          <CheckboxUI
             options={activityTypes.data}
             name="name"
             formatOut={['name', 'id']}
@@ -91,7 +91,7 @@ export default class ActivityContentField<T> extends TableFormField<T> {
     table: ({ text, record, view }: FieldProps<string, ActivityContent, ActivityContentPage>) => (
       <img src={text} style={{ height: '20px' }} />
     ),
-    form: <UploadComponent onDone={() => messageSuccess(site('上传成功'))} />
+    form: <UploadUI onDone={() => messageSuccess(site('上传成功'))} />
   };
 
   'begin_time,end_time' = {
@@ -258,8 +258,8 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                 `}
               >
                 {status => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -281,8 +281,8 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                       }
                     >
                       {record.status === 'enabled' ? site('停用') : site('启用')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -293,8 +293,8 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -302,8 +302,8 @@ export default class ActivityContentField<T> extends TableFormField<T> {
                       }}
                     >
                       编辑
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

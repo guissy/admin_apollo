@@ -5,9 +5,9 @@ import { Table } from 'antd';
 import { Attributes } from '../../../utils/result';
 import { TablePaginationConfig, TableRowSelection } from 'antd/lib/table';
 import { messageError, prettyString } from '../../../utils/showMessage';
-import { FormConfig } from '../form/FormCompoent';
+import { FormConfig } from '../form/FormUI';
 
-const DivWrap = styled.div.attrs<{ hasActions: boolean }>({})`
+const Div = styled.div.attrs<{ hasActions: boolean }>({})`
   background: #fff;
   padding: 20px;
   .ant-table .ant-table-body > table {
@@ -27,7 +27,7 @@ const DivWrap = styled.div.attrs<{ hasActions: boolean }>({})`
   }
 `;
 
-export default withLocale(function TableComponent({
+export default withLocale(function TableUI({
   rowKey = 'id',
   dataSource = [],
   columns = [],
@@ -64,7 +64,7 @@ export default withLocale(function TableComponent({
     messageError('Table 数据要求是数组，但是得到的是' + prettyString(dataSource));
   }
   return (
-    <DivWrap hasActions={hasActions}>
+    <Div hasActions={hasActions}>
       <Table
         size="small"
         rowKey={rowKey}
@@ -75,7 +75,7 @@ export default withLocale(function TableComponent({
         loading={loading}
         {...props}
       />
-    </DivWrap>
+    </Div>
   );
 });
 

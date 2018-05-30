@@ -2,12 +2,11 @@ import * as React from 'react';
 import environment from '../../../utils/environment';
 import { Modal, Button, Form, Tag } from 'antd';
 import ImagePreview from './ImagePreview';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import { SearchFormConfig } from '../form/SearchUI';
 
 interface Props {
-  site?: (p: IntlKeys) => React.ReactNode;
+  site?: (p: string) => React.ReactNode;
   title: string; // 标题
   visible: boolean; // modal显示
   onClose: Function; // 关闭modal事件
@@ -35,7 +34,7 @@ export default class DetailModal extends React.PureComponent<Props, State> {
     imgFileSrc: ''
   };
 
-  onClose = (e: React.FormEvent<HTMLFormElement>) => {
+  onClose = (e: React.FormEvent<HTMLElement>) => {
     return this.props.onClose();
   }
   // 图片

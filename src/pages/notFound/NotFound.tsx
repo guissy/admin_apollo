@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from 'antd';
-import { IntlKeys } from '../../locale/zh_CN';
 import withLocale from '../../utils/withLocale';
 import notFoundPng from '../../assets/images/notFound/404.png';
 
@@ -40,5 +39,5 @@ export default class NotFound extends React.PureComponent<NotFoundProp> {
 }
 
 interface NotFoundProp {
-  site?: (words: IntlKeys) => React.ReactNode;
+  site?: (words: string) => React.ReactNode;
 }

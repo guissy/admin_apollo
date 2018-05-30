@@ -4,10 +4,10 @@ import { Input, Tag, Select, Switch } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import SubAgentRebatePage from './SubAgentRebate.page';
@@ -105,8 +105,8 @@ export default class SubAgentRebateField<
                 refetchQueries={['subAgentRebateQuery']}
               >
                 {remove => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -128,8 +128,8 @@ export default class SubAgentRebateField<
                       }
                     >
                       {record.status === 'enabled' ? site('停用') : site('启用')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -140,8 +140,8 @@ export default class SubAgentRebateField<
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -149,8 +149,8 @@ export default class SubAgentRebateField<
                       }}
                     >
                       编辑
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

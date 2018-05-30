@@ -3,10 +3,10 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { Input, Tag, Select, InputNumber } from 'antd';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import DiscountSettingPage from './DiscountSetting.page';
@@ -71,8 +71,8 @@ export default class DiscountSettingField<
             refetchQueries={['discountSettingQuery']}
           >
             {remove => (
-              <TableActionComponent>
-                <LinkComponent
+              <TableAction>
+                <LinkUI
                   confirm={true}
                   onClick={() =>
                     remove({ variables: { id: record.id } })
@@ -83,8 +83,8 @@ export default class DiscountSettingField<
                   }
                 >
                   {site('删除')}
-                </LinkComponent>
-                <LinkComponent
+                </LinkUI>
+                <LinkUI
                   onClick={() => {
                     this.setState({
                       edit: { visible: true, record }
@@ -92,8 +92,8 @@ export default class DiscountSettingField<
                   }}
                 >
                   编辑
-                </LinkComponent>
-              </TableActionComponent>
+                </LinkUI>
+              </TableAction>
             )}
           </Mutation>
         )

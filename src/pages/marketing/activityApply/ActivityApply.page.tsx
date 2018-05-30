@@ -7,10 +7,7 @@ import { ActivityApply, ActivityApplyFragment } from './ActivityApply.model';
 import { Modal, Button } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import { EditFormUI } from '../../components/form/EditFormUI';
-import TableComponent, {
-  getPagination,
-  graphPagination
-} from '../../components/table/TableComponent';
+import TableUI, { getPagination, graphPagination } from '../../components/table/TableUI';
 import ActivityApplyField from './ActivityApply.field';
 import { SearchUI } from '../../components/form/SearchUI';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
@@ -124,7 +121,7 @@ export default class ActivityApplyPage extends React.PureComponent<Props, {}> {
           {({ data: { apply = { data: [], attributes: {} } }, loading, refetch, fetchMore }) => {
             this.refetch = refetch;
             return (
-              <TableComponent
+              <TableUI
                 loading={loading}
                 dataSource={apply.data}
                 columns={tableFields}

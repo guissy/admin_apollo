@@ -1,32 +1,27 @@
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'antd';
-import { Query, ChildProps, Mutation } from 'react-apollo';
+import { Checkbox, DatePicker, Input, InputNumber, Radio, Select, Tag } from 'antd';
+import { ChildProps, Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
 import AgentAccountPage from './AgentAccount.page';
 import {
   AgentAccount,
-  AgentAccountFragment,
-  AgentAccountType,
-  agentAccountTypeQuery,
   AgentAccountChannel,
   agentAccountChannelQuery,
   AgentAccountOnline,
   agentAccountOnlineQuery,
-  AgentAccountStatus,
-  agentAccountStatusQuery
+  AgentAccountType,
+  agentAccountTypeQuery
 } from './AgentAccount.model';
-import { Radio } from 'antd';
 import { Link, match as Match } from 'react-router-dom';
-import TagButtonComponent from '../../components/tagButton/TagButtonComponent';
+import TagButtonComponent from '../../components/button/TagButton';
 
 const site = withLocale.site;
 
@@ -287,9 +282,9 @@ export default class AgentAccountField<
                 refetchQueries={['agentAccountQuery']}
               >
                 {remove => (
-                  <TableActionComponent>
+                  <TableAction>
                     <Link to={this.props.match.path + '/' + String(record.id)}>{site('详情')}</Link>
-                    <LinkComponent
+                    <LinkUI
                       hidden={record.status === 0 || record.status === 2}
                       confirm={true}
                       onClick={() =>
@@ -312,8 +307,8 @@ export default class AgentAccountField<
                       }
                     >
                       {record.status === 1 ? site('停用') : site('启用')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -324,8 +319,8 @@ export default class AgentAccountField<
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -333,8 +328,8 @@ export default class AgentAccountField<
                       }}
                     >
                       {site('编辑')}
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

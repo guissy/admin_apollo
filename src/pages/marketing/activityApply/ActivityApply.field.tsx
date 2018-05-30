@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Input, Tag, Select } from 'antd';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import ActivityApplyPage from './ActivityApply.page';
 import { ActivityApply } from './ActivityApply.model';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
-import QuickDateComponent from '../../components/date/QuickDateComponent';
+import TableAction from '../../components/table/TableAction';
+import QuickDate from '../../components/date/QuickDate';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { messageResult } from '../../../utils/showMessage';
@@ -200,7 +200,7 @@ export default class ActivityApplyField<T> extends TableFormField<T>
 
   apply_time = {
     title: site('申请时间'),
-    search: <QuickDateComponent />
+    search: <QuickDate />
   };
 
   process_time = {
@@ -265,10 +265,10 @@ export default class ActivityApplyField<T> extends TableFormField<T>
             `}
           >
             {status => (
-              <TableActionComponent>
+              <TableAction>
                 {record.status === 'pending' && (
                   <>
-                    <LinkComponent
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({ variables: { body: { id: record.id, status: 'pass' } } })
@@ -283,8 +283,8 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                       }
                     >
                       {site('通过')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({ variables: { body: { id: record.id, status: 'rejected' } } })
@@ -299,10 +299,10 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                       }
                     >
                       {site('拒绝')}
-                    </LinkComponent>
+                    </LinkUI>
                   </>
                 )}
-                <LinkComponent
+                <LinkUI
                   onClick={() => {
                     this.setState({
                       memo: { visible: true, record }
@@ -310,8 +310,8 @@ export default class ActivityApplyField<T> extends TableFormField<T>
                   }}
                 >
                   写备注
-                </LinkComponent>
-              </TableActionComponent>
+                </LinkUI>
+              </TableAction>
             )}
           </Mutation>
         )

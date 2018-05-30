@@ -23,7 +23,7 @@ interface State {
 
 /** 快选昨日/今日/上周/本周/上月/本月 */
 @withLocale
-export default class QuickDateComponent extends React.PureComponent<Props, State> {
+export default class QuickDate extends React.PureComponent<Props, State> {
   state = {
     rangePickerValue: [undefined, undefined]
   };

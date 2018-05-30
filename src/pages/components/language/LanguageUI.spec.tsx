@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import LanguageComponent from './LanguageComponent';
+import LanguageComponent from './LanguageUI';
 import * as React from 'react';
 import { mountOption } from '../../../utils/jestUtil';
 import chalk from 'chalk';

@@ -3,12 +3,12 @@ import { compose, Query, withApollo } from 'react-apollo';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/button/ButtonBarComponent';
+import ButtonBar from '../../components/button/ButtonBar';
 import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { pathBuilder } from '../../../utils/apollo';
 import gql from 'graphql-tag';
-import { default as TableComponent, graphPagination } from '../../components/table/TableComponent';
+import { default as TableUI, graphPagination } from '../../components/table/TableUI';
 import { ActivityContent, ActivityContentFragment } from './ActivityContent.model';
 import ActivityContentEdit from './ActivityContent.edit';
 
@@ -55,7 +55,7 @@ export default class ActivityContentPage extends React.PureComponent<Props, {}> 
           }}
         />
         {/* 新增按钮 */}
-        <ButtonBarComponent
+        <ButtonBar
           onCreate={() => {
             this.setState({
               create: { visible: true, record: { open_type: '2' } }
@@ -90,7 +90,7 @@ export default class ActivityContentPage extends React.PureComponent<Props, {}> 
           }) => {
             this.refetch = refetch;
             return (
-              <TableComponent
+              <TableUI
                 loading={loading}
                 dataSource={activityContent.data}
                 columns={tableFields}

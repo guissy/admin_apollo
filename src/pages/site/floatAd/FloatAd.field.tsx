@@ -4,10 +4,10 @@ import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'a
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
@@ -22,8 +22,8 @@ import {
   FloatAdApprove,
   floatAdApproveQuery
 } from './FloatAd.model';
-import LanguageComponent from '../../components/language/LanguageComponent';
-import UploadComponent from '../../components/upload/UploadComponent';
+import LanguageComponent from '../../components/language/LanguageUI';
+import UploadUI from '../../components/upload/UploadUI';
 
 const site = withLocale.site;
 
@@ -56,7 +56,7 @@ export default class FloatAdField<T extends { client: ApolloClient<{}> }> extend
 
   picture = {
     title: site('缩略图'),
-    form: <UploadComponent />,
+    form: <UploadUI />,
     table: ({ text, record, view }: FieldProps<string, FloatAd, FloatAdPage>) => (
       <img src={text} alt="picture" />
     )
@@ -187,8 +187,8 @@ export default class FloatAdField<T extends { client: ApolloClient<{}> }> extend
             refetchQueries={['floatAdQuery']}
           >
             {remove => (
-              <TableActionComponent>
-                <LinkComponent
+              <TableAction>
+                <LinkUI
                   confirm={true}
                   onClick={() =>
                     remove({ variables: { id: record.id } })
@@ -199,8 +199,8 @@ export default class FloatAdField<T extends { client: ApolloClient<{}> }> extend
                   }
                 >
                   {site('删除')}
-                </LinkComponent>
-                <LinkComponent
+                </LinkUI>
+                <LinkUI
                   onClick={() => {
                     this.setState({
                       edit: { visible: true, record }
@@ -208,8 +208,8 @@ export default class FloatAdField<T extends { client: ApolloClient<{}> }> extend
                   }}
                 >
                   {site('编辑')}
-                </LinkComponent>
-              </TableActionComponent>
+                </LinkUI>
+              </TableAction>
             )}
           </Mutation>
         )

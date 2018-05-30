@@ -16,7 +16,6 @@ interface Props {
   key?: string;
 }
 
-interface State {}
 function toAntd(options: OptionValue[], name?: string) {
   const isObject = options.every(item => item instanceof Object);
   if (isObject && name) {
@@ -27,8 +26,8 @@ function toAntd(options: OptionValue[], name?: string) {
 }
 /** checkbox */
 @withLocale
-export default class CheckboxComponent extends React.PureComponent<Props, State> {
-  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+export default class CheckboxUI extends React.PureComponent<Props, {}> {
+  static getDerivedStateFromProps(nextProps: Props, prevState: {}) {
     return {
       optionsAntd: toAntd(nextProps.options, nextProps.name),
       checkedList: nextProps.value ? toAntd(nextProps.value, nextProps.name) : []

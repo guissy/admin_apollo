@@ -10,7 +10,7 @@ import { DirItem, FileItem, ResourceFile } from './ResourceManage.model';
 import environment from '../../../utils/environment';
 import ImagePreview from '../../components/modal/ImagePreview';
 import { copyToClipboard } from '../../components/copyText/CopyText';
-import UploadComponent from '../../components/upload/UploadComponent';
+import UploadUI from '../../components/upload/UploadUI';
 import showMessage, { messageError, messageResult } from '../../../utils/showMessage';
 import { Result } from '../../../utils/result';
 import { compose, graphql, MutationFn, Query } from 'react-apollo';
@@ -240,7 +240,7 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
           onCancel={() => this.setState({ uploadVisible: false })}
           cancelText="取消"
         >
-          <UploadComponent
+          <UploadUI
             folder={this.state.uploadFolder}
             // tslint:disable-next-line:no-any
             onDone={(res: Result<{}>) => {

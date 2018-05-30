@@ -2,7 +2,7 @@ import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import TableComponent, { graphPagination } from '../../components/table/TableComponent';
+import TableUI, { graphPagination } from '../../components/table/TableUI';
 import { autobind } from 'core-decorators';
 import { SearchUI } from '../../components/form/SearchUI';
 import withLocale from '../../../utils/withLocale';
@@ -94,7 +94,7 @@ export default class MemberLogPage extends React.PureComponent<Props, {}> {
           }) => {
             this.refetch = refetch;
             return (
-              <TableComponent
+              <TableUI
                 loading={loading}
                 dataSource={memberLog.data}
                 columns={tableFields}

@@ -3,7 +3,7 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Query, withApollo } from 'react-apollo';
 import { SearchUI } from '../../components/form/SearchUI';
 import gql from 'graphql-tag';
-import TableComponent, { graphPagination } from '../../components/table/TableComponent';
+import TableUI, { graphPagination } from '../../components/table/TableUI';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { pathBuilder } from '../../../utils/apollo';
@@ -104,7 +104,7 @@ export default class CmsLogPage extends React.PureComponent<Props, {}> {
           }) => {
             this.refetch = refetch;
             return (
-              <TableComponent
+              <TableUI
                 loading={loading}
                 dataSource={cmsLog.data}
                 columns={tableFields}

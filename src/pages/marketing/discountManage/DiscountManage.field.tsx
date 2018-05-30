@@ -3,10 +3,10 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { Input } from 'antd';
 import { ChildProps, Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult } from '../../../utils/apollo';
 import DiscountManagePage from './DiscountManage.page';
@@ -14,7 +14,7 @@ import { DiscountManage } from './DiscountManage.model';
 import ActivityApplyPage from '../activityApply/ActivityApply.page';
 import { ActivityApply } from '../activityApply/ActivityApply.model';
 import { Link } from 'react-router-dom';
-import CheckboxComponent from '../../components/checkbox/CheckboxComponent';
+import CheckboxUI from '../../components/checkbox/CheckboxUI';
 import { Result } from '../../../utils/result';
 
 const site = withLocale.site;
@@ -86,12 +86,7 @@ export default class DiscountManageField<
         {({
           data: { userLevels = { data: [] } } = {}
         }: ChildProps<{}, { userLevels: Result<UserLevel[]> }, {}>) => (
-          <CheckboxComponent
-            options={userLevels.data}
-            name="name"
-            formatOut={['id', 'name']}
-            key="id"
-          />
+          <CheckboxUI options={userLevels.data} name="name" formatOut={['id', 'name']} key="id" />
         )}
       </Query>
     )
@@ -119,8 +114,8 @@ export default class DiscountManageField<
             refetchQueries={['discountManageQuery']}
           >
             {remove => (
-              <TableActionComponent>
-                <LinkComponent
+              <TableAction>
+                <LinkUI
                   confirm={true}
                   onClick={() =>
                     remove({ variables: { id: record.id } })
@@ -131,8 +126,8 @@ export default class DiscountManageField<
                   }
                 >
                   {site('删除')}
-                </LinkComponent>
-                <LinkComponent
+                </LinkUI>
+                <LinkUI
                   onClick={() => {
                     this.setState({
                       edit: { visible: true, record }
@@ -140,8 +135,8 @@ export default class DiscountManageField<
                   }}
                 >
                   编辑
-                </LinkComponent>
-              </TableActionComponent>
+                </LinkUI>
+              </TableAction>
             )}
           </Mutation>
         )

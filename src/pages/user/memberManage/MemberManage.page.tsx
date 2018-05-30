@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import TableComponent, { graphPagination } from '../../components/table/TableComponent';
+import TableUI, { graphPagination } from '../../components/table/TableUI';
 import { autobind } from 'core-decorators';
 import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/button/ButtonBarComponent';
+import ButtonBar from '../../components/button/ButtonBar';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import MemberManageField from './MemberManage.field';
@@ -72,7 +72,7 @@ export default class MemberManagePage extends React.PureComponent<Props, {}> {
                 }}
               />
               {/* 新增按钮 */}
-              <ButtonBarComponent
+              <ButtonBar
                 onCreate={() => {
                   this.setState({
                     create: { visible: true, record: {} }
@@ -133,7 +133,7 @@ export default class MemberManagePage extends React.PureComponent<Props, {}> {
                 }) => {
                   this.refetch = refetch;
                   return (
-                    <TableComponent
+                    <TableUI
                       loading={loading}
                       dataSource={memberManage.data}
                       columns={tableFields}

@@ -1,20 +1,12 @@
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'antd';
-import { Query, ChildProps, Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import { Input, Switch } from 'antd';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
-import { messageResult } from '../../../utils/showMessage';
-import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { Result } from '../../../utils/result';
 import DomainSettingPage from './DomainSetting.page';
-import { DomainSetting, DomainSettingFragment } from './DomainSetting.model';
-import UploadComponent from '../../components/upload/UploadComponent';
-import Editor from '../../components/richTextEditor/Editor';
+import { DomainSetting } from './DomainSetting.model';
+import UploadUI from '../../components/upload/UploadUI';
+import Editor from '../../components/editor/Editor';
 
 const site = withLocale.site;
 
@@ -49,7 +41,7 @@ export default class DomainSettingField<
 
   logo = {
     title: site('LOGO'),
-    form: <UploadComponent />,
+    form: <UploadUI />,
     table: ({ text, record, view }: FieldProps<string, DomainSetting, DomainSettingPage>) => (
       <img src={text} alt="logo" />
     )

@@ -3,10 +3,10 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { Input, Select, Tag } from 'antd';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import IpBlackListPage from './IpBlackList.page';
@@ -95,8 +95,8 @@ export default class IpBlackListField<
                 `}
               >
                 {status => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -118,8 +118,8 @@ export default class IpBlackListField<
                       }
                     >
                       {record.status === 'enabled' ? site('限制') : site('允许')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -130,8 +130,8 @@ export default class IpBlackListField<
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -139,8 +139,8 @@ export default class IpBlackListField<
                       }}
                     >
                       编辑
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

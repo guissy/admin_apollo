@@ -1,12 +1,12 @@
 import { anyReactNode, mountOption } from '../../../utils/jestUtil';
-import ButtonBarComponent from './ButtonBarComponent';
+import ButtonBar from './ButtonBar';
 import { mount } from 'enzyme';
 import * as React from 'react';
 
 test(
   '按钮操作栏: props.onRefreshMode/onCreate/onExport=undefined',
   anyReactNode(async (children: string) => {
-    const wrapper = mount(<ButtonBarComponent>{children}</ButtonBarComponent>, mountOption);
+    const wrapper = mount(<ButtonBar>{children}</ButtonBar>, mountOption);
     expect(wrapper.text()).not.toMatch('刷新');
     expect(wrapper.text()).not.toMatch('新增');
     expect(wrapper.text()).not.toMatch('导出');
@@ -19,14 +19,9 @@ test(
     const onRefresh = jest.fn();
     const onExport = jest.fn();
     const wrapper = mount(
-      <ButtonBarComponent
-        onCreate={onCreate}
-        onRefresh={onRefresh}
-        onRefreshMode={''}
-        onExport={onExport}
-      >
+      <ButtonBar onCreate={onCreate} onRefresh={onRefresh} onRefreshMode={''} onExport={onExport}>
         {children}
-      </ButtonBarComponent>,
+      </ButtonBar>,
       mountOption
     );
     expect(wrapper.text()).toMatch('刷新');
@@ -52,10 +47,7 @@ test(
 test(
   '按钮操作栏: props.children=ReactNode',
   anyReactNode(async (children: string) => {
-    const wrapper = mount(
-      <ButtonBarComponent onCreate={() => 0}>{children}</ButtonBarComponent>,
-      mountOption
-    );
+    const wrapper = mount(<ButtonBar onCreate={() => 0}>{children}</ButtonBar>, mountOption);
     if (typeof children === 'object') {
       wrapper.containsMatchingElement(children);
     }
@@ -63,6 +55,6 @@ test(
 );
 test('按钮操作栏: props.style={color} & props.className=string', async () => {
   const props = { style: { color: 'rgb(255, 0, 0)' }, className: 'test-cls' } as any; // tslint:disable-line
-  const wrapper = mount(<ButtonBarComponent onCreate={() => 0} {...props} />, mountOption);
+  const wrapper = mount(<ButtonBar onCreate={() => 0} {...props} />, mountOption);
   expect(wrapper.find('button')).toHaveStyle(props);
 });

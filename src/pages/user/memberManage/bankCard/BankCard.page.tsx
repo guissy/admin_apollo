@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { ChildProps, compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import TableComponent, { graphPagination } from '../../../components/table/TableComponent';
+import TableUI, { graphPagination } from '../../../components/table/TableUI';
 import { autobind } from 'core-decorators';
 import { match as Match, Route, Switch, withRouter } from 'react-router';
 import { SearchUI } from '../../../components/form/SearchUI';

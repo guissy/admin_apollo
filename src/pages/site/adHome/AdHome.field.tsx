@@ -1,20 +1,18 @@
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
-import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'antd';
-import { Query, ChildProps, Mutation } from 'react-apollo';
+import { Input, Switch, Tag } from 'antd';
+import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { Result } from '../../../utils/result';
 import AdHomePage from './AdHome.page';
-import { AdHome, AdHomeFragment } from './AdHome.model';
+import { AdHome } from './AdHome.model';
 import Label from '../../components/label/Label';
-import LanguageComponent from '../../components/language/LanguageComponent';
+import LanguageComponent from '../../components/language/LanguageUI';
 
 const site = withLocale.site;
 
@@ -116,8 +114,8 @@ export default class AdHomeField<T extends { client: ApolloClient<{}> }> extends
                 refetchQueries={['adHomeQuery']}
               >
                 {remove => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           detail: { visible: true, record }
@@ -125,8 +123,8 @@ export default class AdHomeField<T extends { client: ApolloClient<{}> }> extends
                       }}
                     >
                       {site('详情')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -148,8 +146,8 @@ export default class AdHomeField<T extends { client: ApolloClient<{}> }> extends
                       }
                     >
                       {record.status === 'enabled' ? site('停用') : site('启用')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -160,8 +158,8 @@ export default class AdHomeField<T extends { client: ApolloClient<{}> }> extends
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -169,8 +167,8 @@ export default class AdHomeField<T extends { client: ApolloClient<{}> }> extends
                       }}
                     >
                       {site('编辑')}
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

@@ -8,7 +8,7 @@ import { default as request, ResponseDetail } from './request';
 import { stringify } from 'querystring';
 
 type Props = {};
-type LodashPick = typeof pick;
+type LodashPick = any; // tslint:disable-line
 // React.ComponentType<T>;
 type Component<T> = any; // tslint:disable-line
 /**
@@ -190,7 +190,7 @@ export function effectErrorMessage(e: Error | ResponseDetail) {
     window.sessionStorage.setItem('lastestUrl', window.location.pathname);
     throw new Error(e.status.toString());
   } else {
-    messageError(e);
+    messageError(e as any); // tslint:disable-line
   }
 }
 

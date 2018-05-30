@@ -7,12 +7,6 @@ interface Props {
   onChange?: (value: string) => void;
 }
 
-interface State {
-  value: string;
-  leftLength: number;
-  maxLength: number;
-}
-
 /**
  * @example
  * <Form.Item label={'描述'}>
@@ -21,15 +15,13 @@ interface State {
  *   })(<TextareaComponent maxLength={11}/>)}
  * </Form.Item>
  */
-export default class TextareaComponent extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      value: '',
-      leftLength: NaN,
-      maxLength: NaN
-    };
-  }
+export default class TextAreaUI extends React.PureComponent<Props, {}> {
+  state = {
+    value: '',
+    leftLength: NaN,
+    maxLength: NaN
+  };
+
   componentWillMount() {
     // 初始值验证
     const { value, maxLength = NaN } = this.props;

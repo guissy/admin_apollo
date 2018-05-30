@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Button } from 'antd';
-import TableComponent, { graphPagination } from '../../components/table/TableComponent';
+import TableUI, { graphPagination } from '../../components/table/TableUI';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder } from '../../../utils/apollo';
@@ -127,7 +127,7 @@ export default class DiscountDetailPage extends React.PureComponent<Props, {}> {
           }) => {
             this.refetch = refetch;
             return (
-              <TableComponent
+              <TableUI
                 loading={loading}
                 dataSource={discountDetail.data}
                 columns={tableFields}

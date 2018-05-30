@@ -4,10 +4,10 @@ import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'a
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
@@ -21,7 +21,7 @@ import {
   applyToQuery
 } from './DepositNote.model';
 import Label from '../../components/label/Label';
-import Editor from '../../components/richTextEditor/Editor';
+import Editor from '../../components/editor/Editor';
 
 const site = withLocale.site;
 
@@ -179,8 +179,8 @@ export default class DepositNoteField<
                 refetchQueries={['depositNoteQuery']}
               >
                 {remove => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           detail: { visible: true, record }
@@ -188,8 +188,8 @@ export default class DepositNoteField<
                       }}
                     >
                       {site('详情')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -211,8 +211,8 @@ export default class DepositNoteField<
                       }
                     >
                       {record.status === 'enabled' ? site('停用') : site('启用')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -223,8 +223,8 @@ export default class DepositNoteField<
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -232,8 +232,8 @@ export default class DepositNoteField<
                       }}
                     >
                       {site('编辑')}
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

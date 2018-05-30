@@ -1,18 +1,23 @@
 import * as React from 'react';
-import { IntlKeys } from '../../../locale/zh_CN';
 import withLocale from '../../../utils/withLocale';
 import { Dispatch } from 'dva';
 import { Button, Form, Select } from 'antd';
 import { select } from '../../../utils/model';
 import { Attributes } from '../../../utils/result';
-const Option = Select.Option;
-const FormItem = Form.Item;
+
+interface Props {
+  actionType: string; // namespace/effect
+  type: 'manually' | 'auto'; // 手动 => manually 自动 => auto
+  attributes: Attributes;
+  site?: (words: string) => React.ReactNode;
+  dispatch?: Dispatch;
+}
 
 /** 手动/自动刷新 */
 @withLocale
 @select('')
-export default class RefreshComponent extends React.PureComponent<RefreshProps, RefreshState> {
-  static getDerivedStateFromProps(nextProps: RefreshProps) {
+export default class RefreshUI extends React.PureComponent<Props, {}> {
+  static getDerivedStateFromProps(nextProps: Props) {
     return {
       attributes: nextProps.attributes
     };
@@ -86,32 +91,19 @@ export default class RefreshComponent extends React.PureComponent<RefreshProps, 
       <>
         {type === 'manually' ? <Button onClick={this.onRefresh}>刷新</Button> : ''}
         {type === 'auto' ? (
-          <FormItem {...formItemLayout} label="刷新">
+          <Form.Item {...formItemLayout} label="刷新">
             <Select defaultValue="noUpdated" onChange={this.onRefreshChange}>
-              <Option value="noUpdated">不刷新</Option>
-              <Option value="30Second">30秒</Option>
-              <Option value="60Second">60秒</Option>
-              <Option value="120Second">120秒</Option>
-              <Option value="180Second">180秒</Option>
+              <Select.Option value="noUpdated">不刷新</Select.Option>
+              <Select.Option value="30Second">30秒</Select.Option>
+              <Select.Option value="60Second">60秒</Select.Option>
+              <Select.Option value="120Second">120秒</Select.Option>
+              <Select.Option value="180Second">180秒</Select.Option>
             </Select>
-          </FormItem>
+          </Form.Item>
         ) : (
           ''
         )}
       </>
     );
   }
-}
-
-/** 刷新组件props */
-export interface RefreshProps {
-  actionType: string; // namespace/effect
-  type: 'manually' | 'auto'; // 手动 => manually 自动 => auto
-  attributes: Attributes;
-  site?: (words: IntlKeys) => React.ReactNode;
-  dispatch?: Dispatch;
-}
-
-interface RefreshState {
-  attributes: Attributes;
 }

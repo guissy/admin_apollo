@@ -4,16 +4,16 @@ import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'a
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkComponent from '../../components/link/LinkComponent';
+import LinkUI from '../../components/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableActionComponent from '../../components/table/TableActionComponent';
+import TableAction from '../../components/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
 import EmailManagePage from './EmailManage.page';
 import { EmailManage, EmailManageFragment, SendType, sendTypeQuery } from './EmailManage.model';
-import Editor from '../../components/richTextEditor/Editor';
+import Editor from '../../components/editor/Editor';
 
 const site = withLocale.site;
 
@@ -131,8 +131,8 @@ export default class EmailManageField<
                 refetchQueries={['emailManageQuery']}
               >
                 {remove => (
-                  <TableActionComponent>
-                    <LinkComponent
+                  <TableAction>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         status({
@@ -154,8 +154,8 @@ export default class EmailManageField<
                       }
                     >
                       {site('发送')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       confirm={true}
                       onClick={() =>
                         remove({ variables: { id: record.id } })
@@ -166,8 +166,8 @@ export default class EmailManageField<
                       }
                     >
                       {site('删除')}
-                    </LinkComponent>
-                    <LinkComponent
+                    </LinkUI>
+                    <LinkUI
                       onClick={() => {
                         this.setState({
                           edit: { visible: true, record }
@@ -175,8 +175,8 @@ export default class EmailManageField<
                       }}
                     >
                       {site('编辑')}
-                    </LinkComponent>
-                  </TableActionComponent>
+                    </LinkUI>
+                  </TableAction>
                 )}
               </Mutation>
             )}

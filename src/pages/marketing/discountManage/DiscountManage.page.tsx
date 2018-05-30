@@ -2,10 +2,10 @@ import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-import TableComponent, { graphPagination } from '../../components/table/TableComponent';
+import TableUI, { graphPagination } from '../../components/table/TableUI';
 import { autobind } from 'core-decorators';
 import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBarComponent from '../../components/button/ButtonBarComponent';
+import ButtonBar from '../../components/button/ButtonBar';
 import withLocale from '../../../utils/withLocale';
 import { pathBuilder } from '../../../utils/apollo';
 import DiscountManageField from './DiscountManage.field';
@@ -66,7 +66,7 @@ export default class DiscountManagePage extends React.PureComponent<Props, {}> {
                 }}
               />
               {/* 新增按钮 */}
-              <ButtonBarComponent
+              <ButtonBar
                 onCreate={() => {
                   this.setState({
                     create: { visible: true, record: {} }
@@ -101,7 +101,7 @@ export default class DiscountManagePage extends React.PureComponent<Props, {}> {
                 }) => {
                   this.refetch = refetch;
                   return (
-                    <TableComponent
+                    <TableUI
                       loading={loading}
                       dataSource={discountManage.data}
                       columns={tableFields}

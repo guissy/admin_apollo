@@ -22,7 +22,7 @@ const language: Array<{ value: string; text: string }> = [
 
 // todo LanguageComponent 改为 LanguageSelect
 /** 语言下拉框 */
-export default withLocale(function LanguageComponent({
+export default withLocale(function LanguageUI({
   placeholder,
   children,
   site = (words: string) => '',

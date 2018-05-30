@@ -3,7 +3,7 @@ import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { FormUI, FormConfig } from './FormUI';
 import { Result } from '../../../utils/result';
-import { cloneButtonBar } from '../button/ButtonBarComponent';
+import { cloneButtonBar } from '../button/ButtonBar';
 import { Form } from 'antd';
 
 /** 表格上面的查询 */

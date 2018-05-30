@@ -1,5 +1,5 @@
-import { anyReactNode, mountOption } from '../../../utils/jestUtil';
-import TagButtonComponent from './TagButtonComponent';
+import { mountOption } from '../../../utils/jestUtil';
+import TagButtonComponent from './TagButton';
 import { mount } from 'enzyme';
 import * as React from 'react';
 

@@ -28,7 +28,7 @@ let actionsView = '查看'.split(',');
  */
 @withLocale
 @select('login')
-export default class LinkComponent extends React.PureComponent<LinkProps, {}> {
+export default class LinkUI extends React.PureComponent<LinkProps, {}> {
   render() {
     const {
       confirm,
