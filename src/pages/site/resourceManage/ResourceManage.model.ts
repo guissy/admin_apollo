@@ -1,11 +1,13 @@
 export interface DirItem {
+  id: number;
   dirtype: string;
   folder: string;
   name: string;
 }
 
 export interface FileItem {
-  filesize: number;
+  id: number;
+  size: number;
   filetype: string;
   folder: string;
   name: string;

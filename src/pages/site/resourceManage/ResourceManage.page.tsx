@@ -1,24 +1,27 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { select } from '../../../utils/model';
-import { connect, Dispatch } from 'dva';
+import { Dispatch } from 'dva';
 import styled from 'styled-components';
-import { Breadcrumb, Button, Card, Form, Input, message, Modal, Select, Spin } from 'antd';
+import { Breadcrumb, Button, Card, Form, Input, Modal, Spin } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import withLocale from '../../../utils/withLocale';
-import { DirItem, ResourceFile } from './ResourceManage.model';
+import { DirItem, FileItem, ResourceFile } from './ResourceManage.model';
 import environment from '../../../utils/environment';
 import ImagePreview from '../../components/modal/ImagePreview';
 import { copyToClipboard } from '../../components/copyText/CopyText';
 import UploadComponent from '../../components/upload/UploadComponent';
-import showMessage, { messageError } from '../../../utils/showMessage';
+import showMessage, { messageError, messageResult } from '../../../utils/showMessage';
 import { Result } from '../../../utils/result';
-import { ChildProps, Query } from 'react-apollo';
+import { compose, graphql, MutationFn, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const confirm = Modal.confirm;
 
 const Div = styled.div`
+  .ant-breadcrumb-link {
+    cursor: pointer;
+  }
   .title {
     button {
       margin: 0 4px;
@@ -59,14 +62,76 @@ interface Props {
   form: WrappedFormUtils;
   site: (p: string) => React.ReactNode;
   resourceManage: ResourceFile;
+  delResourceMutation: MutationFn;
+  renameResourceMutation: MutationFn;
+  addResourceMutation: MutationFn;
 }
 
 /** 资源站管理 */
 @withLocale
 @Form.create()
-@select('resourceManage')
+@compose(
+  graphql<{}, {}, {}>(
+    gql`
+      mutation delResourceMutation($id: Int!) {
+        delResource(id: $id)
+          @rest(type: "DelResourceResult", path: "/resourceFiles/:id", method: "DELETE") {
+          state
+          message
+        }
+      }
+    `,
+    {
+      name: 'delResourceMutation',
+      options: {
+        refetchQueries: ['resourceFiles']
+      }
+    }
+  ),
+  graphql<{}, {}, {}>(
+    gql`
+      mutation renameResourceMutation($id: Int!, $body: RenameInput) {
+        renameResource(id: $id, body: $body)
+          @rest(
+            type: "RenameResourceResult"
+            path: "/resourceFiles/:id"
+            method: "PATCH"
+            bodyKey: "body"
+          ) {
+          state
+          message
+        }
+      }
+    `,
+    {
+      name: 'renameResourceMutation'
+    }
+  ),
+  graphql<{}, {}, {}>(
+    gql`
+      mutation addResourceMutation($body: AddResourceInput!) {
+        addResource(body: $body)
+          @rest(
+            type: "RenameResourceResult"
+            path: "/resourceFiles"
+            method: "PATCH"
+            bodyKey: "body"
+          ) {
+          state
+          message
+        }
+      }
+    `,
+    {
+      name: 'addResourceMutation'
+    }
+  )
+)
+@select('')
 export default class ResourceManagePage extends React.PureComponent<Props, {}> {
   fileContent: React.ReactInstance;
+  nameInput = React.createRef<Input>();
+  refetch: Function;
 
   state = {
     breadcrumbs: [] as string[],
@@ -76,14 +141,6 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
     uploadVisible: false,
     uploadFolder: ''
   };
-
-  componentDidUpdate() {
-    const fileCotent = ReactDOM.findDOMNode(this.fileContent) as HTMLElement;
-    if (fileCotent) {
-      fileCotent.style.height = window.innerHeight - 350 + 'px';
-      fileCotent.style.maxHeight = window.innerHeight - 350 + 'px';
-    }
-  }
 
   openChildFolder = (dirData: DirItem) => {
     let breadcrumbList;
@@ -98,12 +155,7 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
       breadcrumbs: breadcrumbList,
       isLoading: false
     });
-    this.props.dispatch({
-      type: 'resourceManage/openFolder',
-      payload: {
-        folder: dirData.folder
-      }
-    });
+    this.refetch({ folder: dirData.folder });
   }
 
   breadcrumbNavigate = (breadcrumbItem: string, breadcrumbIndex: number) => {
@@ -117,60 +169,33 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
     breadcrumbs.forEach((item, index) => {
       param = param + '/' + item;
     });
-    this.props.dispatch({
-      type: 'resourceManage/openFolder',
-      payload: {
-        folder: param
-      }
-    });
+    this.refetch({ folder: param });
   }
 
-  delectResources = (url: string) => {
+  deleteFile = (id: number) => {
     confirm({
       title: this.props.site('确认删除吗？该操作不可恢复'),
       onOk: () => {
-        this.setState({ isLoading: false });
-        this.props
-          .dispatch({
-            type: 'resourceManage/delete',
-            payload: {
-              url: url
-            }
-          })
-          .then(res => {
-            if (res.state === '0') {
-              this.refresh();
-            }
-          });
+        this.props.delResourceMutation({ variables: { id } }).then(messageResult('delResource'));
       }
     });
   }
 
-  rename = (name: string, folder: string) => {
+  rename = (name: string, id: number) => {
     let breadcrumbs = this.state.breadcrumbs;
     let url = '';
     breadcrumbs.forEach((item, index) => {
       url = url + '/' + item;
     });
-    let value: string;
     confirm({
       title: this.props.site('请输入新的名称'),
-      content: <Input defaultValue={name} onChange={e => (value = e.target.value)} />,
+      content: <Input defaultValue={name} ref={this.nameInput} />,
       onOk: () => {
-        this.setState({ isLoading: false });
+        const input = this.nameInput.current as React.ReactInstance;
+        const elm = ReactDOM.findDOMNode(input) as HTMLInputElement;
         this.props
-          .dispatch({
-            type: 'resourceManage/rename',
-            payload: {
-              name: value,
-              url: folder
-            }
-          })
-          .then(res => {
-            if (res.state === '0') {
-              this.refresh();
-            }
-          });
+          .renameResourceMutation({ variables: { id, body: { name: elm && elm.value } } })
+          .then(messageResult('renameResource'));
       }
     });
   }
@@ -181,25 +206,16 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
     breadcrumbs.forEach((item, index) => {
       url = url + '/' + item;
     });
-    let value: string;
+
     confirm({
       title: this.props.site('请输入新文件夹名称'),
-      content: <Input defaultValue={name} onChange={e => (value = e.target.value)} />,
+      content: <Input defaultValue={name} ref={this.nameInput} />,
       onOk: () => {
-        this.setState({ isLoading: false });
+        const input = this.nameInput.current as React.ReactInstance;
+        const elm = ReactDOM.findDOMNode(input) as HTMLInputElement;
         this.props
-          .dispatch({
-            type: 'resourceManage/addDir',
-            payload: {
-              name: value,
-              url: url === '' ? '/' : url
-            }
-          })
-          .then(res => {
-            if (res.state === '0') {
-              this.refresh();
-            }
-          });
+          .addResourceMutation({ variables: { body: { name: elm && elm.value } } })
+          .then(messageResult('addResource'));
       }
     });
   }
@@ -212,21 +228,6 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
       folder = folder + '/' + item;
     });
     this.setState({ uploadFolder: folder });
-  }
-
-  refresh = () => {
-    this.setState({ isLoading: false });
-    let breadcrumbs = this.state.breadcrumbs;
-    let folder = '';
-    breadcrumbs.forEach((item, index) => {
-      folder = folder + '/' + item;
-    });
-    this.props.dispatch({
-      type: 'resourceManage/openFolder',
-      payload: {
-        folder: folder
-      }
-    });
   }
 
   render() {
@@ -245,7 +246,7 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
             onDone={(res: Result<{}>) => {
               if (res.state === 0) {
                 showMessage(true);
-                this.refresh();
+                // this.refresh();
                 this.setState({ uploadVisible: false });
               } else {
                 messageError(res.message);
@@ -271,31 +272,29 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
           }
         >
           <Breadcrumb>
-            <Breadcrumb.Item
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                this.setState({ isLoading: false, breadcrumbs: [] });
-                this.props.dispatch({ type: 'resourceManage/loadData', payload: {} });
-              }}
-            >
-              {this.props.site('全部文件')}
+            <Breadcrumb.Item>
+              <span
+                onClick={() => {
+                  this.setState({ isLoading: false, breadcrumbs: [] });
+                  this.props.dispatch({ type: 'resourceManage/loadData', payload: {} });
+                }}
+              >
+                {this.props.site('全部文件')}
+              </span>
             </Breadcrumb.Item>
             {this.state.breadcrumbs.map((item, index) => {
               return (
-                <Breadcrumb.Item
-                  style={{ cursor: 'pointer' }}
-                  key={index}
-                  onClick={() => this.breadcrumbNavigate(item, index)}
-                >
-                  {item}
+                <Breadcrumb.Item key={index}>
+                  <span onClick={() => this.breadcrumbNavigate(item, index)}>{item}</span>
                 </Breadcrumb.Item>
               );
             })}
           </Breadcrumb>
           <Query
             query={gql`
-              query {
-                resourceFiles @rest(type: "ResourceFileResult", path: "/resourceFiles") {
+              query resourceFiles($folder: String = "") {
+                resourceFiles(folder: $folder)
+                  @rest(type: "ResourceFileResult", path: "/resourceFiles/:folder") {
                   data {
                     countdir
                     countfile
@@ -318,9 +317,11 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
           >
             {({
               data: { resourceFiles = { data: {} as ResourceFile } } = {},
-              loading
-            }: ChildProps<{ loading: boolean }, { resourceFiles: Result<ResourceFile> }, {}>) =>
-              !loading ? (
+              loading,
+              refetch
+            }) => {
+              this.refetch = refetch;
+              return !loading ? (
                 <div>
                   <ul className="files">
                     <li className={'name'}>
@@ -333,13 +334,10 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
                       <span>{this.props.site('操作')}</span>
                     </li>
                   </ul>
-                  <div
-                    style={{ overflow: 'scroll' }}
-                    ref={fileCotent => (this.fileContent = fileCotent as React.ReactInstance)}
-                  >
-                    {resourceFiles.data.dir.map((dirItem, dirIndex) => {
+                  <div ref={fileContent => (this.fileContent = fileContent as React.ReactInstance)}>
+                    {resourceFiles.data.dir.map((dirItem: DirItem, i: number) => {
                       return (
-                        <ul key={dirIndex} className="files">
+                        <ul key={i} className="files">
                           <li className={'name'} onClick={() => this.openChildFolder(dirItem)}>
                             {dirItem.dirtype === 'sys' ? (
                               <img
@@ -364,13 +362,13 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
                           <li className={'operating'}>
                             {dirItem.dirtype !== 'sys' ? (
                               <div>
-                                <Button onClick={() => this.rename(dirItem.name, dirItem.folder)}>
+                                <Button onClick={() => this.rename(dirItem.name, dirItem.id)}>
                                   {this.props.site('重命名')}
                                 </Button>
                                 <Button
                                   style={{ marginLeft: '5px' }}
                                   type="danger"
-                                  onClick={() => this.delectResources(dirItem.folder)}
+                                  onClick={() => this.deleteFile(dirItem.id)}
                                 >
                                   {this.props.site('删除')}
                                 </Button>
@@ -382,9 +380,9 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
                         </ul>
                       );
                     })}
-                    {resourceFiles.data.file.map((fileItem, fileIndex) => {
+                    {resourceFiles.data.file.map((fileItem: FileItem, i: number) => {
                       return (
-                        <ul key={fileIndex} className="files">
+                        <ul key={i} className="files">
                           <li
                             className={'name'}
                             onClick={() => {
@@ -403,26 +401,23 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
                             <span>{fileItem.name}</span>
                           </li>
                           <li className={'size'}>
-                            <span>{fileItem.filesize / 1000}k</span>
+                            <span>{fileItem.size / 1000}k</span>
                           </li>
                           <li className={'operating'}>
                             <Button
                               onClick={() => {
-                                copyToClipboard(environment.imgHost + fileItem.url, '复制成功');
+                                copyToClipboard(fileItem.url, '复制成功');
                               }}
                             >
                               {this.props.site('复制图片路径')}
                             </Button>
                             <Button
                               style={{ margin: '0 5px' }}
-                              onClick={() => this.rename(fileItem.name, fileItem.folder)}
+                              onClick={() => this.rename(fileItem.name, fileItem.id)}
                             >
                               {this.props.site('重命名')}
                             </Button>
-                            <Button
-                              type="danger"
-                              onClick={() => this.delectResources(fileItem.url)}
-                            >
+                            <Button type="danger" onClick={() => this.deleteFile(fileItem.id)}>
                               {this.props.site('删除')}
                             </Button>
                           </li>
@@ -433,8 +428,8 @@ export default class ResourceManagePage extends React.PureComponent<Props, {}> {
                 </div>
               ) : (
                 <Spin />
-              )
-            }
+              );
+            }}
           </Query>
         </Card>
       </Div>

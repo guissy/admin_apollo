@@ -205,37 +205,54 @@ router.delete('/domainSetting/:id?', async (req, res, next) => {
   res.json(resultOk({}));
 });
 
+function buildDirFile() {
+  return mockjs.mock({
+    'dir|5': [{
+      'id|+1': 1,
+      name: '@word(3,5)',
+      'dirtype|1': ['sys','usr'],
+      folder: '@word(3,5)',
+      size: 'integer(100, 1990)',
+      created: moment().format('YYYY-MM-DD hh:mm:ss'),
+      created_uname: '@cname',
+      updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+      updated_uname: '@cname',
+    }],
+    'file|10': [{
+      'id|+1': 10,
+      name: '@word(3,5)',
+      size: '@integer(100, 1990)',
+      'url|1': ["http://dummyimage.com/100x40/79d4f2&text=leifl", "http://dummyimage.com/100x40/f2ed79&text=clikj", "http://dummyimage.com/100x40/c979f2&text=ynkoa", "http://dummyimage.com/100x40/79f2a6&text=vylvo", "http://dummyimage.com/100x40/f28379&text=qvwna", "http://dummyimage.com/100x40/7992f2&text=xkpsd", "http://dummyimage.com/100x40/b5f279&text=ozpwf", "http://dummyimage.com/100x40/f279d9&text=slqyg", "http://dummyimage.com/100x40/79f2e7&text=pnctb", "http://dummyimage.com/100x40/f2c479&text=iebbo", "http://dummyimage.com/100x40/a179f2&text=iwxfv", "http://dummyimage.com/100x40/79f27d&text=ehbxb", "http://dummyimage.com/100x40/f27997&text=inswt", "http://dummyimage.com/100x40/79bbf2&text=bdabk", "http://dummyimage.com/100x40/def279&text=sskmi", "http://dummyimage.com/100x40/e279f2&text=loeru", "http://dummyimage.com/100x40/79f2bf&text=vwkln", "http://dummyimage.com/100x40/f29c79&text=jpteg", "http://dummyimage.com/100x40/7979f2&text=kgdvw", "http://dummyimage.com/100x40/9cf279&text=agope"],
+      created: moment().format('YYYY-MM-DD hh:mm:ss'),
+      created_uname: '@cname',
+      updated: moment().format('YYYY-MM-DD hh:mm:ss'),
+      updated_uname: '@cname',
+    }]
+  })
+}
 
-const {dir, file} = mockjs.mock({
-  'dir|5': [{
-    'id|+1': 1,
-    name: '@word(3,5)',
-    'dirtype|1': ['sys','usr'],
-    folder: '@word(3,5)',
-    size: 'integer(100, 1990)',
-    created: moment().format('YYYY-MM-DD hh:mm:ss'),
-    created_uname: '@cname',
-    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
-    updated_uname: '@cname',
-  }],
-  'file|10': [{
-    'id|+1': 1,
-    name: '@word(3,5)',
-    size: '@integer(100, 1990)',
-    'url|1': ["http://dummyimage.com/100x40/79d4f2&text=leifl", "http://dummyimage.com/100x40/f2ed79&text=clikj", "http://dummyimage.com/100x40/c979f2&text=ynkoa", "http://dummyimage.com/100x40/79f2a6&text=vylvo", "http://dummyimage.com/100x40/f28379&text=qvwna", "http://dummyimage.com/100x40/7992f2&text=xkpsd", "http://dummyimage.com/100x40/b5f279&text=ozpwf", "http://dummyimage.com/100x40/f279d9&text=slqyg", "http://dummyimage.com/100x40/79f2e7&text=pnctb", "http://dummyimage.com/100x40/f2c479&text=iebbo", "http://dummyimage.com/100x40/a179f2&text=iwxfv", "http://dummyimage.com/100x40/79f27d&text=ehbxb", "http://dummyimage.com/100x40/f27997&text=inswt", "http://dummyimage.com/100x40/79bbf2&text=bdabk", "http://dummyimage.com/100x40/def279&text=sskmi", "http://dummyimage.com/100x40/e279f2&text=loeru", "http://dummyimage.com/100x40/79f2bf&text=vwkln", "http://dummyimage.com/100x40/f29c79&text=jpteg", "http://dummyimage.com/100x40/7979f2&text=kgdvw", "http://dummyimage.com/100x40/9cf279&text=agope"],
-    created: moment().format('YYYY-MM-DD hh:mm:ss'),
-    created_uname: '@cname',
-    updated: moment().format('YYYY-MM-DD hh:mm:ss'),
-    updated_uname: '@cname',
-  }]
-});
-
-router.get('/resourceFiles', async (req, res, next) => {
+let {dir, file} = buildDirFile();
+let folder;
+router.get('/resourceFiles/:folder?', async (req, res, next) => {
+  if (folder !== req.params.folder) {
+    ({ dir, file } = buildDirFile());
+  }
   res.json(resultOk({
-    countdir: 5,
-    countfile: 10,
+    countdir: dir.length,
+    countfile: file.length,
     dir,
     file
   }));
+  folder = req.params.folder;
 });
 
+router.delete('/resourceFiles/:id?', async (req, res, next) => {
+  const n1 = file.findIndex(v => req.params.id === String(v.id));
+  if (n1>=0) file.splice(n1, 1);
+  const n2 = dir.findIndex(v => req.params.id === String(v.id));
+  if (n2>=0) dir.splice(n2, 1);
+  res.json(resultOk({}));
+});
+router.patch('/resourceFiles/:id?/:name?', async (req, res, next) => {
+  res.json(resultOk({}));
+});
