@@ -338,7 +338,7 @@ export default [
       }
     ]
   },
-  {
+  /*{
     id: 109,
     name: '订单',
     icon: 'dingdan',
@@ -359,7 +359,7 @@ export default [
         hidden: true
       }
     ]
-  },
+  },*/
   {
     id: 120,
     name: '现金',

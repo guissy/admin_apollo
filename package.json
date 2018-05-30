@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@storybook/addon-actions": "^3.4.6",
+    "@storybook/addon-links": "^3.4.6",
+    "@storybook/addons": "^3.4.6",
+    "@storybook/react": "^3.4.6",
+    "@types/node": "^10.1.4",
+    "@types/storybook__react": "^3.0.7",
     "antd": "^3.5.4",
     "apollo-cache-inmemory": "^1.2.1",
     "apollo-client": "^2.3.1",
     "apollo-link-context": "^1.0.8",
     "apollo-link-error": "^1.0.9",
     "apollo-link-rest": "^0.2.4",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "clipboard": "^2.0.0",
     "core-decorators": "^0.20.0",
     "dva": "^2.1.0",
@@ -42,7 +49,7 @@
     "@types/lodash": "^4.14.106",
     "@types/mockjs": "^1.0.0",
     "@types/moment-timezone": "^0.5.4",
-    "@types/react": "^16.3.10",
+    "@types/react": "^16.3.14",
     "@types/react-dom": "^16.0.5",
     "@types/react-redux": "^5.0.16",
     "@types/react-router": "^4.0.19",
@@ -141,7 +148,8 @@
     "commitmsg": "node config/devOkCommitMsg.js ${GIT_PARAMS}",
     "tt": "tslint --fix --test config/tslint-test/pages --rules-dir config/tslint-rules",
     "precommit": "lint-staged",
-    "hh": "hygen page new:test --name user/agentAudit"
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,jsx}": [

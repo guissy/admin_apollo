@@ -10,7 +10,7 @@ const aliasDict = {
   setting: 'set,config',
 };
 
-const canS = ['pages', 'components', 'routes', 'utils', 'typings', 'rules'];
+const canS = ['pages', 'components', 'routes', 'utils', 'typings', 'rules', 'stories'];
 
 export class Rule extends Lint.Rules.AbstractRule {
   public apply(sourceFile: ts.SourceFile) {

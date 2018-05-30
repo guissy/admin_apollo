@@ -279,12 +279,12 @@ module.exports = [
         action: ['delete', 'update', 'fetch', 'insert'],
         path: '/agentAccount'
       },
-      {
-        id: 91,
-        name: '有效用户',
-        action: ['delete', 'update', 'fetch', 'insert'],
-        path: '/validUser'
-      },
+      // {
+      //   id: 91,
+      //   name: '有效用户',
+      //   action: ['delete', 'update', 'fetch', 'insert'],
+      //   path: '/validUser'
+      // },
       {
         id: 92,
         name: '第三方会员查询',
@@ -317,7 +317,7 @@ module.exports = [
       // }
     ]
   },
-  {
+  /*{
     id: 109,
     name: '订单',
     icon: 'dingdan',
@@ -338,7 +338,7 @@ module.exports = [
         hidden: true
       }
     ]
-  },
+  },*/
   {
     id: 120,
     name: '现金',

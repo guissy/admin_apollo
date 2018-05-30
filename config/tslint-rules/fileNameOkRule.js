@@ -18,7 +18,7 @@ var aliasDict = {
     info: 'infomation',
     setting: 'set,config'
 };
-var canS = ['pages', 'components', 'routes', 'utils', 'typings', 'rules'];
+var canS = ['pages', 'components', 'routes', 'utils', 'typings', 'rules', 'stories'];
 var Rule = /** @class */ (function (_super) {
     __extends(Rule, _super);
     function Rule() {
