@@ -1,8 +1,7 @@
 import * as React from 'react';
-import withLocale from '../../../utils/withLocale';
 import styled from 'styled-components';
 
-const TagButton = styled.div`
+const Div = styled.div`
   display: inline-block;
   padding: 3px;
   margin: 0 3px;
@@ -21,7 +20,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
-/** 标签按钮组件 */
-export default function TagButtonComponent({ children, ...props }: Props) {
-  return <TagButton {...props}>{children}</TagButton>;
+/** 标签按钮 */
+export default function TagButton({ children, ...props }: Props) {
+  return <Div {...props}>{children}</Div>;
 }

@@ -59,7 +59,7 @@ module.exports = (baseConfig, env) => {
         ],
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.scss$/,
         include: [
           path.resolve(__dirname, `${paths.appSrc}/assets`),
           /antd/,
@@ -83,13 +83,6 @@ module.exports = (baseConfig, env) => {
           require.resolve('sass-loader'),
         ],
       },
-      // {
-      //     exclude: [/\.js$/, /\.ejs$/, /\.html$/, /\.json$/],
-      //     loader: require.resolve('file-loader'),
-      //     options: {
-      //         name: 'static/media/[name].[hash:8].[ext]',
-      //     },
-      // },
     ],
   };
   config.module.rules.push(rules);

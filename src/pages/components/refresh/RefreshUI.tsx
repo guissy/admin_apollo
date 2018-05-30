@@ -8,7 +8,7 @@ import { Attributes } from '../../../utils/result';
 interface Props {
   actionType: string; // namespace/effect
   type: 'manually' | 'auto'; // 手动 => manually 自动 => auto
-  attributes: Attributes;
+  attributes?: Attributes;
   site?: (words: string) => React.ReactNode;
   dispatch?: Dispatch;
 }

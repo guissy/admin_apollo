@@ -21,7 +21,7 @@ import {
   agentAccountTypeQuery
 } from './AgentAccount.model';
 import { Link, match as Match } from 'react-router-dom';
-import TagButtonComponent from '../../components/button/TagButton';
+import TagButton from '../../components/button/TagButton';
 
 const site = withLocale.site;
 
@@ -110,9 +110,9 @@ export default class AgentAccountField<
     title: site('会员数'),
     search: <InputNumber min={0} />,
     table: ({ text, record, view }: FieldProps<string, AgentAccountChannel, AgentAccountPage>) => (
-      <TagButtonComponent>
+      <TagButton>
         <Link to={{ pathname: '/memberManage', search: `?agent=${record.name}` }}>{text}</Link>
-      </TagButtonComponent>
+      </TagButton>
     )
   };
 

@@ -5,9 +5,12 @@ import { Button } from 'antd';
 import styled from 'styled-components';
 import createClone from '../../../utils/createClone';
 
-interface Props {
+interface Hoc {
   site?: (words: string) => React.ReactNode;
   dispatch?: Dispatch;
+}
+
+interface Props extends Partial<Hoc> {
   children?: React.ReactNode;
   createText?: string; // 创建按钮文字
   onCreate?: () => void; // 新增按钮的回调
@@ -18,7 +21,7 @@ interface Props {
   onExport?: () => void; // 导出按钮的回调
 }
 
-const Wrap = styled.section`
+const Div = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -54,7 +57,7 @@ export default withClone<Props>(
     ...props
   }: Props) {
     return (
-      <Wrap hidden={canClone && !isCloned} className={isCloned ? 'search' : ''}>
+      <Div hidden={canClone && !isCloned} className={isCloned ? 'search' : ''}>
         {onCreate && (
           <Button type="primary" icon="plus" onClick={onCreate} {...props}>
             {createText || site('新增')}
@@ -73,7 +76,7 @@ export default withClone<Props>(
           </Button>
         )}
         {children}
-      </Wrap>
+      </Div>
     );
   })
 );

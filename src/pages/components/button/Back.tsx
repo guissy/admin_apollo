@@ -1,5 +1,4 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import withLocale from '../../../utils/withLocale';
 import { select } from '../../../utils/model';
 import { Button } from 'antd';
@@ -22,16 +21,14 @@ interface Hoc {
 
 interface Props extends Partial<Hoc> {}
 
-/** Back */
+/** 返回 */
 @withLocale
 @compose(withRouter)
 @select('login')
 @autobind
 export default class Back extends React.PureComponent<Props, {}> {
-  state = {};
-
   goParent() {
-    const { site, dispatch, location, history, login } = this.props as Hoc;
+    const { dispatch, location, login } = this.props as Hoc;
     const parent = initial(location.pathname.split('/')).join('/');
     const visited = login.visited.slice(0);
     visited.pop();
@@ -40,10 +37,11 @@ export default class Back extends React.PureComponent<Props, {}> {
   }
 
   render(): React.ReactNode {
-    const { site } = this.props as Hoc;
+    const { site, ...props } = this.props as Hoc;
+    const { children } = this.props;
     return (
-      <Button onClick={this.goParent} type="primary">
-        {site('返回')}
+      <Button onClick={this.goParent} type="primary" {...props}>
+        {children && site('返回')}
       </Button>
     );
   }
