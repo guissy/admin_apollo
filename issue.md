@@ -14,9 +14,6 @@ Table标题栏的输入框（批量更新列）
 # Task14:
 Table每页1000行的性能优化（类似瀑布流）
 
-# Task17:
-service.ts 与 model.ts 的 effect 名要一致
-
 # Task18:
 表格中的链接和按钮要统一
 

@@ -38,6 +38,13 @@ import TextAreaUI from '../src/zongzi/pc/textarea/TextAreaUI';
 
 addDecorator(story => (
   <div style={{ textAlign: 'center' }}>
+    <style>{`
+form.ant-form {
+  margin: 0 auto;
+  text-align: left;
+  width: 600px;
+}
+`}</style>
     {story()}
   </div>
 ));
@@ -142,12 +149,12 @@ storiesOf('表单', module)
   );
 
 storiesOf('按钮', module)
-  .add('返回', () => (
+  .add('返回', (() => (
     <Provider store={createStore(() => ({ site: (s: string) => s }))}>
       <ConnectedRouter history={createBrowserHistory()}>
-        <Back>试试</Back>
+        <Back>Back</Back>
       </ConnectedRouter>
-    </Provider>)
+    </Provider>))
   )
   .add('标签', () => (
     <Provider store={createStore(() => ({ site: (s: string) => s }))}>
