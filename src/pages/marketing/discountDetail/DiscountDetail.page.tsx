@@ -4,14 +4,14 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Mutation, Query, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Button } from 'antd';
-import TableUI, { graphPagination } from '../../components/table/TableUI';
+import TableUI, { graphPagination } from '../../../zongzi/pc/table/TableUI';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { GqlResult, pathBuilder } from '../../../utils/apollo';
 import DiscountDetailField from './DiscountDetail.field';
 import { DiscountDetail, DiscountDetailFragment } from './DiscountDetail.model';
 import { messageResult } from '../../../utils/showMessage';
-import Back from '../../components/button/Back';
+import Back from '../../../zongzi/pc/button/Back';
 
 const Div = styled.div`
   strong {

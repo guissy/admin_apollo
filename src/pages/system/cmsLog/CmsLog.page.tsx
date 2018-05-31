@@ -1,9 +1,9 @@
 import * as React from 'react';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { compose, Query, withApollo } from 'react-apollo';
-import { SearchUI } from '../../components/form/SearchUI';
+import { SearchUI } from '../../../zongzi/pc/form/SearchUI';
 import gql from 'graphql-tag';
-import TableUI, { graphPagination } from '../../components/table/TableUI';
+import TableUI, { graphPagination } from '../../../zongzi/pc/table/TableUI';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
 import { pathBuilder } from '../../../utils/apollo';

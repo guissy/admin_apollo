@@ -1,0 +1,3 @@
+[submodule "src/zongzi"]
+	path = src/zongzi
+	url = https://github.com/guissy/zongzi.git

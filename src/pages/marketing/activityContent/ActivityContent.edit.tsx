@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import withLocale from '../../../utils/withLocale';
 import { ActivityApply } from '../activityApply/ActivityApply.model';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import { EditFormUI, EditFormConfig } from '../../components/form/EditFormUI';
+import { EditFormUI, EditFormConfig } from '../../../zongzi/pc/form/EditFormUI';
 import { ActivityContent } from './ActivityContent.model';
 
 interface Hoc {

@@ -5,8 +5,8 @@ import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
 import DomainSettingPage from './DomainSetting.page';
 import { DomainSetting } from './DomainSetting.model';
-import UploadUI from '../../components/upload/UploadUI';
-import Editor from '../../components/editor/Editor';
+import UploadUI from '../../../zongzi/pc/upload/UploadUI';
+import Editor from '../../../zongzi/pc/editor/Editor';
 
 const site = withLocale.site;
 

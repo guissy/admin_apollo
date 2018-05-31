@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Input, Tag, Select } from 'antd';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkUI from '../../components/link/LinkUI';
+import LinkUI from '../../../zongzi/pc/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import ActivityApplyPage from './ActivityApply.page';
 import { ActivityApply } from './ActivityApply.model';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableAction from '../../components/table/TableAction';
-import QuickDate from '../../components/date/QuickDate';
+import TableAction from '../../../zongzi/pc/table/TableAction';
+import QuickDate from '../../../zongzi/pc/date/QuickDate';
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
-import Label from '../../components/label/Label';
+import Label from '../../../zongzi/pc/label/Label';
 import ApolloClient from 'apollo-client/ApolloClient';
 
 const site = withLocale.site;

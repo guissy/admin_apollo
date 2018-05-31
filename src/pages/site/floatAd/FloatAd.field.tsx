@@ -4,10 +4,10 @@ import { Input, InputNumber, Checkbox, Tag, Select, Switch, DatePicker } from 'a
 import { Query, ChildProps, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { moneyPattern } from '../../../utils/formRule';
-import LinkUI from '../../components/link/LinkUI';
+import LinkUI from '../../../zongzi/pc/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableAction from '../../components/table/TableAction';
+import TableAction from '../../../zongzi/pc/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { Result } from '../../../utils/result';
@@ -22,8 +22,8 @@ import {
   FloatAdApprove,
   floatAdApproveQuery
 } from './FloatAd.model';
-import LanguageComponent from '../../components/language/LanguageUI';
-import UploadUI from '../../components/upload/UploadUI';
+import LanguageComponent from '../../../zongzi/pc/language/LanguageUI';
+import UploadUI from '../../../zongzi/pc/upload/UploadUI';
 
 const site = withLocale.site;
 

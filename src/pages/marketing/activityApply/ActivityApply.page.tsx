@@ -6,10 +6,10 @@ import gql from 'graphql-tag';
 import { ActivityApply, ActivityApplyFragment } from './ActivityApply.model';
 import { Modal, Button } from 'antd';
 import withLocale from '../../../utils/withLocale';
-import { EditFormUI } from '../../components/form/EditFormUI';
-import TableUI, { getPagination, graphPagination } from '../../components/table/TableUI';
+import { EditFormUI } from '../../../zongzi/pc/form/EditFormUI';
+import TableUI, { getPagination, graphPagination } from '../../../zongzi/pc/table/TableUI';
 import ActivityApplyField from './ActivityApply.field';
-import { SearchUI } from '../../components/form/SearchUI';
+import { SearchUI } from '../../../zongzi/pc/form/SearchUI';
 import { GqlResult, pathBuilder, writeFragment } from '../../../utils/apollo';
 import ActivityApplyEdit from './ActivityApply.edit';
 

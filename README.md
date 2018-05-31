@@ -32,3 +32,23 @@
 ├── typings         类型声明
 └── view            资源目录，用于link img的src
 ```
+
+## 子模块
+```
+### 创建子模块
+git submodule add https://git.henrizi.com/zlg/zongzi.git src/zongzi
+```
+### 克隆带子模块的项目
+```
+git clone --recursive
+```
+### 更新子模块
+```
+git submodule update --init
+```
+### 删除子模块
+```
+rm -rf src/zongzi
+git rm -r --cached src/zongzi
+.git/config
+```

@@ -4,7 +4,7 @@ import { compose, Mutation, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
 import withLocale from '../../../../utils/withLocale';
 import { GqlResult, writeFragment } from '../../../../utils/apollo';
-import { EditFormUI, EditFormConfig } from '../../../components/form/EditFormUI';
+import { EditFormUI, EditFormConfig } from '../../../../zongzi/pc/form/EditFormUI';
 import { AgentInfo } from './AgentInfo.model';
 
 interface Hoc {

@@ -3,16 +3,16 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { Input, Switch, Tag } from 'antd';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import LinkUI from '../../components/link/LinkUI';
+import LinkUI from '../../../zongzi/pc/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableAction from '../../components/table/TableAction';
+import TableAction from '../../../zongzi/pc/table/TableAction';
 import { messageResult } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import ProxyPromotionPage from './ProxyPromotion.page';
 import { ProxyPromotion } from './ProxyPromotion.model';
-import UploadUI from '../../components/upload/UploadUI';
-import LanguageComponent from '../../components/language/LanguageUI';
+import UploadUI from '../../../zongzi/pc/upload/UploadUI';
+import LanguageComponent from '../../../zongzi/pc/language/LanguageUI';
 
 const site = withLocale.site;
 

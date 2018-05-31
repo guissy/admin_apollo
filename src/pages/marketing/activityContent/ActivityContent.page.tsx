@@ -2,13 +2,13 @@ import * as React from 'react';
 import { compose, Query, withApollo } from 'react-apollo';
 import { autobind } from 'core-decorators';
 import withLocale from '../../../utils/withLocale';
-import { SearchUI } from '../../components/form/SearchUI';
-import ButtonBar from '../../components/button/ButtonBar';
+import { SearchUI } from '../../../zongzi/pc/form/SearchUI';
+import ButtonBar from '../../../zongzi/pc/button/ButtonBar';
 import ActivityContentField from './ActivityContent.field';
 import ApolloClient from 'apollo-client/ApolloClient';
 import { pathBuilder } from '../../../utils/apollo';
 import gql from 'graphql-tag';
-import { default as TableUI, graphPagination } from '../../components/table/TableUI';
+import { default as TableUI, graphPagination } from '../../../zongzi/pc/table/TableUI';
 import { ActivityContent, ActivityContentFragment } from './ActivityContent.model';
 import ActivityContentEdit from './ActivityContent.edit';
 

@@ -3,20 +3,20 @@ import ApolloClient from 'apollo-client/ApolloClient';
 import { DatePicker, Input, InputNumber, Radio, Select, Tag } from 'antd';
 import { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import LinkUI from '../../components/link/LinkUI';
+import LinkUI from '../../../zongzi/pc/link/LinkUI';
 import withLocale from '../../../utils/withLocale';
 import TableFormField, { FieldProps, notInTable } from '../../../utils/TableFormField';
-import TableAction from '../../components/table/TableAction';
+import TableAction from '../../../zongzi/pc/table/TableAction';
 import { messageResult, messageSuccess } from '../../../utils/showMessage';
 import { GqlResult, writeFragment } from '../../../utils/apollo';
 import { ActivityContent, ActivityType } from './ActivityContent.model';
-import CheckboxUI from '../../components/checkbox/CheckboxUI';
+import CheckboxUI from '../../../zongzi/pc/checkbox/CheckboxUI';
 import ActivityApplyPage from '../activityApply/ActivityApply.page';
 import ActivityContentPage from './ActivityContent.page';
 import { ActivityApply } from '../activityApply/ActivityApply.model';
-import LanguageComponent from '../../components/language/LanguageUI';
-import UploadUI from '../../components/upload/UploadUI';
-import Editor from '../../components/editor/Editor';
+import LanguageComponent from '../../../zongzi/pc/language/LanguageUI';
+import UploadUI from '../../../zongzi/pc/upload/UploadUI';
+import Editor from '../../../zongzi/pc/editor/Editor';
 
 const site = withLocale.site;
 

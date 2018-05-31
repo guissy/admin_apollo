@@ -8,17 +8,17 @@ import '@dump247/storybook-state/register';
 import centered from '@storybook/addon-centered';
 import '../src/assets/styles/app.scss';
 import NotFound from '../src/pages/notFound/NotFound';
-import LanguageUI from '../src/pages/components/language/LanguageUI';
-import Back from '../src/pages/components/button/Back';
+import LanguageUI from '../src/zongzi/pc/language/LanguageUI';
+import Back from '../src/zongzi/pc/button/Back';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import createBrowserHistory from 'history/createBrowserHistory';
-import ButtonBar from '../src/pages/components/button/ButtonBar';
-import TagButton from '../src/pages/components/button/TagButton';
-import CheckboxUI from '../src/pages/components/checkbox/CheckboxUI';
-import CopyText from '../src/pages/components/copyText/CopyText';
-import QuickDate from '../src/pages/components/date/QuickDate';
-import Editor from '../src/pages/components/editor/Editor';
+import ButtonBar from '../src/zongzi/pc/button/ButtonBar';
+import TagButton from '../src/zongzi/pc/button/TagButton';
+import CheckboxUI from '../src/zongzi/pc/checkbox/CheckboxUI';
+import CopyText from '../src/zongzi/pc/copyText/CopyText';
+import QuickDate from '../src/zongzi/pc/date/QuickDate';
+import Editor from '../src/zongzi/pc/editor/Editor';
 
 // ueditor需要的相关文件
 import '../src/assets/ueditor/ueditor.config';
@@ -26,15 +26,15 @@ import '../src/assets/ueditor/ueditor.all';
 import '../src/assets/ueditor/lang/zh-cn/zh-cn';
 import '../src/assets/ueditor/themes/default/css/ueditor.css';
 
-import Label from '../src/pages/components/label/Label';
-import LinkUI from '../src/pages/components/link/LinkUI';
+import Label from '../src/zongzi/pc/label/Label';
+import LinkUI from '../src/zongzi/pc/link/LinkUI';
 import { messageSuccess } from '../src/utils/showMessage';
-import ImagePreview from '../src/pages/components/modal/ImagePreview';
+import ImagePreview from '../src/zongzi/pc/modal/ImagePreview';
 import { Random } from 'mockjs';
 import { withState, Store } from '@dump247/storybook-state';
-import RefreshUI from '../src/pages/components/refresh/RefreshUI';
-import UploadUI from '../src/pages/components/upload/UploadUI';
-import TextAreaUI from '../src/pages/components/textarea/TextAreaUI';
+import RefreshUI from '../src/zongzi/pc/refresh/RefreshUI';
+import UploadUI from '../src/zongzi/pc/upload/UploadUI';
+import TextAreaUI from '../src/zongzi/pc/textarea/TextAreaUI';
 
 addDecorator(story => (
   <div style={{ textAlign: 'center' }}>
